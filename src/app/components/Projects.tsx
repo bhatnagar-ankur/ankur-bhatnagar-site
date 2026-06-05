@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
-import { Rocket, Calendar, CheckCircle2 } from 'lucide-react';
+import { Rocket, Calendar, CheckCircle2, Sparkles } from 'lucide-react';
 
 interface Project {
   name: string;
@@ -9,6 +9,7 @@ interface Project {
   description: string;
   achievements: string[];
   techStack: string[];
+  aiAssisted?: boolean;
 }
 
 const projects: Project[] = [
@@ -20,9 +21,11 @@ const projects: Project[] = [
     achievements: [
       'Architected microservices-based frontend solutions',
       'Implemented AI-powered features for enhanced UX',
-      'Led team of 20+ designers and developers'
+      'Led team of 20+ designers and developers',
+      'Accelerated delivery using Claude, GitHub Copilot & Codex for code generation, review and refactoring'
     ],
-    techStack: ['Angular', 'React', 'Azure', 'TypeScript', 'AI/GenAI']
+    techStack: ['Angular', 'React', 'Azure', 'TypeScript', 'AI/GenAI', 'Claude', 'Copilot'],
+    aiAssisted: true
   },
   {
     name: 'Trainup',
@@ -84,7 +87,7 @@ export function Projects() {
       className="py-24 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -93,13 +96,13 @@ export function Projects() {
             fontFamily: 'var(--font-display)',
             color: 'var(--text-primary)'
           }}
-          className="text-4xl md:text-5xl font-bold mb-12 tracking-wide"
+          className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
           <span style={{ color: 'var(--accent-amber)' }}>04.</span> KEY PROJECTS
         </motion.h2>
 
         {/* Responsive Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-6 xl:gap-8">
           {projects.map((project, index) => (
             <ProjectCard
               key={project.name}
@@ -139,15 +142,31 @@ function ProjectCard({ project, index, inView }: { project: Project; index: numb
       <div className="flex items-start gap-3 mb-4">
         <Rocket size={28} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
         <div className="flex-1">
-          <h3
-            style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--text-primary)'
-            }}
-            className="text-2xl font-bold mb-2"
-          >
-            {project.name}
-          </h3>
+          <div className="flex items-center gap-2 flex-wrap mb-2">
+            <h3
+              style={{
+                fontFamily: 'var(--font-display)',
+                color: 'var(--text-primary)'
+              }}
+              className="text-2xl font-bold"
+            >
+              {project.name}
+            </h3>
+            {project.aiAssisted && (
+              <span
+                className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  background: 'rgba(255, 170, 0, 0.15)',
+                  color: 'var(--accent-amber)',
+                  border: '1px solid rgba(255, 170, 0, 0.3)'
+                }}
+              >
+                <Sparkles size={11} />
+                AI-Assisted
+              </span>
+            )}
+          </div>
           <div className="flex flex-wrap items-center gap-3 mb-2">
             <span
               className="px-3 py-1 rounded-full text-xs"

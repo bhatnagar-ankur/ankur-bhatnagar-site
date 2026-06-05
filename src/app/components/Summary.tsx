@@ -32,7 +32,7 @@ export function Summary() {
       className="py-24 px-6"
       style={{ background: "var(--bg-deep)" }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="resume-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -44,7 +44,7 @@ export function Summary() {
               fontFamily: "var(--font-display)",
               color: "var(--text-primary)",
             }}
-            className="text-4xl md:text-5xl font-bold mb-12 tracking-wide"
+            className="fluid-section-h2 font-bold mb-12 tracking-wide"
           >
             <span style={{ color: "var(--accent-amber)" }}>
               01.
@@ -72,7 +72,7 @@ export function Summary() {
           </blockquote>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-12 mb-12">
             <StatCard
               number={Math.floor((new Date().getTime() - new Date('2013-06-01').getTime()) / (1000 * 60 * 60 * 24 * 365.25))}
               suffix="+"
@@ -231,12 +231,13 @@ function StatCard({
         }}
         className="text-5xl font-bold mb-2"
       >
-        {count}
+        <span className="screen-counter">{count}</span>
+        <span className="print-counter">{number}</span>
         {suffix}
       </div>
       <div
         style={{
-          fontFamily: "var(--font-body)",
+          fontFamily: "var(--font-ui)",
           color: "var(--text-muted)",
         }}
         className="text-sm uppercase tracking-wider"

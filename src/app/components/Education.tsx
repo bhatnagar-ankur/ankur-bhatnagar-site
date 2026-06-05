@@ -34,7 +34,7 @@ export function Education() {
       className="py-24 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -43,7 +43,7 @@ export function Education() {
             fontFamily: 'var(--font-display)',
             color: 'var(--text-primary)'
           }}
-          className="text-4xl md:text-5xl font-bold mb-12 tracking-wide"
+          className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
           <span style={{ color: 'var(--accent-amber)' }}>06.</span> EDUCATION
         </motion.h2>

@@ -17,7 +17,7 @@ export function Contact() {
       className="py-24 px-6 min-h-screen flex flex-col justify-center"
       style={{ background: 'var(--bg-deep)' }}
     >
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="resume-container max-w-4xl xl:max-w-5xl 2xl:max-w-6xl 3xl:max-w-7xl text-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -29,7 +29,7 @@ export function Contact() {
               fontFamily: 'var(--font-display)',
               color: 'var(--text-primary)'
             }}
-            className="text-4xl md:text-5xl font-bold mb-6 tracking-wide"
+            className="fluid-section-h2 font-bold mb-6 tracking-wide"
           >
             <span style={{ color: 'var(--accent-amber)' }}>07.</span> LET'S CONNECT
           </h2>
@@ -75,7 +75,7 @@ export function Contact() {
               borderColor: 'var(--accent-cyan)',
               background: 'rgba(0, 200, 255, 0.1)',
               color: 'var(--accent-cyan)',
-              fontFamily: 'var(--font-mono)'
+              fontFamily: 'var(--font-ui)'
             }}
           >
             {copied ? (
@@ -132,7 +132,7 @@ export function Contact() {
         </p>
         <p
           style={{
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-ui)',
             color: 'var(--bg-border)',
             fontSize: '0.75rem'
           }}
@@ -156,7 +156,7 @@ function ContactLink({ icon, label, href }: { icon: React.ReactNode; label: stri
         borderColor: 'var(--bg-border)',
         background: 'var(--bg-surface)',
         color: 'var(--text-primary)',
-        fontFamily: 'var(--font-body)'
+        fontFamily: 'var(--font-ui)'
       }}
     >
       <span style={{ color: 'var(--accent-cyan)' }} className="transition-colors group-hover:drop-shadow-[0_0_8px_rgba(0,200,255,0.8)]">

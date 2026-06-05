@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { ChevronDown, MapPin, Phone, Mail, Linkedin, Github } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import profileImage from '@/assets/profile.jpg';
+import profilePic from '../../imports/Profile_Pic.jpg';
 
 export function Hero() {
   const [currentRole, setCurrentRole] = useState(0);
@@ -29,14 +29,10 @@ export function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" style={{ background: 'var(--bg-deep)' }}>
       {/* Animated Grid Background */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(var(--accent-cyan) 1px, transparent 1px),
-            linear-gradient(90deg, var(--accent-cyan) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-          animation: 'gridFade 4s ease-in-out infinite alternate'
-        }} />
+        <div
+          className="absolute inset-0 blueprint-grid"
+          style={{ animation: 'gridFade 4s ease-in-out infinite alternate' }}
+        />
       </div>
 
       <style>{`
@@ -54,7 +50,7 @@ export function Hero() {
         }
       `}</style>
 
-      <div className="relative z-0 max-w-6xl mx-auto px-6 text-center">
+      <div className="relative z-0 resume-container text-center">
         {/* Profile Image with Experience Badge */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -85,7 +81,7 @@ export function Hero() {
               whileHover={{ scale: 1.05, rotate: [0, -2, 2, 0] }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden border-4 backdrop-blur-sm cursor-pointer"
+              className="relative w-48 h-48 md:w-64 md:h-64 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 3xl:w-[28rem] 3xl:h-[28rem] 4xl:w-[36rem] 4xl:h-[36rem] rounded-2xl overflow-hidden border-4 backdrop-blur-sm cursor-pointer"
               style={{
                 borderColor: 'var(--accent-cyan)',
                 background: 'var(--bg-surface)',
@@ -93,9 +89,9 @@ export function Hero() {
               }}
             >
               <ImageWithFallback
-                src={profileImage}
+                src={profilePic}
                 alt="Ankur Bhatnagar"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
               
               {/* Gradient Overlay */}
@@ -173,7 +169,7 @@ export function Hero() {
             fontFamily: 'var(--font-display)',
             color: 'var(--text-primary)'
           }}
-          className="text-6xl md:text-8xl font-bold tracking-wider mb-6"
+          className="fluid-hero-name font-bold tracking-wider mb-6"
         >
           ANKUR BHATNAGAR
         </motion.h1>
@@ -195,7 +191,7 @@ export function Hero() {
               fontFamily: 'var(--font-body)',
               color: 'var(--accent-cyan)'
             }}
-            className="text-2xl md:text-4xl tracking-wide"
+            className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl tracking-wide"
           >
             {roles[currentRole]}
           </motion.h2>
@@ -222,8 +218,6 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="flex flex-wrap items-center justify-center gap-4 mb-16"
         >
-          <ContactButton icon={<Phone size={20} />} label="+91-7259901002" href="tel:+917259901002" />
-          <ContactButton icon={<Mail size={20} />} label="bhatnagar018@gmail.com" href="mailto:bhatnagar018@gmail.com" />
           <ContactButton icon={<Linkedin size={20} />} label="LinkedIn" href="https://www.linkedin.com/in/bhatnagar-ankur" />
           <ContactButton icon={<Github size={20} />} label="GitHub" href="https://github.com/bhatnagar-ankur" />
         </motion.div>
@@ -238,7 +232,7 @@ export function Hero() {
           style={{
             borderColor: 'var(--accent-cyan)',
             color: 'var(--accent-cyan)',
-            fontFamily: 'var(--font-mono)'
+            fontFamily: 'var(--font-ui)'
           }}
         >
           <span className="text-sm tracking-wider">SCROLL TO EXPLORE</span>

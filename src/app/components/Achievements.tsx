@@ -72,7 +72,7 @@ export function Achievements() {
       className="py-24 px-6"
       style={{ background: 'var(--bg-deep)' }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -81,7 +81,7 @@ export function Achievements() {
             fontFamily: 'var(--font-display)',
             color: 'var(--text-primary)'
           }}
-          className="text-4xl md:text-5xl font-bold mb-12 tracking-wide"
+          className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
           <span style={{ color: 'var(--accent-amber)' }}>05.</span> ACHIEVEMENTS & RECOGNITION
         </motion.h2>
@@ -174,7 +174,7 @@ export function Achievements() {
           >
             Professional Certifications
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 3xl:grid-cols-4 gap-4 xl:gap-6">
             {certifications.map((cert, index) => (
               <motion.div
                 key={cert.name}

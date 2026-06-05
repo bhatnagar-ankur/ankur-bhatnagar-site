@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, ChevronUp } from 'lucide-react';
+import { Menu, X, ChevronUp, Share2, FileDown, Mail } from 'lucide-react';
 
 const navItems = [
   { id: 'summary', label: 'Summary' },
@@ -17,6 +17,32 @@ export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const shareRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (shareRef.current && !shareRef.current.contains(e.target as Node)) {
+        setShareOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSharePDF = () => {
+    setShareOpen(false);
+    window.print();
+  };
+
+  const handleShareEmail = () => {
+    setShareOpen(false);
+    const subject = encodeURIComponent('Resume – Ankur Bhatnagar | Technical Architect & UI/UX Practice Head');
+    const body = encodeURIComponent(
+      `Hi,\n\nPlease find the interactive resume of Ankur Bhatnagar below:\n\n${window.location.href}\n\nAnkur is a Technical Architect & UI/UX Practice Head with 13+ years of experience, based in Bengaluru, India.\n\nBest regards`
+    );
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,12 +96,12 @@ export function Navigation() {
           boxShadow: isScrolled ? '0 4px 20px rgba(0, 0, 0, 0.5)' : 'none'
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="resume-container py-4 flex items-center justify-between">
           {/* Logo */}
           <button
             onClick={scrollToTop}
             style={{
-              fontFamily: 'var(--font-display)',
+              fontFamily: 'var(--font-ui)',
               color: 'var(--text-primary)'
             }}
             className="text-xl font-bold tracking-wider hover:opacity-80 transition-opacity"
@@ -92,7 +118,7 @@ export function Navigation() {
                 onClick={() => scrollToSection(item.id)}
                 className="px-4 py-2 rounded-lg transition-all"
                 style={{
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: 'var(--font-ui)',
                   fontSize: '0.875rem',
                   color: activeSection === item.id ? 'var(--accent-cyan)' : 'var(--text-muted)',
                   background: activeSection === item.id ? 'rgba(0, 200, 255, 0.1)' : 'transparent'
@@ -101,6 +127,60 @@ export function Navigation() {
                 {item.label}
               </button>
             ))}
+
+            {/* Share Button */}
+            <div ref={shareRef} className="relative ml-2">
+              <button
+                onClick={() => setShareOpen(!shareOpen)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border transition-all hover:scale-105"
+                style={{
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.875rem',
+                  borderColor: 'var(--accent-cyan)',
+                  color: 'var(--accent-cyan)',
+                  background: shareOpen ? 'rgba(0, 200, 255, 0.15)' : 'rgba(0, 200, 255, 0.05)'
+                }}
+              >
+                <Share2 size={15} />
+                Share
+              </button>
+
+              <AnimatePresence>
+                {shareOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-52 rounded-lg border overflow-hidden z-50"
+                    style={{
+                      background: 'var(--bg-surface)',
+                      borderColor: 'var(--accent-cyan)',
+                      boxShadow: '0 8px 30px rgba(0, 200, 255, 0.2)'
+                    }}
+                  >
+                    {[
+                      { label: 'Download as PDF', icon: <FileDown size={15} />, action: handleSharePDF },
+                      { label: 'Share via Email', icon: <Mail size={15} />, action: handleShareEmail }
+                    ].map(({ label, icon, action }) => (
+                      <button
+                        key={label}
+                        onClick={action}
+                        className="w-full flex items-center gap-3 px-4 py-3 transition-all text-left hover:bg-cyan-500/10"
+                        style={{
+                          fontFamily: 'var(--font-ui)',
+                          fontSize: '0.8125rem',
+                          color: 'var(--text-primary)'
+                        }}
+                      >
+                        <span style={{ color: 'var(--accent-cyan)' }}>{icon}</span>
+                        {label}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -142,6 +222,34 @@ export function Navigation() {
                     {item.label}
                   </button>
                 ))}
+
+                {/* Mobile Share Options */}
+                <div className="pt-2 border-t" style={{ borderColor: 'var(--bg-border)' }}>
+                  <p
+                    className="px-4 py-2 text-xs uppercase tracking-widest"
+                    style={{ fontFamily: 'var(--font-ui)', color: 'var(--text-muted)' }}
+                  >
+                    Share Profile
+                  </p>
+                  {[
+                    { label: 'Download as PDF', icon: <FileDown size={15} />, action: handleSharePDF },
+                    { label: 'Share via Email', icon: <Mail size={15} />, action: handleShareEmail }
+                  ].map(({ label, icon, action }) => (
+                    <button
+                      key={label}
+                      onClick={action}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all"
+                      style={{
+                        fontFamily: 'var(--font-ui)',
+                        color: 'var(--accent-cyan)',
+                        fontSize: '0.875rem'
+                      }}
+                    >
+                      {icon}
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}

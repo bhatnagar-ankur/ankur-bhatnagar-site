@@ -12,8 +12,9 @@
   --success-green: #3FB950;
   
   /* Fonts */
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-display: 'IBM Plex Sans', sans-serif;
+  --font-body: 'Fira Sans', sans-serif;
+  --font-ui: 'Roboto', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   
   --font-size: 16px;

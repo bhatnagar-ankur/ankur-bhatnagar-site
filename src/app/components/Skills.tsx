@@ -1,9 +1,9 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
-import { 
-  Code2, 
-  Server, 
-  Cloud, 
+import {
+  Code2,
+  Server,
+  Cloud,
   Wrench,
   Hexagon,
   AtomIcon,
@@ -25,7 +25,10 @@ import {
   Grid3x3,
   Component,
   Palette,
-  BarChart3
+  BarChart3,
+  BrainCircuit,
+  Bot,
+  Sparkles
 } from 'lucide-react';
 
 interface Skill {
@@ -62,19 +65,27 @@ const skillCategories: SkillCategory[] = [
       { name: 'ASP.Net', level: 85, icon: <Box size={16} /> },
       { name: 'MVC APIs', level: 85, icon: <Activity size={16} /> },
       { name: 'SignalR', level: 80, icon: <MessageSquare size={16} /> },
-      { name: 'SQL', level: 85, icon: <Database size={16} /> },
-      { name: 'C#', level: 82, icon: <Hash size={16} /> },
-      { name: 'C++', level: 75, icon: <Code size={16} /> }
+      { name: 'SQL', level: 55, icon: <Database size={16} /> },
+      { name: 'C#', level: 55, icon: <Hash size={16} /> }
     ]
   },
   {
     title: 'Cloud & DevOps',
     icon: <Cloud size={24} />,
     skills: [
-      { name: 'Azure', level: 88, icon: <CloudCog size={16} /> },
-      { name: 'TeamCity', level: 80, icon: <GitBranch size={16} /> },
-      { name: 'Octopus', level: 78, icon: <Package size={16} /> },
-      { name: 'CruiseControl.NET', level: 75, icon: <Terminal size={16} /> }
+      { name: 'Azure', level: 50, icon: <CloudCog size={16} /> },
+      { name: 'TeamCity', level: 45, icon: <GitBranch size={16} /> },
+      { name: 'Octopus', level: 42, icon: <Package size={16} /> },
+      { name: 'CruiseControl.NET', level: 40, icon: <Terminal size={16} /> }
+    ]
+  },
+  {
+    title: 'AI-Assisted Development',
+    icon: <BrainCircuit size={24} />,
+    skills: [
+      { name: 'Claude (Anthropic)', level: 92, icon: <Sparkles size={16} /> },
+      { name: 'GitHub Copilot', level: 90, icon: <Bot size={16} /> },
+      { name: 'OpenAI Codex', level: 85, icon: <BrainCircuit size={16} /> }
     ]
   },
   {
@@ -101,7 +112,7 @@ export function Skills() {
       className="py-24 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -110,12 +121,12 @@ export function Skills() {
             fontFamily: 'var(--font-display)',
             color: 'var(--text-primary)'
           }}
-          className="text-4xl md:text-5xl font-bold mb-12 tracking-wide"
+          className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
           <span style={{ color: 'var(--accent-amber)' }}>02.</span> TECHNICAL SKILLS
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 3xl:grid-cols-3 gap-8 xl:gap-10">
           {skillCategories.map((category, categoryIndex) => (
             <SkillCategoryCard
               key={category.title}
@@ -199,11 +210,12 @@ function SkillBar({ skill, inView, delay }: { skill: Skill; inView: boolean; del
           initial={{ width: 0 }}
           animate={inView ? { width: `${skill.level}%` } : {}}
           transition={{ duration: 1, delay, ease: 'easeOut' }}
-          className="h-full rounded-full"
+          className="skill-meter h-full rounded-full"
           style={{
+            '--skill-level': `${skill.level}%`,
             background: `linear-gradient(90deg, var(--success-green), var(--accent-cyan))`,
             boxShadow: '0 0 10px rgba(0, 200, 255, 0.5)'
-          }}
+          } as React.CSSProperties}
         />
       </div>
     </div>

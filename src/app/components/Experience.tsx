@@ -7,9 +7,10 @@ interface Experience {
   period: string;
   role: string;
   company: string;
+  acquiredBy?: string;
   highlights: string[];
   techStack: string[];
-  keySkills: string[]; // Skills to highlight
+  keySkills: string[];
 }
 
 const experiences: Experience[] = [
@@ -29,6 +30,7 @@ const experiences: Experience[] = [
     period: 'Feb 2022 – Mar 2025',
     role: 'Technical Architect & UI/UX Practice Head',
     company: 'DreamOrbit Softech',
+    acquiredBy: 'Saksoft Ltd.',
     highlights: [
       'Led a team of 20+ designers and established UI/UX best practices',
       'Architected scalable frontend solutions for enterprise applications',
@@ -41,6 +43,7 @@ const experiences: Experience[] = [
     period: 'Oct 2021 – Jan 2022',
     role: 'Technical Lead & UI/UX Team Manager',
     company: 'DreamOrbit Softech',
+    acquiredBy: 'Saksoft Ltd.',
     highlights: [
       'Managed UI/UX team and coordinated with stakeholders',
       'Led technical design and implementation of key features',
@@ -53,6 +56,7 @@ const experiences: Experience[] = [
     period: 'Sep 2018 – Sep 2021',
     role: 'Technical Lead',
     company: 'DreamOrbit Softech',
+    acquiredBy: 'Saksoft Ltd.',
     highlights: [
       'Led frontend development for multiple enterprise projects',
       'Implemented real-time features using SignalR',
@@ -65,6 +69,7 @@ const experiences: Experience[] = [
     period: 'Jul 2016 – Jul 2018',
     role: 'Senior Software Engineer',
     company: 'DreamOrbit Softech',
+    acquiredBy: 'Saksoft Ltd.',
     highlights: [
       'Developed complex UI components and features',
       'Collaborated with designers to implement pixel-perfect interfaces',
@@ -77,6 +82,7 @@ const experiences: Experience[] = [
     period: 'Jun 2013 – Jun 2016',
     role: 'Software Engineer',
     company: 'DreamOrbit Softech',
+    acquiredBy: 'Saksoft Ltd.',
     highlights: [
       'Built responsive web applications from ground up',
       'Worked on full-stack development with focus on frontend',
@@ -97,7 +103,7 @@ export function Experience() {
       className="py-24 px-6 relative"
       style={{ background: 'var(--bg-deep)' }}
     >
-      <div className="max-w-5xl mx-auto">
+      <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -106,7 +112,7 @@ export function Experience() {
             fontFamily: 'var(--font-display)',
             color: 'var(--text-primary)'
           }}
-          className="text-4xl md:text-5xl font-bold mb-16 tracking-wide"
+          className="fluid-section-h2 font-bold mb-16 tracking-wide"
         >
           <span style={{ color: 'var(--accent-amber)' }}>03.</span> WORK EXPERIENCE
         </motion.h2>
@@ -206,15 +212,30 @@ function ExperienceCard({ experience, index, inView }: { experience: Experience;
                 >
                   {experience.role}
                 </h3>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    color: 'var(--text-primary)'
-                  }}
-                  className="font-semibold"
-                >
-                  {experience.company}
-                </p>
+                <div>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      color: 'var(--text-primary)'
+                    }}
+                    className="font-semibold"
+                  >
+                    {experience.company}
+                  </p>
+                  {experience.acquiredBy && (
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        color: 'var(--accent-amber)',
+                        fontSize: '0.75rem'
+                      }}
+                      className="flex items-center gap-1 mt-0.5"
+                    >
+                      <span>→</span>
+                      <span>Now {experience.acquiredBy}</span>
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex flex-col items-end gap-2">
@@ -233,15 +254,14 @@ function ExperienceCard({ experience, index, inView }: { experience: Experience;
           </div>
 
           {/* Expanded Content */}
-          {expanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mt-4 pt-4 border-t"
-              style={{ borderColor: 'var(--bg-border)' }}
-            >
+          <motion.div
+            initial={false}
+            animate={expanded ? { opacity: 1, height: 'auto' } : { opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            aria-hidden={!expanded}
+            className="experience-details mt-4 pt-4 border-t overflow-hidden"
+            style={{ borderColor: 'var(--bg-border)' }}
+          >
               {/* Highlights */}
               <ul className="space-y-2 mb-4">
                 {experience.highlights.map((highlight, i) => (
@@ -278,8 +298,7 @@ function ExperienceCard({ experience, index, inView }: { experience: Experience;
                   </span>
                 ))}
               </div>
-            </motion.div>
-          )}
+          </motion.div>
         </div>
       </div>
     </motion.div>
