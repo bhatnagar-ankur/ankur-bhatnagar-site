@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ChevronUp, Share2, FileDown, Mail } from 'lucide-react';
+import { useSound } from './SoundProvider';
+import { SettingsMenu } from './SettingsMenu';
 
 const navItems = [
   { id: 'summary', label: 'Summary' },
@@ -13,6 +15,7 @@ const navItems = [
 ];
 
 export function Navigation() {
+  const { playSound } = useSound();
   const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -31,11 +34,13 @@ export function Navigation() {
   }, []);
 
   const handleSharePDF = () => {
+    playSound('success');
     setShareOpen(false);
     window.print();
   };
 
   const handleShareEmail = () => {
+    playSound('success');
     setShareOpen(false);
     const subject = encodeURIComponent('Resume – Ankur Bhatnagar | Technical Architect & UI/UX Practice Head');
     const body = encodeURIComponent(
@@ -43,6 +48,11 @@ export function Navigation() {
     );
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
+
+  const shareItems = [
+    { label: 'Download as PDF', icon: <FileDown size={15} />, action: handleSharePDF },
+    { label: 'Share via Email', icon: <Mail size={15} />, action: handleShareEmail }
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,8 +78,10 @@ export function Navigation() {
   }, []);
 
   const scrollToSection = (id: string) => {
+    playSound('click');
     const element = document.getElementById(id);
     if (element) {
+      playSound('transition');
       const offset = 80;
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
@@ -78,6 +90,7 @@ export function Navigation() {
   };
 
   const scrollToTop = () => {
+    playSound('whoosh');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -90,10 +103,10 @@ export function Navigation() {
         transition={{ duration: 0.6 }}
         className="fixed top-0 left-0 right-0 z-50 transition-all"
         style={{
-          background: isScrolled ? 'rgba(13, 17, 23, 0.95)' : 'transparent',
+          background: isScrolled ? 'var(--nav-bg-scrolled)' : 'transparent',
           backdropFilter: isScrolled ? 'blur(10px)' : 'none',
           borderBottom: isScrolled ? '1px solid var(--bg-border)' : 'none',
-          boxShadow: isScrolled ? '0 4px 20px rgba(0, 0, 0, 0.5)' : 'none'
+          boxShadow: isScrolled ? 'var(--nav-shadow)' : 'none'
         }}
       >
         <div className="resume-container py-4 flex items-center justify-between">
@@ -128,6 +141,9 @@ export function Navigation() {
               </button>
             ))}
 
+            {/* Settings Menu */}
+            <SettingsMenu />
+
             {/* Share Button */}
             <div ref={shareRef} className="relative ml-2">
               <button
@@ -159,10 +175,7 @@ export function Navigation() {
                       boxShadow: '0 8px 30px rgba(0, 200, 255, 0.2)'
                     }}
                   >
-                    {[
-                      { label: 'Download as PDF', icon: <FileDown size={15} />, action: handleSharePDF },
-                      { label: 'Share via Email', icon: <Mail size={15} />, action: handleShareEmail }
-                    ].map(({ label, icon, action }) => (
+                    {shareItems.map(({ label, icon, action }) => (
                       <button
                         key={label}
                         onClick={action}
@@ -231,10 +244,7 @@ export function Navigation() {
                   >
                     Share Profile
                   </p>
-                  {[
-                    { label: 'Download as PDF', icon: <FileDown size={15} />, action: handleSharePDF },
-                    { label: 'Share via Email', icon: <Mail size={15} />, action: handleShareEmail }
-                  ].map(({ label, icon, action }) => (
+                  {shareItems.map(({ label, icon, action }) => (
                     <button
                       key={label}
                       onClick={action}

@@ -1,14 +1,45 @@
 import { motion } from 'motion/react';
 import { Mail, Linkedin, Github, Phone, Heart, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
+import { useSound } from './SoundProvider';
 
 export function Contact() {
+  const { playSound } = useSound();
   const [copied, setCopied] = useState(false);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText('bhatnagar018@gmail.com');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyEmail = async () => {
+    const email = 'bhatnagar018@gmail.com';
+
+    try {
+      await navigator.clipboard.writeText(email);
+      playSound('success');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = email;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        if (successful) {
+          playSound('success');
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        } else {
+          alert(`Copy this email: ${email}`);
+        }
+      } catch (fallbackErr) {
+        alert(`Copy this email: ${email}`);
+      }
+    }
   };
 
   return (
@@ -146,11 +177,15 @@ export function Contact() {
 }
 
 function ContactLink({ icon, label, href }: { icon: React.ReactNode; label: string; href: string }) {
+  const { playSound } = useSound();
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => playSound('click')}
+      onMouseEnter={() => playSound('hover')}
       className="group flex items-center gap-3 px-6 py-3 rounded-lg border transition-all hover:scale-105"
       style={{
         borderColor: 'var(--bg-border)',

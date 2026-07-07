@@ -1,14 +1,18 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+@import './blueprint.css';
 
-/* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
 }
 
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+}
+
 /* ── Responsive section container ─────────────────────────────────────────
-   Drop-in replacement for the per-component max-w-* + mx-auto pattern.
    Grows with screen size so content never looks marooned on HD/4K displays.
    ───────────────────────────────────────────────────────────────────────── */
 .resume-container {
@@ -17,38 +21,26 @@ html {
   margin-right: auto;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-  max-width: 72rem;        /* 1152px  — default (≤ xl)   */
+  max-width: 72rem;
 }
-@media (min-width: 1280px) {
-  .resume-container { max-width: 80rem; }      /* 1280px — xl  */
-}
-@media (min-width: 1536px) {
-  .resume-container { max-width: 90rem; }      /* 1440px — 2xl */
-}
-@media (min-width: 1920px) {
-  .resume-container { max-width: 110rem; }     /* 1760px — 3xl */
-}
-@media (min-width: 2560px) {
-  .resume-container { max-width: 140rem; }     /* 2240px — 4xl */
-}
-@media (min-width: 3840px) {
-  .resume-container { max-width: 180rem; }     /* 2880px — 5xl */
-}
+@media (min-width: 1280px)  { .resume-container { max-width: 80rem;  } }
+@media (min-width: 1536px)  { .resume-container { max-width: 90rem;  } }
+@media (min-width: 1920px)  { .resume-container { max-width: 110rem; } }
+@media (min-width: 2560px)  { .resume-container { max-width: 140rem; } }
+@media (min-width: 3840px)  { .resume-container { max-width: 180rem; } }
 
 /* ── Fluid typography ──────────────────────────────────────────────────────
    clamp(min, preferred-vw, max) — scales smoothly between screen sizes.
    ───────────────────────────────────────────────────────────────────────── */
-.fluid-hero-name  { font-size: clamp(2.5rem,  6vw,  9rem);  }
-.fluid-section-h2 { font-size: clamp(1.75rem, 3vw,  5rem);  }
+.fluid-hero-name  { font-size: clamp(2.5rem,  6vw,  9rem);   }
+.fluid-section-h2 { font-size: clamp(1.75rem, 3vw,  5rem);   }
 .fluid-body       { font-size: clamp(0.9rem,  1.1vw, 1.25rem); }
 .fluid-mono       { font-size: clamp(0.75rem, 0.9vw, 1.1rem);  }
 
-.print-counter {
-  display: none;
-}
+.screen-counter { display: inline; }
+.print-counter  { display: none;   }
 
-/* ── Blueprint grid: scale cell size with viewport so it doesn't look
-   microscopic on 4K or overwhelmingly large on mobile ──────────────────── */
+/* ── Blueprint grid background ─────────────────────────────────────────── */
 .blueprint-grid {
   background-image:
     linear-gradient(var(--accent-cyan) 1px, transparent 1px),
@@ -56,162 +48,64 @@ html {
   background-size: clamp(30px, 3vw, 80px) clamp(30px, 3vw, 80px);
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 12px;
+/* ── Keyframe animations (used in Hero) ───────────────────────────────── */
+@keyframes gridFade {
+  0%   { opacity: 0.1; }
+  100% { opacity: 0.3; }
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-deep);
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 40px rgba(0, 200, 255, 0.4), 0 0 80px rgba(0, 200, 255, 0.2); }
+  50%       { box-shadow: 0 0 60px rgba(0, 200, 255, 0.6), 0 0 100px rgba(0, 200, 255, 0.3); }
 }
 
+.anim-grid-fade  { animation: gridFade   4s ease-in-out infinite alternate; }
+.anim-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* ── Custom scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 12px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
 ::-webkit-scrollbar-thumb {
   background: var(--accent-cyan);
   border-radius: 6px;
   border: 2px solid var(--bg-deep);
 }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-amber); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-amber);
-}
-
-/* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--accent-cyan) var(--bg-deep);
 }
 
-/* Selection Color */
 ::selection {
   background: var(--accent-cyan);
   color: var(--bg-deep);
 }
 
-/* Print styles for PDF export */
+/* ── Print styles for PDF export ──────────────────────────────────────── */
 @media print {
-  /* ── Page setup ── */
   @page {
     size: A4 portrait;
-    margin: 12mm 14mm;
+    margin: 0;
   }
 
-  /* ── Force background colours & images to print ── */
   *,
   *::before,
   *::after {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    scroll-behavior: auto !important;
   }
 
-  /* ── Hide chrome that makes no sense on paper ── */
   nav,
   .fixed,
   [class*="scroll"],
   [class*="animate-bounce"] {
     display: none !important;
-  }
-
-  /* ── Root / body ── */
-  html,
-  body {
-    background: #0d1117 !important;
-    color: #e6edf3 !important;
-    font-size: 11pt;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* ── Hero: collapse full-screen height, centre everything ── */
-  #hero,
-  section:first-of-type {
-    min-height: unset !important;
-    height: auto !important;
-    padding: 24pt 0 16pt !important;
-  }
-
-  /* ── Sections: tighten padding, sensible page breaks ── */
-  section {
-    padding-top: 20pt !important;
-    padding-bottom: 20pt !important;
-    page-break-before: auto;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* ── Experience timeline: force single column ── */
-  #experience .relative.flex {
-    flex-direction: column !important;
-  }
-  #experience .hidden.md\:block {
-    display: none !important;
-  }
-  #experience .flex-1.ml-8 {
-    margin-left: 1.5rem !important;
-  }
-
-  /* ── Skills / Projects grids: two columns max ── */
-  #skills .grid,
-  #projects .grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  /* ── Skill bars: ensure gradient prints ── */
-  #skills .h-2 > div {
-    background: linear-gradient(90deg, #3fb950, #00c8ff) !important;
-    box-shadow: none !important;
-  }
-
-  /* ── Cards & borders ── */
-  .rounded-lg,
-  .rounded-xl {
-    border-radius: 6pt !important;
-  }
-
-  /* ── Suppress box-shadow glows (saves ink, keeps layout) ── */
-  * {
-    box-shadow: none !important;
-    text-shadow: none !important;
-    animation: none !important;
-    transition: none !important;
-  }
-
-  /* ── Preserve accent colours in text ── */
-  [style*="color: var(--accent-cyan)"],
-  [style*="color:var(--accent-cyan)"] {
-    color: #00c8ff !important;
-  }
-  [style*="color: var(--accent-amber)"],
-  [style*="color:var(--accent-amber)"] {
-    color: #f0883e !important;
-  }
-
-  /* ── Don't break a card across pages ── */
-  .p-6,
-  .p-4 {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* ── Profile image: keep it from being giant on paper ── */
-  .w-64, .md\:w-80 {
-    width: 140pt !important;
-    height: 140pt !important;
-  }
-
-  /* ── Links: show URL after text only for email/phone ── */
-  a[href^="mailto"]::after {
-    content: " (" attr(href) ")";
-    font-size: 8pt;
-    color: #8b949e;
-  }
-}
-
-/* Screen-faithful print overrides.
-   Keep this block after the legacy print rules so it wins the cascade. */
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 0;
   }
 
   html,
@@ -221,11 +115,6 @@ html {
     color: #e6edf3 !important;
     margin: 0 !important;
     overflow: visible !important;
-  }
-
-  nav,
-  .fixed {
-    display: none !important;
   }
 
   .resume-container {
@@ -257,21 +146,18 @@ html {
     transform: none !important;
   }
 
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
+  [style*="color: var(--accent-cyan)"],
+  [style*="color:var(--accent-cyan)"] {
+    color: #00c8ff !important;
   }
 
-  .screen-counter {
-    display: none !important;
+  [style*="color: var(--accent-amber)"],
+  [style*="color:var(--accent-amber)"] {
+    color: #f0883e !important;
   }
 
-  .print-counter {
-    display: inline !important;
-  }
+  .screen-counter { display: none !important;   }
+  .print-counter  { display: inline !important;  }
 
   .skill-meter {
     width: var(--skill-level) !important;
@@ -285,21 +171,15 @@ html {
     display: block !important;
   }
 
-  #experience [class*="md:flex-row-reverse"] {
-    flex-direction: row-reverse !important;
+  #skills .grid,
+  #projects .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  #experience [class*="md:flex-row"] {
-    flex-direction: row !important;
-  }
-
-  #experience [class*="hidden"][class*="md:block"] {
-    display: block !important;
-  }
-
-  #experience .flex-1.ml-8 {
-    margin-left: 0 !important;
-  }
+  #experience [class*="md:flex-row-reverse"] { flex-direction: row-reverse !important; }
+  #experience [class*="md:flex-row"]         { flex-direction: row !important; }
+  #experience [class*="hidden"][class*="md:block"] { display: block !important; }
+  #experience .flex-1.ml-8 { margin-left: 0 !important; }
 
   .p-8,
   .p-6,
@@ -312,6 +192,17 @@ html {
   section:first-of-type [class*="w-48"][class*="h-48"] {
     width: 220pt !important;
     height: 220pt !important;
+  }
+
+  .rounded-lg,
+  .rounded-xl {
+    border-radius: 6pt !important;
+  }
+
+  a[href^="mailto"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #8b949e;
   }
 
   svg {

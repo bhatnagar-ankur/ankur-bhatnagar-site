@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
+import { yearsOfExperience } from "../lib/constants";
 import {
   Triangle,
   Atom,
@@ -67,14 +68,14 @@ export function Summary() {
               }}
               className="text-xl md:text-2xl leading-relaxed"
             >
-              Accomplished Technical Architect and UI/UX Practice Head with {Math.floor((new Date().getTime() - new Date('2013-06-01').getTime()) / (1000 * 60 * 60 * 24 * 365.25))}+ years of experience leading frontend technology initiatives and managing cross-functional teams of 20+ designers. Proven track record of delivering scalable web applications and driving AI technology adoption. Recognized leader with awards for technical excellence and innovation.
+              Accomplished Technical Architect and UI/UX Practice Head with {yearsOfExperience}+ years of experience leading frontend technology initiatives and managing cross-functional teams of 20+ designers. Proven track record of delivering scalable web applications and driving AI technology adoption. Recognized leader with awards for technical excellence and innovation.
             </p>
           </blockquote>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-12 mb-12">
             <StatCard
-              number={Math.floor((new Date().getTime() - new Date('2013-06-01').getTime()) / (1000 * 60 * 60 * 24 * 365.25))}
+              number={yearsOfExperience}
               suffix="+"
               label="Years Experience"
               inView={inView}

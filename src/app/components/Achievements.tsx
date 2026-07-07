@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
-import { Award, Trophy, Medal, Sparkles, Satellite, Building2, Search, User } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { Award, Trophy, Medal, Sparkles, Satellite, Building2, Search } from 'lucide-react';
 
 interface Achievement {
   title: string;

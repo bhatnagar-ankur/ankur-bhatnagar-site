@@ -1,5 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
+import { useEffect } from 'react';
+import { useSound } from './SoundProvider';
 import {
   Code2,
   Server,
@@ -104,6 +106,13 @@ const skillCategories: SkillCategory[] = [
 
 export function Skills() {
   const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
+  const { playSound } = useSound();
+
+  useEffect(() => {
+    if (inView) {
+      setTimeout(() => playSound('pop'), 300);
+    }
+  }, [inView, playSound]);
 
   return (
     <section
@@ -150,7 +159,7 @@ function SkillCategoryCard({ category, inView, delay }: { category: SkillCategor
       className="p-6 rounded-lg border backdrop-blur-xl"
       style={{
         borderColor: 'var(--accent-cyan)',
-        background: 'rgba(22, 27, 34, 0.8)',
+        background: 'var(--bg-deep)',
         boxShadow: '0 4px 20px rgba(0, 200, 255, 0.1)'
       }}
     >

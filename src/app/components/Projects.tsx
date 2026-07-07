@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
-import { Rocket, Calendar, CheckCircle2, Sparkles } from 'lucide-react';
+import { FolderKanban, Calendar, CheckCircle2, Sparkles } from 'lucide-react';
 
 interface Project {
   name: string;
@@ -140,7 +140,7 @@ function ProjectCard({ project, index, inView }: { project: Project; index: numb
     >
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
-        <Rocket size={28} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
+        <FolderKanban size={28} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap mb-2">
             <h3

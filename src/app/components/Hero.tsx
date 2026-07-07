@@ -1,17 +1,21 @@
 import { motion } from 'motion/react';
-import { ChevronDown, MapPin, Phone, Mail, Linkedin, Github } from 'lucide-react';
+import { ChevronDown, MapPin, Linkedin, Github } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useSound } from './SoundProvider';
+import { ImageWithFallback } from './ImageWithFallback';
 import profilePic from '../../imports/Profile_Pic.jpg';
+import { yearsOfExperience } from '../lib/constants';
+
+const roles = [
+  'Technical Architect',
+  'UI/UX Practice Head',
+  'Frontend Technologist',
+  'Team Leader & Mentor'
+];
 
 export function Hero() {
+  const { playSound } = useSound();
   const [currentRole, setCurrentRole] = useState(0);
-  const roles = [
-    'Technical Architect',
-    'UI/UX Practice Head',
-    'Frontend Technologist',
-    'Team Leader & Mentor'
-  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,6 +25,7 @@ export function Hero() {
   }, []);
 
   const scrollToSection = () => {
+    playSound('transition');
     const summarySection = document.getElementById('summary');
     summarySection?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -29,26 +34,8 @@ export function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" style={{ background: 'var(--bg-deep)' }}>
       {/* Animated Grid Background */}
       <div className="absolute inset-0 opacity-20">
-        <div
-          className="absolute inset-0 blueprint-grid"
-          style={{ animation: 'gridFade 4s ease-in-out infinite alternate' }}
-        />
+        <div className="absolute inset-0 blueprint-grid anim-grid-fade" />
       </div>
-
-      <style>{`
-        @keyframes gridFade {
-          0% { opacity: 0.1; }
-          100% { opacity: 0.3; }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 40px rgba(0, 200, 255, 0.4), 0 0 80px rgba(0, 200, 255, 0.2); }
-          50% { box-shadow: 0 0 60px rgba(0, 200, 255, 0.6), 0 0 100px rgba(0, 200, 255, 0.3); }
-        }
-      `}</style>
 
       <div className="relative z-0 resume-container text-center">
         {/* Profile Image with Experience Badge */}
@@ -75,17 +62,16 @@ export function Hero() {
               className="absolute -bottom-4 -right-4 w-12 h-12 border-b-2 border-r-2 transition-all group-hover:scale-110 group-hover:w-16 group-hover:h-16"
               style={{ borderColor: 'var(--accent-amber)' }}
             />
-            
+
             {/* Profile Image */}
             <motion.div
               whileHover={{ scale: 1.05, rotate: [0, -2, 2, 0] }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative w-48 h-48 md:w-64 md:h-64 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 3xl:w-[28rem] 3xl:h-[28rem] 4xl:w-[36rem] 4xl:h-[36rem] rounded-2xl overflow-hidden border-4 backdrop-blur-sm cursor-pointer"
+              className="relative w-48 h-48 md:w-64 md:h-64 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 3xl:w-[28rem] 3xl:h-[28rem] 4xl:w-[36rem] 4xl:h-[36rem] rounded-2xl overflow-hidden border-4 backdrop-blur-sm cursor-pointer anim-pulse-glow"
               style={{
                 borderColor: 'var(--accent-cyan)',
-                background: 'var(--bg-surface)',
-                animation: 'pulse-glow 3s ease-in-out infinite'
+                background: 'var(--bg-surface)'
               }}
             >
               <ImageWithFallback
@@ -93,9 +79,9 @@ export function Hero() {
                 alt="Ankur Bhatnagar"
                 className="w-full h-full object-cover object-top"
               />
-              
+
               {/* Gradient Overlay */}
-              <div 
+              <div
                 className="absolute inset-0 opacity-20 group-hover:opacity-10 transition-opacity"
                 style={{
                   background: 'linear-gradient(135deg, rgba(0, 200, 255, 0.3) 0%, rgba(240, 136, 62, 0.3) 100%)'
@@ -108,34 +94,25 @@ export function Hero() {
               <motion.div
                 className="absolute top-1/4 left-1/4 w-2 h-2 rounded-full"
                 style={{ background: 'var(--accent-cyan)' }}
-                animate={{
-                  y: [-20, -40, -20],
-                  opacity: [0, 1, 0],
-                }}
+                animate={{ y: [-20, -40, -20], opacity: [0, 1, 0] }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
               />
               <motion.div
                 className="absolute top-1/3 right-1/4 w-2 h-2 rounded-full"
                 style={{ background: 'var(--accent-amber)' }}
-                animate={{
-                  y: [-20, -40, -20],
-                  opacity: [0, 1, 0],
-                }}
+                animate={{ y: [-20, -40, -20], opacity: [0, 1, 0] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 0.3, repeatDelay: 0.5 }}
               />
               <motion.div
                 className="absolute bottom-1/3 left-1/3 w-2 h-2 rounded-full"
                 style={{ background: 'var(--accent-cyan)' }}
-                animate={{
-                  y: [-20, -40, -20],
-                  opacity: [0, 1, 0],
-                }}
+                animate={{ y: [-20, -40, -20], opacity: [0, 1, 0] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 0.6, repeatDelay: 0.5 }}
               />
             </div>
           </div>
 
-          {/* Experience Badge - Below Image */}
+          {/* Experience Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -150,11 +127,8 @@ export function Hero() {
                 boxShadow: '0 0 30px rgba(0, 200, 255, 0.3)'
               }}
             >
-              <span style={{
-                color: 'var(--accent-cyan)',
-                fontFamily: 'var(--font-mono)'
-              }} className="text-xl font-semibold tracking-wider">
-                {Math.floor((new Date().getTime() - new Date('2013-06-01').getTime()) / (1000 * 60 * 60 * 24 * 365.25))}+ YEARS
+              <span style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }} className="text-xl font-semibold tracking-wider">
+                {yearsOfExperience}+ YEARS
               </span>
             </div>
           </motion.div>
@@ -165,10 +139,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          style={{ 
-            fontFamily: 'var(--font-display)',
-            color: 'var(--text-primary)'
-          }}
+          style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
           className="fluid-hero-name font-bold tracking-wider mb-6"
         >
           ANKUR BHATNAGAR
@@ -187,10 +158,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            style={{ 
-              fontFamily: 'var(--font-body)',
-              color: 'var(--accent-cyan)'
-            }}
+            style={{ fontFamily: 'var(--font-body)', color: 'var(--accent-cyan)' }}
             className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl tracking-wide"
           >
             {roles[currentRole]}
@@ -244,11 +212,15 @@ export function Hero() {
 }
 
 function ContactButton({ icon, label, href }: { icon: React.ReactNode; label: string; href: string }) {
+  const { playSound } = useSound();
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => playSound('click')}
+      onMouseEnter={() => playSound('hover')}
       className="group flex items-center gap-3 px-5 py-3 rounded-lg border transition-all hover:scale-105"
       style={{
         borderColor: 'var(--bg-border)',

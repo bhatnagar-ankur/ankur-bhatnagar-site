@@ -8,13 +8,12 @@ import { Achievements } from './components/Achievements';
 import { Education } from './components/Education';
 import { Contact } from './components/Contact';
 import { useFavicon } from './components/useFavicon';
+import { ThemeProvider } from './components/ThemeProvider';
+import { SoundProvider } from './components/SoundProvider';
 
-export default function App() {
-  // Set favicon emoji
-  useFavicon('⚡');
-
+function AppContent() {
   return (
-    <div className="min-h-screen" style={{ 
+    <div className="min-h-screen" style={{
       fontFamily: 'var(--font-body)',
       background: 'var(--bg-deep)',
       color: 'var(--text-primary)'
@@ -29,5 +28,17 @@ export default function App() {
       <Education />
       <Contact />
     </div>
+  );
+}
+
+export default function App() {
+  useFavicon('⚡');
+
+  return (
+    <ThemeProvider>
+      <SoundProvider>
+        <AppContent />
+      </SoundProvider>
+    </ThemeProvider>
   );
 }

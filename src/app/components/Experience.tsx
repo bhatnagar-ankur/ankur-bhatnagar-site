@@ -135,7 +135,7 @@ export function Experience() {
           <div className="space-y-12">
             {experiences.map((exp, index) => (
               <ExperienceCard
-                key={index}
+                key={`${exp.company}-${exp.period}`}
                 experience={exp}
                 index={index}
                 inView={inView}
