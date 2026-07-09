@@ -3,109 +3,158 @@ import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { useSound } from './SoundProvider';
 import {
-  Code2,
-  Server,
-  Cloud,
-  Wrench,
-  Hexagon,
-  AtomIcon,
-  FileCode,
-  Braces,
-  Code,
-  FileJson,
-  Layers,
-  Database,
-  Box,
-  Activity,
-  MessageSquare,
-  Hash,
-  CloudCog,
-  GitBranch,
-  Package,
-  Terminal,
-  Zap,
-  Grid3x3,
-  Component,
-  Palette,
-  BarChart3,
-  BrainCircuit,
-  Bot,
-  Sparkles
+  Hexagon, AtomIcon, FileCode, Braces, Code, FileJson, Layers, Palette,
+  Box, Activity, MessageSquare, Database, Hash,
+  CloudCog, GitBranch, Package,
+  BrainCircuit, Bot, Sparkles, Zap,
+  Code2, Grid3x3, Component, BarChart3,
+  Users, Building2, Layout
 } from 'lucide-react';
 
-interface Skill {
+interface SkillTag {
   name: string;
-  level: number;
   icon: React.ReactNode;
 }
 
-interface SkillCategory {
-  title: string;
-  icon: React.ReactNode;
-  skills: Skill[];
+interface SkillGroup {
+  category: string;
+  skills: SkillTag[];
 }
 
-const skillCategories: SkillCategory[] = [
+interface SkillTier {
+  level: 'primary' | 'secondary' | 'exploring';
+  label: string;
+  description: string;
+  groups: SkillGroup[];
+}
+
+const skillTiers: SkillTier[] = [
   {
-    title: 'Frontend Technologies',
-    icon: <Code2 size={24} />,
-    skills: [
-      { name: 'Angular', level: 95, icon: <Hexagon size={16} /> },
-      { name: 'ReactJS', level: 90, icon: <AtomIcon size={16} /> },
-      { name: 'TypeScript', level: 92, icon: <FileCode size={16} /> },
-      { name: 'JavaScript', level: 95, icon: <Braces size={16} /> },
-      { name: 'HTML5/CSS3', level: 95, icon: <Code size={16} /> },
-      { name: 'NextJS', level: 85, icon: <FileJson size={16} /> },
-      { name: 'VueJS', level: 80, icon: <Layers size={16} /> },
-      { name: 'SCSS', level: 90, icon: <Palette size={16} /> }
+    level: 'primary',
+    label: 'PRIMARY',
+    description: 'Core expertise · Daily use · Deep proficiency',
+    groups: [
+      {
+        category: 'Frontend',
+        skills: [
+          { name: 'Angular', icon: <Hexagon size={14} /> },
+          { name: 'React', icon: <AtomIcon size={14} /> },
+          { name: 'TypeScript', icon: <FileCode size={14} /> },
+          { name: 'JavaScript', icon: <Braces size={14} /> },
+          { name: 'HTML5/CSS3', icon: <Code size={14} /> },
+          { name: 'SCSS', icon: <Palette size={14} /> }
+        ]
+      },
+      {
+        category: 'AI Tools',
+        skills: [
+          { name: 'Claude (Anthropic)', icon: <Sparkles size={14} /> },
+          { name: 'GitHub Copilot', icon: <Bot size={14} /> },
+          { name: 'VS Code', icon: <Code2 size={14} /> },
+          { name: 'Windsurf', icon: <Zap size={14} /> }
+        ]
+      },
+      {
+        category: 'Practice',
+        skills: [
+          { name: 'UI/UX Architecture', icon: <Layout size={14} /> },
+          { name: 'Team Leadership', icon: <Users size={14} /> },
+          { name: 'Frontend Architecture', icon: <Building2 size={14} /> }
+        ]
+      }
     ]
   },
   {
-    title: 'Backend & Database',
-    icon: <Server size={24} />,
-    skills: [
-      { name: 'ASP.Net', level: 85, icon: <Box size={16} /> },
-      { name: 'MVC APIs', level: 85, icon: <Activity size={16} /> },
-      { name: 'SignalR', level: 80, icon: <MessageSquare size={16} /> },
-      { name: 'SQL', level: 55, icon: <Database size={16} /> },
-      { name: 'C#', level: 55, icon: <Hash size={16} /> }
+    level: 'secondary',
+    label: 'SECONDARY',
+    description: 'Proven proficiency · Regular project use',
+    groups: [
+      {
+        category: 'Frontend',
+        skills: [
+          { name: 'NextJS', icon: <FileJson size={14} /> },
+          { name: 'VueJS', icon: <Layers size={14} /> },
+          { name: 'MaterialUI', icon: <Palette size={14} /> },
+          { name: 'AG Grid', icon: <Grid3x3 size={14} /> },
+          { name: 'Highcharts', icon: <BarChart3 size={14} /> },
+          { name: 'DevExtreme', icon: <Component size={14} /> }
+        ]
+      },
+      {
+        category: 'Backend',
+        skills: [
+          { name: 'ASP.Net', icon: <Box size={14} /> },
+          { name: 'C#', icon: <Hash size={14} /> },
+          { name: 'SignalR', icon: <MessageSquare size={14} /> },
+          { name: 'MVC APIs', icon: <Activity size={14} /> }
+        ]
+      },
+      {
+        category: 'Cloud & Data',
+        skills: [
+          { name: 'Azure', icon: <CloudCog size={14} /> },
+          { name: 'SQL', icon: <Database size={14} /> }
+        ]
+      },
+      {
+        category: 'Systems',
+        skills: [
+          { name: 'TeamCity', icon: <GitBranch size={14} /> },
+          { name: 'Octopus', icon: <Package size={14} /> }
+        ]
+      }
     ]
   },
   {
-    title: 'Cloud & DevOps',
-    icon: <Cloud size={24} />,
-    skills: [
-      { name: 'Azure', level: 50, icon: <CloudCog size={16} /> },
-      { name: 'TeamCity', level: 45, icon: <GitBranch size={16} /> },
-      { name: 'Octopus', level: 42, icon: <Package size={16} /> },
-      { name: 'CruiseControl.NET', level: 40, icon: <Terminal size={16} /> }
-    ]
-  },
-  {
-    title: 'AI-Assisted Development',
-    icon: <BrainCircuit size={24} />,
-    skills: [
-      { name: 'Claude (Anthropic)', level: 92, icon: <Sparkles size={16} /> },
-      { name: 'GitHub Copilot', level: 90, icon: <Bot size={16} /> },
-      { name: 'OpenAI Codex', level: 85, icon: <BrainCircuit size={16} /> }
-    ]
-  },
-  {
-    title: 'Tools & Libraries',
-    icon: <Wrench size={24} />,
-    skills: [
-      { name: 'VS Code', level: 95, icon: <Code2 size={16} /> },
-      { name: 'Windsurf', level: 90, icon: <Zap size={16} /> },
-      { name: 'AgGrid', level: 88, icon: <Grid3x3 size={16} /> },
-      { name: 'DevExtreme', level: 85, icon: <Component size={16} /> },
-      { name: 'MaterialUI', level: 90, icon: <Palette size={16} /> },
-      { name: 'Highcharts', level: 85, icon: <BarChart3 size={16} /> }
+    level: 'exploring',
+    label: 'EXPLORING',
+    description: 'Actively learning · Building deeper expertise',
+    groups: [
+      {
+        category: 'AI',
+        skills: [
+          { name: 'OpenAI Codex', icon: <BrainCircuit size={14} /> }
+        ]
+      }
     ]
   }
 ];
 
+const tierStyles = {
+  primary: {
+    border: 'var(--accent-cyan)',
+    labelBg: 'rgba(0, 200, 255, 0.12)',
+    labelColor: 'var(--accent-cyan)',
+    tagBg: 'rgba(0, 200, 255, 0.08)',
+    tagBorder: 'rgba(0, 200, 255, 0.35)',
+    tagColor: 'var(--text-primary)',
+    iconColor: 'var(--accent-cyan)',
+    glow: '0 0 30px rgba(0, 200, 255, 0.12)'
+  },
+  secondary: {
+    border: 'var(--bg-border)',
+    labelBg: 'rgba(240, 136, 62, 0.1)',
+    labelColor: 'var(--accent-amber)',
+    tagBg: 'rgba(240, 136, 62, 0.06)',
+    tagBorder: 'rgba(240, 136, 62, 0.25)',
+    tagColor: 'var(--text-primary)',
+    iconColor: 'var(--accent-amber)',
+    glow: 'none'
+  },
+  exploring: {
+    border: 'var(--bg-border)',
+    labelBg: 'var(--bg-deep)',
+    labelColor: 'var(--text-muted)',
+    tagBg: 'transparent',
+    tagBorder: 'var(--bg-border)',
+    tagColor: 'var(--text-muted)',
+    iconColor: 'var(--text-muted)',
+    glow: 'none'
+  }
+};
+
 export function Skills() {
-  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { playSound } = useSound();
 
   useEffect(() => {
@@ -126,22 +175,29 @@ export function Skills() {
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          style={{
-            fontFamily: 'var(--font-display)',
-            color: 'var(--text-primary)'
-          }}
-          className="fluid-section-h2 font-bold mb-12 tracking-wide"
+          style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
+          className="fluid-section-h2 font-bold mb-4 tracking-wide"
         >
           <span style={{ color: 'var(--accent-amber)' }}>02.</span> TECHNICAL SKILLS
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 3xl:grid-cols-3 gap-8 xl:gap-10">
-          {skillCategories.map((category, categoryIndex) => (
-            <SkillCategoryCard
-              key={category.title}
-              category={category}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-12"
+          style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.9375rem' }}
+        >
+          Organized by depth of expertise — not by arbitrary percentages.
+        </motion.p>
+
+        <div className="space-y-6">
+          {skillTiers.map((tier, tierIndex) => (
+            <TierBlock
+              key={tier.level}
+              tier={tier}
               inView={inView}
-              delay={categoryIndex * 0.2}
+              delay={tierIndex * 0.15}
             />
           ))}
         </div>
@@ -150,83 +206,79 @@ export function Skills() {
   );
 }
 
-function SkillCategoryCard({ category, inView, delay }: { category: SkillCategory; inView: boolean; delay: number }) {
+function TierBlock({ tier, inView, delay }: { tier: SkillTier; inView: boolean; delay: number }) {
+  const styles = tierStyles[tier.level];
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay }}
-      className="p-6 rounded-lg border backdrop-blur-xl"
+      className="rounded-xl border p-6"
       style={{
-        borderColor: 'var(--accent-cyan)',
+        borderColor: styles.border,
         background: 'var(--bg-deep)',
-        boxShadow: '0 4px 20px rgba(0, 200, 255, 0.1)'
+        boxShadow: styles.glow
       }}
     >
-      {/* Category Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div style={{ color: 'var(--accent-cyan)' }}>
-          {category.icon}
-        </div>
-        <h3
+      {/* Tier header */}
+      <div className="flex items-center gap-3 mb-5">
+        <span
+          className="px-3 py-1 rounded-full text-xs font-bold tracking-widest"
           style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--text-primary)'
+            fontFamily: 'var(--font-mono)',
+            background: styles.labelBg,
+            color: styles.labelColor
           }}
-          className="text-xl font-semibold"
         >
-          {category.title}
-        </h3>
+          {tier.label}
+        </span>
+        <span
+          style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.8125rem' }}
+        >
+          {tier.description}
+        </span>
       </div>
 
-      {/* Skill Bars */}
+      {/* Groups */}
       <div className="space-y-4">
-        {category.skills.map((skill, index) => (
-          <SkillBar
-            key={skill.name}
-            skill={skill}
-            inView={inView}
-            delay={delay + 0.1 + index * 0.05}
-          />
+        {tier.groups.map((group, groupIndex) => (
+          <motion.div
+            key={group.category}
+            initial={{ opacity: 0, x: -16 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5, delay: delay + 0.1 + groupIndex * 0.08 }}
+          >
+            <p
+              className="text-xs uppercase tracking-widest mb-2"
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', opacity: 0.6 }}
+            >
+              {group.category}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {group.skills.map((skill, skillIndex) => (
+                <motion.span
+                  key={skill.name}
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.35, delay: delay + 0.15 + groupIndex * 0.08 + skillIndex * 0.04 }}
+                  whileHover={{ scale: 1.06, boxShadow: `0 0 12px ${styles.tagBorder}` }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm cursor-default"
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    background: styles.tagBg,
+                    borderColor: styles.tagBorder,
+                    color: styles.tagColor
+                  }}
+                >
+                  <span style={{ color: styles.iconColor }}>{skill.icon}</span>
+                  {skill.name}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
         ))}
       </div>
     </motion.div>
-  );
-}
-
-function SkillBar({ skill, inView, delay }: { skill: Skill; inView: boolean; delay: number }) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <div style={{ color: 'var(--accent-cyan)' }}>
-          {skill.icon}
-        </div>
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            color: 'var(--text-primary)',
-            fontSize: '0.875rem'
-          }}
-        >
-          {skill.name}
-        </span>
-      </div>
-      <div
-        className="h-2 rounded-full overflow-hidden"
-        style={{ background: 'var(--bg-border)' }}
-      >
-        <motion.div
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${skill.level}%` } : {}}
-          transition={{ duration: 1, delay, ease: 'easeOut' }}
-          className="skill-meter h-full rounded-full"
-          style={{
-            '--skill-level': `${skill.level}%`,
-            background: `linear-gradient(90deg, var(--success-green), var(--accent-cyan))`,
-            boxShadow: '0 0 10px rgba(0, 200, 255, 0.5)'
-          } as React.CSSProperties}
-        />
-      </div>
-    </div>
   );
 }

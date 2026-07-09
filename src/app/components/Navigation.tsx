@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { Menu, X, ChevronUp, Share2, FileDown, Mail } from 'lucide-react';
 import { useSound } from './SoundProvider';
 import { SettingsMenu } from './SettingsMenu';
@@ -7,6 +7,7 @@ import { SettingsMenu } from './SettingsMenu';
 const navItems = [
   { id: 'summary', label: 'Summary' },
   { id: 'skills', label: 'Skills' },
+  { id: 'ai-practice', label: 'AI Practice' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'achievements', label: 'Awards' },
@@ -16,6 +17,7 @@ const navItems = [
 
 export function Navigation() {
   const { playSound } = useSound();
+  const { scrollYProgress } = useScroll();
   const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -59,7 +61,6 @@ export function Navigation() {
       setIsScrolled(window.scrollY > 100);
       setShowScrollTop(window.scrollY > 500);
 
-      // Determine active section
       const sections = navItems.map(item => document.getElementById(item.id));
       const scrollPosition = window.scrollY + 200;
 
@@ -78,12 +79,11 @@ export function Navigation() {
   }, []);
 
   const scrollToSection = (id: string) => {
-    playSound('click');
     const element = document.getElementById(id);
     if (element) {
       playSound('transition');
       const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
       setMobileMenuOpen(false);
     }
@@ -96,7 +96,6 @@ export function Navigation() {
 
   return (
     <>
-      {/* Desktop & Mobile Navigation */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -109,18 +108,25 @@ export function Navigation() {
           boxShadow: isScrolled ? 'var(--nav-shadow)' : 'none'
         }}
       >
+        {/* Scroll progress bar */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-0.5 origin-left"
+          style={{
+            scaleX: scrollYProgress,
+            background: 'linear-gradient(90deg, var(--accent-cyan), var(--accent-amber))',
+            boxShadow: '0 0 6px rgba(0, 200, 255, 0.6)'
+          }}
+        />
+
         <div className="resume-container py-4 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo — A.BHATNAGAR */}
           <button
             onClick={scrollToTop}
-            style={{
-              fontFamily: 'var(--font-ui)',
-              color: 'var(--text-primary)'
-            }}
+            style={{ fontFamily: 'var(--font-ui)' }}
             className="text-xl font-bold tracking-wider hover:opacity-80 transition-opacity"
           >
-            <span style={{ color: 'var(--accent-cyan)' }}>ANKUR</span>
-            <span style={{ color: 'var(--accent-amber)' }}>.DEV</span>
+            <span style={{ color: 'var(--accent-cyan)' }}>A.</span>
+            <span style={{ color: 'var(--text-primary)' }}>BHATNAGAR</span>
           </button>
 
           {/* Desktop Menu */}
@@ -129,7 +135,7 @@ export function Navigation() {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="px-4 py-2 rounded-lg transition-all"
+                className="relative px-4 py-2 rounded-lg transition-colors group"
                 style={{
                   fontFamily: 'var(--font-ui)',
                   fontSize: '0.875rem',
@@ -138,27 +144,34 @@ export function Navigation() {
                 }}
               >
                 {item.label}
+                {/* Underline draw-on */}
+                <motion.span
+                  className="absolute bottom-1 left-2 right-2 h-px"
+                  style={{ background: 'var(--accent-cyan)', originX: 0 }}
+                  initial={{ scaleX: 0 }}
+                  whileHover={{ scaleX: 1 }}
+                  animate={{ scaleX: activeSection === item.id ? 1 : 0 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                />
               </button>
             ))}
 
-            {/* Settings Menu */}
             <SettingsMenu />
 
             {/* Share Button */}
             <div ref={shareRef} className="relative ml-2">
               <button
                 onClick={() => setShareOpen(!shareOpen)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border transition-all hover:scale-105"
+                aria-label="Share"
+                title="Share"
+                className="flex items-center justify-center w-9 h-9 rounded-lg border transition-all hover:scale-105"
                 style={{
-                  fontFamily: 'var(--font-ui)',
-                  fontSize: '0.875rem',
                   borderColor: 'var(--accent-cyan)',
                   color: 'var(--accent-cyan)',
                   background: shareOpen ? 'rgba(0, 200, 255, 0.15)' : 'rgba(0, 200, 255, 0.05)'
                 }}
               >
-                <Share2 size={15} />
-                Share
+                <Share2 size={16} />
               </button>
 
               <AnimatePresence>
@@ -236,7 +249,6 @@ export function Navigation() {
                   </button>
                 ))}
 
-                {/* Mobile Share Options */}
                 <div className="pt-2 border-t" style={{ borderColor: 'var(--bg-border)' }}>
                   <p
                     className="px-4 py-2 text-xs uppercase tracking-widest"
@@ -275,7 +287,7 @@ export function Navigation() {
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 p-4 rounded-full border z-50 hover:scale-110 transition-transform"
+            className="fixed bottom-8 left-8 p-4 rounded-full border z-50 hover:scale-110 transition-transform"
             style={{
               borderColor: 'var(--accent-cyan)',
               background: 'var(--bg-surface)',

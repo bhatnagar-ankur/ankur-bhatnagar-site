@@ -82,7 +82,7 @@ export function Achievements() {
           }}
           className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
-          <span style={{ color: 'var(--accent-amber)' }}>05.</span> ACHIEVEMENTS & RECOGNITION
+          <span style={{ color: 'var(--accent-amber)' }}>06.</span> ACHIEVEMENTS & RECOGNITION
         </motion.h2>
 
         {/* Achievement Cards Grid */}
