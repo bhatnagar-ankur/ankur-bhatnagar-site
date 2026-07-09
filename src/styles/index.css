@@ -7,6 +7,25 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ── Cursor intent ─────────────────────────────────────────────────────────
+   Browsers don't apply cursor:pointer to <button> by default on all OSes.
+   ───────────────────────────────────────────────────────────────────────── */
+button:not(:disabled),
+a,
+[role="button"],
+label[for],
+summary {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.cursor-default {
+  cursor: default !important;
+}
+
 body {
   background: var(--bg-deep);
   color: var(--text-primary);
@@ -176,10 +195,10 @@ body {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  #experience [class*="md:flex-row-reverse"] { flex-direction: row-reverse !important; }
-  #experience [class*="md:flex-row"]         { flex-direction: row !important; }
-  #experience [class*="hidden"][class*="md:block"] { display: block !important; }
-  #experience .flex-1.ml-8 { margin-left: 0 !important; }
+  #experience .pl-10,
+  #experience .pl-14 {
+    padding-left: 2rem !important;
+  }
 
   .p-8,
   .p-6,

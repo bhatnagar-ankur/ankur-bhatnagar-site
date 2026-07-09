@@ -1,11 +1,13 @@
 import { motion } from 'motion/react';
-import { Mail, Linkedin, Github, Phone, Heart, Copy, Check } from 'lucide-react';
+import { useInView } from 'react-intersection-observer';
+import { Mail, Linkedin, Github, Heart, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { useSound } from './SoundProvider';
 
 export function Contact() {
   const { playSound } = useSound();
   const [copied, setCopied] = useState(false);
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
 
   const copyEmail = async () => {
     const email = 'bhatnagar018@gmail.com';
@@ -15,28 +17,19 @@ export function Contact() {
       playSound('success');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       try {
         const textArea = document.createElement('textarea');
         textArea.value = email;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
+        textArea.style.cssText = 'position:fixed;left:-999999px;top:-999999px';
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-
-        const successful = document.execCommand('copy');
         document.body.removeChild(textArea);
-
-        if (successful) {
-          playSound('success');
-          setCopied(true);
-          setTimeout(() => setCopied(false), 2000);
-        } else {
-          alert(`Copy this email: ${email}`);
-        }
-      } catch (fallbackErr) {
+        playSound('success');
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
         alert(`Copy this email: ${email}`);
       }
     }
@@ -45,133 +38,103 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="py-24 px-6 min-h-screen flex flex-col justify-center"
-      style={{ background: 'var(--bg-deep)' }}
+      ref={ref}
+      className="py-20 px-6"
+      style={{ background: 'var(--bg-surface)' }}
     >
-      <div className="resume-container max-w-4xl xl:max-w-5xl 2xl:max-w-6xl 3xl:max-w-7xl text-center">
+      <div className="resume-container max-w-4xl xl:max-w-5xl 2xl:max-w-6xl 3xl:max-w-7xl">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          className="mb-10"
         >
           <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--text-primary)'
-            }}
-            className="fluid-section-h2 font-bold mb-6 tracking-wide"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
+            className="fluid-section-h2 font-bold tracking-wide mb-3"
           >
-            <span style={{ color: 'var(--accent-amber)' }}>07.</span> LET'S CONNECT
+            <span style={{ color: 'var(--accent-amber)' }}>08.</span> LET'S CONNECT
           </h2>
           <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              color: 'var(--text-muted)'
-            }}
-            className="text-lg mb-12 max-w-2xl mx-auto"
+            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
+            className="text-base max-w-xl"
           >
-            Open to new opportunities and collaborations. Feel free to reach out for technical discussions, consulting, or full-time roles.
+            Open to new opportunities and collaborations. Reach out for technical discussions, consulting, or full-time roles.
           </p>
+        </motion.div>
 
-          {/* Contact Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
-            <ContactLink
-              icon={<Mail size={20} />}
-              label="Email Me"
-              href="mailto:bhatnagar018@gmail.com"
-            />
-            <ContactLink
-              icon={<Phone size={20} />}
-              label="Call Me"
-              href="tel:+917259901002"
-            />
-            <ContactLink
-              icon={<Linkedin size={20} />}
-              label="LinkedIn"
-              href="https://www.linkedin.com/in/bhatnagar-ankur"
-            />
-            <ContactLink
-              icon={<Github size={20} />}
-              label="GitHub"
-              href="https://github.com/bhatnagar-ankur"
-            />
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="flex flex-wrap items-center gap-3 mb-6"
+        >
+          <ContactLink icon={<Mail size={18} />} label="Email Me" href="mailto:bhatnagar018@gmail.com" />
+          <ContactLink icon={<Linkedin size={18} />} label="LinkedIn" href="https://www.linkedin.com/in/bhatnagar-ankur" />
+          <ContactLink icon={<Github size={18} />} label="GitHub" href="https://github.com/bhatnagar-ankur" />
 
-          {/* Copy Email Button */}
           <button
             onClick={copyEmail}
-            className="group inline-flex items-center gap-3 px-6 py-3 rounded-lg border transition-all hover:scale-105"
+            className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all hover:scale-105"
             style={{
               borderColor: 'var(--accent-cyan)',
-              background: 'rgba(0, 200, 255, 0.1)',
+              background: 'rgba(0, 200, 255, 0.08)',
               color: 'var(--accent-cyan)',
-              fontFamily: 'var(--font-ui)'
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.875rem'
             }}
           >
             {copied ? (
               <>
-                <Check size={20} />
-                <span>Email Copied!</span>
+                <Check size={16} />
+                <span>Copied!</span>
               </>
             ) : (
               <>
-                <Copy size={20} />
-                <span>Copy Email Address</span>
+                <Copy size={16} />
+                <span>Copy Email</span>
               </>
             )}
           </button>
         </motion.div>
-      </div>
 
-      {/* Footer */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="mt-24 pt-12 border-t text-center"
-        style={{ borderColor: 'var(--bg-border)' }}
-      >
-        <p
-          style={{
-            fontFamily: 'var(--font-display)',
-            color: 'var(--text-primary)'
-          }}
-          className="text-2xl font-bold mb-2"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="pt-8 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+          style={{ borderColor: 'var(--bg-border)' }}
         >
-          ANKUR BHATNAGAR
-        </p>
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--text-muted)'
-          }}
-          className="text-sm mb-6"
-        >
-          Technical Architect & UI/UX Practice Head
-        </p>
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--text-muted)',
-            fontSize: '0.875rem'
-          }}
-          className="flex items-center justify-center gap-2"
-        >
-          Made with <Heart size={16} style={{ color: 'var(--accent-amber)' }} fill="var(--accent-amber)" /> — Open to opportunities
-        </p>
-        <p
-          style={{
-            fontFamily: 'var(--font-ui)',
-            color: 'var(--bg-border)',
-            fontSize: '0.75rem'
-          }}
-          className="mt-4"
-        >
-          © 2026 Ankur Bhatnagar. All rights reserved.
-        </p>
-      </motion.div>
+          <div>
+            <p
+              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
+              className="text-lg font-bold tracking-wider"
+            >
+              ANKUR BHATNAGAR
+            </p>
+            <p
+              style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
+              className="text-sm"
+            >
+              Technical Architect & UI/UX Practice Head
+            </p>
+          </div>
+          <div className="text-right">
+            <p
+              style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.8125rem' }}
+              className="flex items-center gap-1.5"
+            >
+              Made with <Heart size={14} style={{ color: 'var(--accent-amber)' }} fill="var(--accent-amber)" /> · Open to opportunities
+            </p>
+            <p
+              style={{ fontFamily: 'var(--font-ui)', color: 'var(--text-muted)', fontSize: '0.75rem', opacity: 0.5 }}
+              className="mt-1"
+            >
+              © 2026 Ankur Bhatnagar
+            </p>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }
@@ -186,15 +149,16 @@ function ContactLink({ icon, label, href }: { icon: React.ReactNode; label: stri
       rel="noopener noreferrer"
       onClick={() => playSound('click')}
       onMouseEnter={() => playSound('hover')}
-      className="group flex items-center gap-3 px-6 py-3 rounded-lg border transition-all hover:scale-105"
+      className="group flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all hover:scale-105"
       style={{
         borderColor: 'var(--bg-border)',
-        background: 'var(--bg-surface)',
+        background: 'var(--bg-deep)',
         color: 'var(--text-primary)',
-        fontFamily: 'var(--font-ui)'
+        fontFamily: 'var(--font-ui)',
+        fontSize: '0.875rem'
       }}
     >
-      <span style={{ color: 'var(--accent-cyan)' }} className="transition-colors group-hover:drop-shadow-[0_0_8px_rgba(0,200,255,0.8)]">
+      <span style={{ color: 'var(--accent-cyan)' }} className="group-hover:drop-shadow-[0_0_8px_rgba(0,200,255,0.8)] transition-all">
         {icon}
       </span>
       <span>{label}</span>

@@ -7,19 +7,52 @@ interface SoundSettings {
   volume: number;
 }
 
+// Musical note frequencies (equal temperament, A4 = 440 Hz)
+const NOTE = {
+  C4: 261.63, D4: 293.66, E4: 329.63, G4: 392.00,
+  A4: 440.00, C5: 523.25, E5: 659.25, G5: 783.99,
+  A5: 880.00,
+} as const;
+
 let audioContext: AudioContext | null = null;
 
 const getAudioContext = () => {
   if (!audioContext) {
-    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
   }
   return audioContext;
 };
 
+function makeOscillator(
+  ctx: AudioContext,
+  type: OscillatorType,
+  freq: number,
+  gain: number,
+  start: number,
+  duration: number,
+  freqEnd?: number
+) {
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.connect(g);
+  g.connect(ctx.destination);
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, start);
+  if (freqEnd !== undefined) {
+    osc.frequency.exponentialRampToValueAtTime(freqEnd, start + duration * 0.9);
+  }
+  // Soft attack, clean exponential decay
+  g.gain.setValueAtTime(0.001, start);
+  g.gain.linearRampToValueAtTime(gain, start + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.001, start + duration);
+  osc.start(start);
+  osc.stop(start + duration + 0.01);
+}
+
 export function useSoundEffects() {
   const [settings, setSettings] = useState<SoundSettings>({
     enabled: true,
-    volume: 0.15
+    volume: 0.08   // Reduced from 0.15 — more ambient, less intrusive
   });
   const [isInitialized, setIsInitialized] = useState(false);
   const lastPlayTime = useRef<{ [key: string]: number }>({});
@@ -29,7 +62,7 @@ export function useSoundEffects() {
     if (saved) {
       try {
         setSettings(JSON.parse(saved));
-      } catch (e) {
+      } catch {
         // Use defaults
       }
     }
@@ -46,90 +79,53 @@ export function useSoundEffects() {
     if (!settings.enabled) return;
 
     const now = Date.now();
-    if (lastPlayTime.current[type] && now - lastPlayTime.current[type] < 50) {
-      return;
-    }
+    // Hover gets a much longer throttle to avoid firing on every element
+    const throttle = type === 'hover' ? 300 : 60;
+    if (lastPlayTime.current[type] && now - lastPlayTime.current[type] < throttle) return;
     lastPlayTime.current[type] = now;
 
     try {
       const ctx = getAudioContext();
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
-
-      const baseVolume = settings.volume;
-      const currentTime = ctx.currentTime;
+      const v = settings.volume;
+      const t = ctx.currentTime;
 
       switch (type) {
+        // Short, low-pitched click — triangle wave is warmer than sine at high freq
         case 'click':
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(1200, currentTime);
-          oscillator.frequency.exponentialRampToValueAtTime(800, currentTime + 0.02);
-          gainNode.gain.setValueAtTime(baseVolume * 0.3, currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.05);
-          oscillator.start(currentTime);
-          oscillator.stop(currentTime + 0.05);
+          makeOscillator(ctx, 'triangle', NOTE.A4, v * 0.55, t, 0.04, NOTE.E4);
           break;
 
+        // Very subtle hover chime — barely audible, just a breath of sound
         case 'hover':
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(800, currentTime);
-          gainNode.gain.setValueAtTime(baseVolume * 0.15, currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.08);
-          oscillator.start(currentTime);
-          oscillator.stop(currentTime + 0.08);
+          makeOscillator(ctx, 'sine', NOTE.G4, v * 0.18, t, 0.03);
           break;
 
+        // Ascending minor third = on; descending = off feel
         case 'toggle':
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(600, currentTime);
-          oscillator.frequency.setValueAtTime(900, currentTime + 0.05);
-          gainNode.gain.setValueAtTime(baseVolume * 0.4, currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.12);
-          oscillator.start(currentTime);
-          oscillator.stop(currentTime + 0.12);
+          makeOscillator(ctx, 'triangle', NOTE.C4, v * 0.55, t, 0.06);
+          makeOscillator(ctx, 'triangle', NOTE.G4, v * 0.4, t + 0.06, 0.07);
           break;
 
+        // Two-note ascending chord — C5 + E5 played close together
         case 'success':
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(800, currentTime);
-          oscillator.frequency.exponentialRampToValueAtTime(1200, currentTime + 0.1);
-          gainNode.gain.setValueAtTime(baseVolume * 0.35, currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.15);
-          oscillator.start(currentTime);
-          oscillator.stop(currentTime + 0.15);
+          makeOscillator(ctx, 'sine', NOTE.C5, v * 0.45, t, 0.12);
+          makeOscillator(ctx, 'sine', NOTE.E5, v * 0.35, t + 0.04, 0.14);
+          makeOscillator(ctx, 'sine', NOTE.G5, v * 0.25, t + 0.08, 0.14);
           break;
 
+        // Gentle rising sweep — navigation feels intentional
         case 'transition':
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(400, currentTime);
-          oscillator.frequency.exponentialRampToValueAtTime(600, currentTime + 0.2);
-          gainNode.gain.setValueAtTime(baseVolume * 0.2, currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.25);
-          oscillator.start(currentTime);
-          oscillator.stop(currentTime + 0.25);
+          makeOscillator(ctx, 'triangle', NOTE.C4, v * 0.3, t, 0.18, NOTE.G4);
           break;
 
+        // Descending sweep — return to top
         case 'whoosh':
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(2000, currentTime);
-          oscillator.frequency.exponentialRampToValueAtTime(400, currentTime + 0.15);
-          gainNode.gain.setValueAtTime(baseVolume * 0.2, currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.15);
-          oscillator.start(currentTime);
-          oscillator.stop(currentTime + 0.15);
+          makeOscillator(ctx, 'triangle', NOTE.A5, v * 0.25, t, 0.14, NOTE.C4);
           break;
 
+        // Quick low pop — section reveal
         case 'pop':
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(1000, currentTime);
-          oscillator.frequency.exponentialRampToValueAtTime(600, currentTime + 0.08);
-          gainNode.gain.setValueAtTime(baseVolume * 0.25, currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.08);
-          oscillator.start(currentTime);
-          oscillator.stop(currentTime + 0.08);
+          makeOscillator(ctx, 'triangle', NOTE.G4, v * 0.4, t, 0.06, NOTE.C4);
           break;
       }
     } catch (error) {

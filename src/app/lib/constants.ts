@@ -1,3 +1,3 @@
 export const yearsOfExperience = Math.floor(
-  (Date.now() - new Date('2013-06-01').getTime()) / (1000 * 60 * 60 * 24 * 365.25)
+  (Date.now() - new Date('2012-10-01').getTime()) / (1000 * 60 * 60 * 24 * 365.25)
 );

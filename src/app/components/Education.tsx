@@ -6,21 +6,18 @@ interface Education {
   degree: string;
   institution: string;
   year: string;
-  score: string;
 }
 
 const education: Education[] = [
   {
     degree: 'B.Tech in Computer Science & Engineering',
     institution: 'Amity University, Lucknow',
-    year: '2012',
-    score: 'CGPA: 6.22/10'
+    year: '2012'
   },
   {
     degree: 'XII - CBSE',
     institution: 'Lucknow Public School',
-    year: '2007',
-    score: '74.2%'
+    year: '2007'
   }
 ];
 
@@ -45,7 +42,7 @@ export function Education() {
           }}
           className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
-          <span style={{ color: 'var(--accent-amber)' }}>06.</span> EDUCATION
+          <span style={{ color: 'var(--accent-amber)' }}>07.</span> EDUCATION
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -91,27 +88,16 @@ export function Education() {
                   >
                     {edu.institution}
                   </p>
-                  <div className="flex items-center gap-4">
-                    <span
-                      className="px-3 py-1 rounded-full text-xs"
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        background: 'var(--accent-amber)',
-                        color: 'var(--bg-deep)'
-                      }}
-                    >
-                      {edu.year}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        color: 'var(--accent-cyan)',
-                        fontSize: '0.875rem'
-                      }}
-                    >
-                      {edu.score}
-                    </span>
-                  </div>
+                  <span
+                    className="px-3 py-1 rounded-full text-xs"
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      background: 'var(--accent-amber)',
+                      color: 'var(--bg-deep)'
+                    }}
+                  >
+                    {edu.year}
+                  </span>
                 </div>
               </div>
             </motion.div>

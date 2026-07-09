@@ -42,17 +42,16 @@ export function SettingsMenu() {
           setIsOpen(!isOpen);
         }}
         onMouseEnter={() => playSound('hover')}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg border transition-all hover:scale-105"
+        aria-label="Settings"
+        title="Settings"
+        className="flex items-center justify-center w-9 h-9 rounded-lg border transition-all hover:scale-105"
         style={{
-          fontFamily: 'var(--font-ui)',
-          fontSize: '0.875rem',
           borderColor: 'var(--accent-amber)',
           color: 'var(--accent-amber)',
           background: isOpen ? 'rgba(240, 136, 62, 0.15)' : 'rgba(240, 136, 62, 0.05)'
         }}
       >
-        <Settings size={15} />
-        Settings
+        <Settings size={16} />
       </button>
 
       <AnimatePresence>

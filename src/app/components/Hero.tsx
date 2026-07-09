@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { ChevronDown, MapPin, Linkedin, Github } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSound } from './SoundProvider';
@@ -16,6 +16,8 @@ const roles = [
 export function Hero() {
   const { playSound } = useSound();
   const [currentRole, setCurrentRole] = useState(0);
+  const { scrollY } = useScroll();
+  const gridY = useTransform(scrollY, [0, 600], [0, -120]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,10 +34,13 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" style={{ background: 'var(--bg-deep)' }}>
-      {/* Animated Grid Background */}
-      <div className="absolute inset-0 opacity-20">
+      {/* Parallax Blueprint Grid */}
+      <motion.div
+        className="absolute inset-0 opacity-20 pointer-events-none"
+        style={{ y: gridY }}
+      >
         <div className="absolute inset-0 blueprint-grid anim-grid-fade" />
-      </div>
+      </motion.div>
 
       <div className="relative z-0 resume-container text-center">
         {/* Profile Image with Experience Badge */}
@@ -45,9 +50,8 @@ export function Hero() {
           transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
           className="relative inline-block mb-8"
         >
-          {/* Profile Image Container */}
           <div className="relative group">
-            {/* Decorative Blueprint Corners */}
+            {/* Blueprint Corner Decorators */}
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -79,8 +83,6 @@ export function Hero() {
                 alt="Ankur Bhatnagar"
                 className="w-full h-full object-cover object-top"
               />
-
-              {/* Gradient Overlay */}
               <div
                 className="absolute inset-0 opacity-20 group-hover:opacity-10 transition-opacity"
                 style={{
@@ -89,26 +91,21 @@ export function Hero() {
               />
             </motion.div>
 
-            {/* Animated Particles on Hover */}
+            {/* Hover Particles */}
             <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <motion.div
-                className="absolute top-1/4 left-1/4 w-2 h-2 rounded-full"
-                style={{ background: 'var(--accent-cyan)' }}
-                animate={{ y: [-20, -40, -20], opacity: [0, 1, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
-              />
-              <motion.div
-                className="absolute top-1/3 right-1/4 w-2 h-2 rounded-full"
-                style={{ background: 'var(--accent-amber)' }}
-                animate={{ y: [-20, -40, -20], opacity: [0, 1, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.3, repeatDelay: 0.5 }}
-              />
-              <motion.div
-                className="absolute bottom-1/3 left-1/3 w-2 h-2 rounded-full"
-                style={{ background: 'var(--accent-cyan)' }}
-                animate={{ y: [-20, -40, -20], opacity: [0, 1, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.6, repeatDelay: 0.5 }}
-              />
+              {[
+                { top: '25%', left: '25%', color: 'var(--accent-cyan)', delay: 0 },
+                { top: '33%', right: '25%', color: 'var(--accent-amber)', delay: 0.3 },
+                { bottom: '33%', left: '33%', color: 'var(--accent-cyan)', delay: 0.6 }
+              ].map((p, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-full"
+                  style={{ background: p.color, top: p.top, left: p.left, right: (p as { right?: string }).right, bottom: (p as { bottom?: string }).bottom }}
+                  animate={{ y: [-20, -40, -20], opacity: [0, 1, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: p.delay, repeatDelay: 0.5 }}
+                />
+              ))}
             </div>
           </div>
 
@@ -145,24 +142,26 @@ export function Hero() {
           ANKUR BHATNAGAR
         </motion.h1>
 
-        {/* Animated Role Subtitle */}
+        {/* Role Subtitle — AnimatePresence for proper enter/exit */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="h-16 mb-8"
+          className="h-16 mb-8 flex items-center justify-center"
         >
-          <motion.h2
-            key={currentRole}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            style={{ fontFamily: 'var(--font-body)', color: 'var(--accent-cyan)' }}
-            className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl tracking-wide"
-          >
-            {roles[currentRole]}
-          </motion.h2>
+          <AnimatePresence mode="wait">
+            <motion.h2
+              key={currentRole}
+              initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              style={{ fontFamily: 'var(--font-body)', color: 'var(--accent-cyan)' }}
+              className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl tracking-wide"
+            >
+              {roles[currentRole]}
+            </motion.h2>
+          </AnimatePresence>
         </motion.div>
 
         {/* Location */}
