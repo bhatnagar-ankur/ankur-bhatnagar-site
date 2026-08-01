@@ -28,8 +28,8 @@ export function Hero() {
 
   const scrollToSection = () => {
     playSound('transition');
-    const summarySection = document.getElementById('summary');
-    summarySection?.scrollIntoView({ behavior: 'smooth' });
+    const projectsSection = document.getElementById('projects');
+    projectsSection?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -147,7 +147,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="h-16 mb-8 flex items-center justify-center"
+          className="h-16 mb-4 flex items-center justify-center"
         >
           <AnimatePresence mode="wait">
             <motion.h2
@@ -163,6 +163,17 @@ export function Hero() {
             </motion.h2>
           </AnimatePresence>
         </motion.div>
+
+        {/* Value proposition tagline */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.55 }}
+          style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)' }}
+          className="text-base md:text-lg xl:text-xl max-w-3xl mx-auto mb-8 leading-relaxed px-4"
+        >
+          Enterprise frontend systems on Angular, React &amp; Azure — leading 20+ engineers with an AI-first delivery model that ships faster and holds the line on quality.
+        </motion.p>
 
         {/* Location */}
         <motion.div
@@ -202,7 +213,7 @@ export function Hero() {
             fontFamily: 'var(--font-ui)'
           }}
         >
-          <span className="text-sm tracking-wider">SCROLL TO EXPLORE</span>
+          <span className="text-sm tracking-wider">SEE RECENT WORK</span>
           <ChevronDown size={20} className="animate-bounce" />
         </motion.button>
       </div>

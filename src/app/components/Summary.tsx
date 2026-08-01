@@ -68,7 +68,7 @@ export function Summary() {
               }}
               className="text-xl md:text-2xl leading-relaxed"
             >
-              Accomplished Technical Architect and UI/UX Practice Head with {yearsOfExperience}+ years of experience leading frontend technology initiatives and managing cross-functional teams of 20+ designers. Proven track record of delivering scalable web applications and driving AI technology adoption. Recognized leader with awards for technical excellence and innovation.
+              Technical Architect and UI/UX Practice Head. {yearsOfExperience}+ years shipping enterprise-scale frontend systems on Angular, React &amp; Azure — leading a 20+ engineer team and embedding AI into every stage of the design-to-code pipeline. Award-recognized for technical excellence and craft.
             </p>
           </blockquote>
 

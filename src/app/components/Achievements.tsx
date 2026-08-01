@@ -1,9 +1,10 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
-import { Award, Trophy, Medal, Sparkles, Satellite, Building2, Search } from 'lucide-react';
+import { Award, Trophy, Sparkles, Satellite, Building2, Search } from 'lucide-react';
 
 interface Achievement {
   title: string;
+  issuer: string;
   description: string;
   icon: React.ReactNode;
   year: string;
@@ -13,28 +14,24 @@ interface Achievement {
 const achievements: Achievement[] = [
   {
     title: 'Technical Lead of the Year',
-    description: 'Recognized for exceptional leadership and technical excellence',
+    issuer: 'DreamOrbit Softech',
+    description: 'Company-wide recognition for leadership impact — delivery velocity, mentorship, and technical decision quality across the year.',
     icon: <Trophy size={32} />,
     year: '2018-2019',
     type: 'award'
   },
   {
     title: 'Best Software Engineer',
-    description: 'Outstanding performance and contributions to project success',
+    issuer: 'DreamOrbit Softech',
+    description: 'Individual contributor award — shipped mission-critical features across financial and logistics platforms.',
     icon: <Award size={32} />,
     year: '2015-2016',
     type: 'award'
   },
   {
-    title: '2nd Prize - Nukkad Natak',
-    description: 'Inter-college drama competition at Amity Engineering College',
-    icon: <Medal size={32} />,
-    year: '2010',
-    type: 'award'
-  },
-  {
     title: 'ISRO AI/ML for Geodata Analysis',
-    description: 'Advanced certification in AI/ML applications for geospatial data',
+    issuer: 'Indian Space Research Organisation',
+    description: 'Advanced practitioner certification in AI/ML applied to geospatial datasets — issued by ISRO.',
     icon: <Sparkles size={32} />,
     year: '2024',
     type: 'certification'
@@ -86,7 +83,7 @@ export function Achievements() {
         </motion.h2>
 
         {/* Achievement Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {achievements.map((achievement, index) => (
             <motion.div
               key={achievement.title}
@@ -117,7 +114,7 @@ export function Achievements() {
                   {achievement.icon}
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex items-start justify-between gap-2 mb-1">
                     <h3
                       style={{
                         fontFamily: 'var(--font-display)',
@@ -138,6 +135,17 @@ export function Achievements() {
                       {achievement.year}
                     </span>
                   </div>
+                  <p
+                    className="mb-2"
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      color: 'var(--accent-amber)',
+                      fontSize: '0.75rem',
+                      letterSpacing: '0.03em',
+                    }}
+                  >
+                    {achievement.issuer}
+                  </p>
                   <p
                     style={{
                       fontFamily: 'var(--font-body)',

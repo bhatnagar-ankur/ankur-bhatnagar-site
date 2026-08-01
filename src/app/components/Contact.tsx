@@ -55,11 +55,39 @@ export function Contact() {
           >
             <span style={{ color: 'var(--accent-amber)' }}>08.</span> LET'S CONNECT
           </h2>
+
+          <div className="flex items-center gap-2 mb-4">
+            <span
+              className="relative flex h-2.5 w-2.5"
+              aria-hidden="true"
+            >
+              <span
+                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                style={{ background: 'var(--success-green)' }}
+              />
+              <span
+                className="relative inline-flex rounded-full h-2.5 w-2.5"
+                style={{ background: 'var(--success-green)' }}
+              />
+            </span>
+            <span
+              className="tracking-wider"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--success-green)',
+                fontSize: '0.8125rem',
+                letterSpacing: '0.08em',
+              }}
+            >
+              AVAILABLE FOR NEW ENGAGEMENTS
+            </span>
+          </div>
+
           <p
-            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
-            className="text-base max-w-xl"
+            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)' }}
+            className="text-base md:text-lg max-w-2xl leading-relaxed"
           >
-            Open to new opportunities and collaborations. Reach out for technical discussions, consulting, or full-time roles.
+            Open to full-time architect roles, fractional / consulting engagements, and technical advisory work — especially for teams scaling frontend delivery with AI in the loop.
           </p>
         </motion.div>
 

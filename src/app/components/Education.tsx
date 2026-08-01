@@ -15,8 +15,8 @@ const education: Education[] = [
     year: '2012'
   },
   {
-    degree: 'XII - CBSE',
-    institution: 'Lucknow Public School',
+    degree: 'Higher Secondary (Science)',
+    institution: 'Lucknow Public School, Lucknow',
     year: '2007'
   }
 ];

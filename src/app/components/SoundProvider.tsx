@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode } from 'react';
 import { useSoundEffects } from './useSoundEffects';
 
-type SoundType = 'click' | 'hover' | 'toggle' | 'success' | 'transition' | 'whoosh' | 'pop';
+type SoundType = 'click' | 'hover' | 'toggle' | 'success' | 'transition' | 'whoosh' | 'pop' | 'bulb-on' | 'bulb-off';
 
 interface SoundContextType {
   playSound: (type: SoundType) => void;

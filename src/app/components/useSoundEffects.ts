@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 
-type SoundType = 'click' | 'hover' | 'toggle' | 'success' | 'transition' | 'whoosh' | 'pop';
+type SoundType = 'click' | 'hover' | 'toggle' | 'success' | 'transition' | 'whoosh' | 'pop' | 'bulb-on' | 'bulb-off';
 
 interface SoundSettings {
   enabled: boolean;
@@ -126,6 +126,23 @@ export function useSoundEffects() {
         // Quick low pop — section reveal
         case 'pop':
           makeOscillator(ctx, 'triangle', NOTE.G4, v * 0.4, t, 0.06, NOTE.C4);
+          break;
+
+        // Sharp click + electrical buzz burst + warm filament swell
+        case 'bulb-on':
+          makeOscillator(ctx, 'square', 280, v * 2.8, t, 0.018);
+          makeOscillator(ctx, 'square', 140, v * 1.6, t, 0.022);
+          makeOscillator(ctx, 'square', 4400, v * 0.9, t + 0.012, 0.055);
+          makeOscillator(ctx, 'square', 2200, v * 0.6, t + 0.015, 0.04);
+          makeOscillator(ctx, 'sine', 220, v * 0.55, t + 0.05, 0.28, 420);
+          break;
+
+        // Heavy thunk + sharp arc pop + deep rumble
+        case 'bulb-off':
+          makeOscillator(ctx, 'triangle', 160, v * 2.5, t, 0.025);
+          makeOscillator(ctx, 'square', 80, v * 1.4, t, 0.03);
+          makeOscillator(ctx, 'square', 3400, v * 0.7, t, 0.02);
+          makeOscillator(ctx, 'sine', 100, v * 0.45, t + 0.015, 0.2, 28);
           break;
       }
     } catch (error) {

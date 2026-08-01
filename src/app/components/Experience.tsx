@@ -19,9 +19,9 @@ const experiences: Experience[] = [
     role: 'Technical Architect & UI/UX Practice Head',
     company: 'Saksoft Ltd',
     highlights: [
-      'Leading UI/UX practice and frontend architecture strategy across enterprise accounts',
-      'Driving adoption of modern frontend technologies and AI integration across teams',
-      'Managing cross-functional design and development teams of 20+ members'
+      'Leading UI/UX practice + frontend architecture across enterprise accounts — 20+ designers and developers under my leadership',
+      'Embedding AI (Claude, GitHub Copilot, Codex) across every stage of the design-to-code pipeline — from prompt design to code review',
+      'Setting organization-wide standards for AI evaluation, hiring criteria, and responsible tool use'
     ],
     techStack: ['Angular', 'React', 'Azure', 'AI/GenAI', 'TypeScript']
   },
