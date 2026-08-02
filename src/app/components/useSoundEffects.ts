@@ -52,7 +52,7 @@ function makeOscillator(
 export function useSoundEffects() {
   const [settings, setSettings] = useState<SoundSettings>({
     enabled: true,
-    volume: 0.08   // Reduced from 0.15 — more ambient, less intrusive
+    volume: 1
   });
   const [isInitialized, setIsInitialized] = useState(false);
   const lastPlayTime = useRef<{ [key: string]: number }>({});

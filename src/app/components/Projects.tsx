@@ -1,4 +1,5 @@
 import React from 'react';
+import { ProjectsBg } from './SectionBackgrounds';
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { Calendar, CheckCircle2, GitBranch, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
@@ -228,9 +229,10 @@ export function Projects() {
     <section
       id="projects"
       ref={ref}
-      className="py-24 px-6"
+      className="relative overflow-hidden py-24 px-6"
       style={{ background: 'var(--bg-deep)' }}
     >
+      <ProjectsBg />
       <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
@@ -661,7 +663,7 @@ function DetailBlock({ icon, label, color, children }: {
         {icon}
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</span>
       </div>
-      <div style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.75rem', lineHeight: '1.5' }} className="flex flex-col gap-1">
+      <div style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }} className="flex flex-col gap-1 fluid-caption">
         {children}
       </div>
     </div>
@@ -772,8 +774,8 @@ function ProjectCard({ project, index, inView, featured = false }: {
           <MetricsBand metrics={project.metrics} />
 
           <p
-            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)', fontSize: featured ? '0.9375rem' : '0.875rem' }}
-            className="leading-relaxed"
+            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)' }}
+            className="fluid-body"
           >
             {project.description}
           </p>
@@ -782,7 +784,7 @@ function ProjectCard({ project, index, inView, featured = false }: {
             {project.achievements.map((a, i) => (
               <div key={i} className="flex items-start gap-2">
                 <CheckCircle2 size={13} style={{ color: 'var(--success-green)', flexShrink: 0, marginTop: '3px' }} />
-                <span style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
+                <span className="fluid-caption" style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}>
                   {a}
                 </span>
               </div>

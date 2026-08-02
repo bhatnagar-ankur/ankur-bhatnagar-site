@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { Sparkles, Users, Layers, BrainCircuit } from 'lucide-react';
+import { AIBg } from './SectionBackgrounds';
 
 interface AIInitiative {
   icon: React.ReactNode;
@@ -53,9 +54,10 @@ export function AISection() {
     <section
       id="ai-practice"
       ref={ref}
-      className="py-24 px-6"
+      className="relative overflow-hidden py-24 px-6"
       style={{ background: 'var(--bg-deep)' }}
     >
+      <AIBg />
       <div className="resume-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -69,8 +71,8 @@ export function AISection() {
             <span style={{ color: 'var(--accent-amber)' }}>03.</span> AI-AUGMENTED PRACTICE
           </h2>
           <p
-            className="mb-12"
-            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.9375rem' }}
+            className="mb-12 fluid-body"
+            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
           >
             AI is not a feature on the roadmap — it's the operating model.
           </p>
@@ -187,7 +189,8 @@ export function AISection() {
         >
           <BrainCircuit size={24} style={{ color: 'var(--accent-cyan)', flexShrink: 0, marginTop: 2 }} />
           <p
-            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.9375rem', lineHeight: 1.7 }}
+            className="fluid-body"
+            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
           >
             As UI/UX Practice Head, I don't just use AI tools — I design the frameworks that govern how a 20+ person team uses them responsibly, consistently, and creatively. AI fluency is now a hiring criterion, not a nice-to-have.
           </p>

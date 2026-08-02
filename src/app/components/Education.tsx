@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { GraduationCap, BookOpen } from 'lucide-react';
+import { EducationBg } from './SectionBackgrounds';
 
 interface Education {
   degree: string;
@@ -28,9 +29,10 @@ export function Education() {
     <section
       id="education"
       ref={ref}
-      className="py-24 px-6"
+      className="relative overflow-hidden py-24 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
+      <EducationBg />
       <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}

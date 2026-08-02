@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { Mail, Linkedin, Github, Heart, Copy, Check } from 'lucide-react';
+import { ContactBg } from './SectionBackgrounds';
 import { useState } from 'react';
 import { useSound } from './SoundProvider';
 
@@ -39,9 +40,10 @@ export function Contact() {
     <section
       id="contact"
       ref={ref}
-      className="py-20 px-6"
+      className="relative overflow-hidden pt-20 pb-48 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
+      <ContactBg />
       <div className="resume-container max-w-4xl xl:max-w-5xl 2xl:max-w-6xl 3xl:max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

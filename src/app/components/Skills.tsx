@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { SkillsBg } from './SectionBackgrounds';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { useSound } from './SoundProvider';
@@ -167,9 +168,10 @@ export function Skills() {
     <section
       id="skills"
       ref={ref}
-      className="py-24 px-6"
+      className="relative overflow-hidden py-24 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
+      <SkillsBg />
       <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
@@ -185,8 +187,8 @@ export function Skills() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-12"
-          style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.9375rem' }}
+          className="mb-12 fluid-body"
+          style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
         >
           Organized by depth of expertise — not by arbitrary percentages.
         </motion.p>
@@ -234,7 +236,8 @@ function TierBlock({ tier, inView, delay }: { tier: SkillTier; inView: boolean; 
           {tier.label}
         </span>
         <span
-          style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.8125rem' }}
+          className="fluid-caption"
+          style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
         >
           {tier.description}
         </span>

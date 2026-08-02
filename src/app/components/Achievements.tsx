@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { Award, Trophy, Sparkles, Satellite, Building2, Search } from 'lucide-react';
+import { AchievementsBg } from './SectionBackgrounds';
 
 interface Achievement {
   title: string;
@@ -65,9 +66,10 @@ export function Achievements() {
     <section
       id="achievements"
       ref={ref}
-      className="py-24 px-6"
+      className="relative overflow-hidden py-24 px-6"
       style={{ background: 'var(--bg-deep)' }}
     >
+      <AchievementsBg />
       <div className="resume-container">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
@@ -147,10 +149,10 @@ export function Achievements() {
                     {achievement.issuer}
                   </p>
                   <p
+                    className="fluid-body"
                     style={{
                       fontFamily: 'var(--font-body)',
-                      color: 'var(--text-muted)',
-                      fontSize: '0.875rem'
+                      color: 'var(--text-muted)'
                     }}
                   >
                     {achievement.description}

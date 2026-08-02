@@ -65,6 +65,13 @@ export function Navigation() {
       const sections = navItems.map(item => document.getElementById(item.id));
       const scrollPosition = window.scrollY + 200;
 
+      const atBottom =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 20;
+      if (atBottom) {
+        setActiveSection(navItems[navItems.length - 1].id);
+        return;
+      }
+
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section && section.offsetTop <= scrollPosition) {
@@ -83,9 +90,9 @@ export function Navigation() {
     const element = document.getElementById(id);
     if (element) {
       playSound('transition');
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+      setActiveSection(id);
+      const rawY = element.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: rawY, behavior: 'smooth' });
       setMobileMenuOpen(false);
     }
   };
@@ -208,6 +215,7 @@ export function Navigation() {
                 )}
               </AnimatePresence>
             </div>
+            <BulbToggle />
           </div>
 
           {/* Mobile Menu Button */}
@@ -278,8 +286,6 @@ export function Navigation() {
           )}
         </AnimatePresence>
       </motion.nav>
-
-      <BulbToggle />
 
       {/* Scroll to Top Button */}
       <AnimatePresence>
@@ -461,8 +467,27 @@ function BulbToggle() {
   const isOn = theme === 'light';
   const [swingKey, setSwingKey] = useState(0);
   const [showElectricity, setShowElectricity] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    setShowTooltip(true);
+  }, []);
+
+  useEffect(() => {
+    if (!showTooltip) return;
+    const dismiss = () => {
+      setShowTooltip(false);
+    };
+    const timer = setTimeout(dismiss, 4000);
+    window.addEventListener('scroll', dismiss, { once: true, passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', dismiss);
+    };
+  }, [showTooltip]);
 
   const handleToggle = () => {
+    setShowTooltip(false);
     const turningOn = !isOn;
     playSound(isOn ? 'bulb-off' : 'bulb-on');
     toggleTheme();
@@ -474,23 +499,69 @@ function BulbToggle() {
   };
 
   return (
-    <div
-      className="hidden md:block"
-      style={{ position: 'fixed', top: 0, right: 8, zIndex: 49, pointerEvents: 'none' }}
-    >
-      <motion.div
-        key={swingKey === 0 ? 'init' : swingKey}
-        initial={{ rotate: 0 }}
-        animate={{ rotate: swingKey > 0 ? [0, 14, -10, 7, -4, 2, -1, 0] : 0 }}
-        transition={{ duration: 1.25, ease: [0.25, 0.1, 0.25, 1] }}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          transformOrigin: '50% 0%',
-          pointerEvents: 'auto',
-        }}
-      >
+    <div className="relative ml-3" style={{ alignSelf: 'stretch', pointerEvents: 'none', minWidth: 38 }}>
+      <AnimatePresence>
+        {showTooltip && (
+          <motion.div
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 8 }}
+            transition={{ duration: 0.3 }}
+            className="flex items-center"
+            style={{
+              position: 'absolute',
+              top: WIRE_H + 24,
+              right: '100%',
+              marginRight: 8,
+              transform: 'translateY(-50%)',
+              zIndex: 48,
+              pointerEvents: 'none',
+            }}
+          >
+            <motion.div
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              <div style={{
+                padding: '5px 10px',
+                borderRadius: 6,
+                border: '1px solid rgba(240,136,62,0.45)',
+                background: 'rgba(13,17,23,0.9)',
+                backdropFilter: 'blur(8px)',
+                whiteSpace: 'nowrap',
+              }}>
+                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', fontSize: '0.6875rem', letterSpacing: '0.03em' }}>
+                  Toggle the light
+                </span>
+              </div>
+              <div style={{
+                width: 0, height: 0,
+                borderTop: '5px solid transparent',
+                borderBottom: '5px solid transparent',
+                borderLeft: '6px solid rgba(240,136,62,0.45)',
+                marginLeft: -1, flexShrink: 0,
+              }} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+        <motion.div
+          key={swingKey === 0 ? 'init' : swingKey}
+          initial={{ rotate: 0 }}
+          animate={{ rotate: swingKey > 0 ? [0, 14, -10, 7, -4, 2, -1, 0] : 0 }}
+          transition={{ duration: 1.25, ease: [0.25, 0.1, 0.25, 1] }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            transformOrigin: '50% 0%',
+            pointerEvents: 'auto',
+            zIndex: 49,
+          }}
+        >
         {/* Hanging wire */}
         <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
           <div
@@ -557,7 +628,8 @@ function BulbToggle() {
 
           <BulbSvg isOn={isOn} />
         </motion.button>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }

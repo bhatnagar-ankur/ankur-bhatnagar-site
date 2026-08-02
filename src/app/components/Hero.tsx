@@ -5,6 +5,7 @@ import { useSound } from './SoundProvider';
 import { ImageWithFallback } from './ImageWithFallback';
 import profilePic from '../../imports/Profile_Pic.jpg';
 import { yearsOfExperience } from '../lib/constants';
+import { HeroBackground } from './HeroBackground';
 
 const roles = [
   'Technical Architect',
@@ -41,6 +42,9 @@ export function Hero() {
       >
         <div className="absolute inset-0 blueprint-grid anim-grid-fade" />
       </motion.div>
+
+      {/* Neural architecture background — constellation + circuit traces */}
+      <HeroBackground />
 
       <div className="relative z-0 resume-container text-center">
         {/* Profile Image with Experience Badge */}
@@ -170,17 +174,45 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.55 }}
           style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)' }}
-          className="text-base md:text-lg xl:text-xl max-w-3xl mx-auto mb-8 leading-relaxed px-4"
+          className="text-base md:text-lg xl:text-xl max-w-3xl mx-auto mb-5 leading-relaxed px-4"
         >
           Enterprise frontend systems on Angular, React &amp; Azure — leading 20+ engineers with an AI-first delivery model that ships faster and holds the line on quality.
         </motion.p>
+
+        {/* Stat band */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.65 }}
+          className="flex items-center justify-center mb-5"
+        >
+          {[
+            { value: `${yearsOfExperience}+`, label: 'Years' },
+            { value: '20+', label: 'Engineers Led' },
+            { value: 'AI-First', label: 'Delivery' },
+          ].map((s, i) => (
+            <div key={s.label} className="flex items-center">
+              {i > 0 && (
+                <div style={{ width: 1, height: 28, background: 'var(--bg-border)', margin: '0 20px' }} />
+              )}
+              <div className="text-center">
+                <div style={{ fontFamily: 'var(--font-display)', color: 'var(--accent-cyan)', fontSize: 'clamp(1.125rem, 2.2vw, 1.5rem)', fontWeight: 700, lineHeight: 1.1 }}>
+                  {s.value}
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.625rem', letterSpacing: '0.1em', marginTop: 3 }}>
+                  {s.label.toUpperCase()}
+                </div>
+              </div>
+            </div>
+          ))}
+        </motion.div>
 
         {/* Location */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex items-center justify-center gap-2 mb-12"
+          transition={{ duration: 0.8, delay: 0.72 }}
+          className="flex items-center justify-center gap-2 mb-4"
           style={{ color: 'var(--text-muted)' }}
         >
           <MapPin size={20} style={{ color: 'var(--accent-amber)' }} />
@@ -189,11 +221,25 @@ export function Hero() {
           </span>
         </motion.div>
 
+        {/* Company / credential strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.78 }}
+          className="flex items-center justify-center gap-3 mb-10"
+        >
+          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', fontSize: '0.6875rem', letterSpacing: '0.04em' }}>▸ Saksoft Ltd</span>
+          <span style={{ color: 'var(--bg-border)' }}>·</span>
+          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.6875rem', letterSpacing: '0.04em' }}>DreamOrbit</span>
+          <span style={{ color: 'var(--bg-border)' }}>·</span>
+          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.6875rem', letterSpacing: '0.04em' }}>ISRO Certified</span>
+        </motion.div>
+
         {/* Contact Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.85 }}
           className="flex flex-wrap items-center justify-center gap-4 mb-16"
         >
           <ContactButton icon={<Linkedin size={20} />} label="LinkedIn" href="https://www.linkedin.com/in/bhatnagar-ankur" />

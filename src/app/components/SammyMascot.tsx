@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useAnimationControls } from 'motion/react';
 
 // ── Section-aware dialogue ──────────────────────────────────────────
 const SECTION_DIALOGUES: Record<string, { greet: string; tips: string[]; mouth: string; emotion: 'sparkle' | 'think' }> = {
@@ -107,8 +107,10 @@ export function SammyMascot() {
   const [bubbleVisible, setBubbleVisible] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
 
   const mascotRef = useRef<HTMLDivElement>(null);
+  const controls = useAnimationControls();
   const bubbleTimer = useRef<ReturnType<typeof setTimeout>>();
   const dragStart = useRef({ x: 0, y: 0 });
   const posRef = useRef({ x: 0, y: 0 });
@@ -137,12 +139,33 @@ export function SammyMascot() {
     return () => window.removeEventListener('scroll', detect);
   }, []);
 
+  // ── Fly-in when leaving hero for the first time ──
+  useEffect(() => {
+    if (hasEntered || currentSection === 'hero') return;
+    setHasEntered(true);
+    controls.set({ x: -window.innerWidth * 0.6, y: 60, opacity: 0, scale: 0.5, rotate: -25 });
+    controls.start({
+      x: 0,
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      rotate: 0,
+      transition: {
+        type: 'spring',
+        stiffness: 55,
+        damping: 14,
+        mass: 1,
+        duration: 1.4,
+      },
+    });
+  }, [currentSection, hasEntered, controls]);
+
   // ── Show greet on section change ──
   useEffect(() => {
-    if (isMinimized) return;
+    if (isMinimized || !hasEntered) return;
     const d = SECTION_DIALOGUES[currentSection];
     if (d) showBubble(d.greet);
-  }, [currentSection, isMinimized]);
+  }, [currentSection, isMinimized, hasEntered]);
 
   // ── Bubble helpers ──
   const showBubble = useCallback((text: string) => {
@@ -166,12 +189,13 @@ export function SammyMascot() {
     return () => clearInterval(id);
   }, [isMinimized, bubbleVisible, showRandomTip]);
 
-  // ── Initial greeting ──
+  // ── Initial greeting (after fly-in) ──
   useEffect(() => {
-    const t = setTimeout(() => showBubble(SECTION_DIALOGUES.hero.greet), 1200);
+    if (!hasEntered) return;
+    const t = setTimeout(() => showBubble(SECTION_DIALOGUES[currentSection]?.greet ?? SECTION_DIALOGUES.hero.greet), 800);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hasEntered]);
 
   // ── Drag ──
   const onPointerDown = (e: React.PointerEvent) => {
@@ -231,13 +255,12 @@ export function SammyMascot() {
     <motion.div
       ref={mascotRef}
       className="fixed bottom-6 right-6 z-[60]"
-      style={{ x: pos.x, y: pos.y, touchAction: 'none' }}
+      style={{ x: pos.x, y: pos.y, touchAction: 'none', pointerEvents: hasEntered ? 'auto' : 'none' }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.6, type: 'spring', stiffness: 200, damping: 20 }}
+      initial={{ opacity: 0, x: -300, y: 60, scale: 0.5, rotate: -25 }}
+      animate={controls}
     >
       {/* Speech bubble */}
       <AnimatePresence>

@@ -1,7 +1,8 @@
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { useState, useRef, Fragment } from 'react';
-import { ChevronDown, Building2, ArrowRight } from 'lucide-react';
+import { ChevronDown, Building2, ArrowRight, ChevronsUpDown } from 'lucide-react';
+import { ExperienceBg } from './SectionBackgrounds';
 import { useSound } from './SoundProvider';
 
 interface Experience {
@@ -138,9 +139,10 @@ export function Experience() {
     <section
       id="experience"
       ref={setRefs}
-      className="py-24 px-6 relative"
+      className="py-24 px-6 relative overflow-hidden"
       style={{ background: 'var(--bg-deep)' }}
     >
+      <ExperienceBg />
       <div className="resume-container">
         {/* Section Header */}
         <motion.div
@@ -160,6 +162,13 @@ export function Experience() {
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.8125rem' }}
           >
             13+ years · 7 roles · Engineer → Architect
+          </p>
+          <p
+            className="mt-2 flex items-center gap-1.5 tracking-wider"
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.75rem', opacity: 0.6 }}
+          >
+            <ChevronsUpDown size={13} />
+            Click any role card to expand or collapse details
           </p>
         </motion.div>
 
@@ -364,7 +373,7 @@ function TimelineItem({
             {/* Company */}
             <div className="flex items-center gap-2 flex-wrap">
               <Building2 size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
-              <span style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+              <span className="fluid-caption" style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}>
                 {experience.company}
               </span>
               {experience.acquiredBy && (
@@ -379,16 +388,36 @@ function TimelineItem({
           </div>
 
           {/* Expand chevron — rotates smoothly */}
-          <motion.div
-            animate={{ rotate: expanded ? 180 : 0 }}
-            transition={{ duration: 0.25 }}
-            className="mt-2 flex-shrink-0"
-          >
-            <ChevronDown
-              size={20}
-              style={{ color: expanded ? 'var(--accent-cyan)' : 'var(--text-muted)' }}
-            />
-          </motion.div>
+          <div className="flex flex-col items-center gap-0.5 mt-2 flex-shrink-0">
+            <motion.div
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.25 }}
+            >
+              <ChevronDown
+                size={20}
+                style={{ color: expanded ? 'var(--accent-cyan)' : 'var(--text-muted)' }}
+              />
+            </motion.div>
+            <AnimatePresence>
+              {!expanded && (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    color: 'var(--text-muted)',
+                    fontSize: '0.6rem',
+                    letterSpacing: '0.06em',
+                    lineHeight: 1,
+                  }}
+                >
+                  expand
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Expandable Details — always in DOM for print CSS support */}
@@ -404,8 +433,8 @@ function TimelineItem({
               {experience.highlights.map((highlight, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-2"
-                  style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)', fontSize: '0.875rem' }}
+                  className="flex items-start gap-2 fluid-body"
+                  style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
                 >
                   <span style={{ color: 'var(--accent-cyan)', flexShrink: 0 }}>▹</span>
                   <span>{highlight}</span>

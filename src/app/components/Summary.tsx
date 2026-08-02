@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import { yearsOfExperience } from "../lib/constants";
+import { SummaryBg } from './SectionBackgrounds';
 import {
   Triangle,
   Atom,
@@ -30,9 +31,10 @@ export function Summary() {
     <section
       id="summary"
       ref={ref}
-      className="py-24 px-6"
+      className="relative overflow-hidden py-24 px-6"
       style={{ background: "var(--bg-deep)" }}
     >
+      <SummaryBg />
       <div className="resume-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}

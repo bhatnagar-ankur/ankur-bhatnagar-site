@@ -29,6 +29,7 @@ button:disabled {
 body {
   background: var(--bg-deep);
   color: var(--text-primary);
+  line-height: 1.6;
 }
 
 /* ── Responsive section container ─────────────────────────────────────────
@@ -53,8 +54,9 @@ body {
    ───────────────────────────────────────────────────────────────────────── */
 .fluid-hero-name  { font-size: clamp(2.5rem,  6vw,  9rem);   }
 .fluid-section-h2 { font-size: clamp(1.75rem, 3vw,  5rem);   }
-.fluid-body       { font-size: clamp(0.9rem,  1.1vw, 1.25rem); }
-.fluid-mono       { font-size: clamp(0.75rem, 0.9vw, 1.1rem);  }
+.fluid-body       { font-size: clamp(0.9rem,  1.1vw, 1.25rem); line-height: 1.65; }
+.fluid-caption    { font-size: clamp(0.8125rem, 0.35vw + 0.72rem, 1rem); line-height: 1.6; }
+.fluid-mono       { font-size: clamp(0.75rem, 0.9vw, 1.1rem); line-height: 1.5; }
 
 .screen-counter { display: inline; }
 .print-counter  { display: none;   }
