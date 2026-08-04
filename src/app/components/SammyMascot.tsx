@@ -105,7 +105,7 @@ export function SammyMascot() {
   const [currentSection, setCurrentSection] = useState('hero');
   const [bubbleText, setBubbleText] = useState('');
   const [bubbleVisible, setBubbleVisible] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [hasEntered, setHasEntered] = useState(false);
 
@@ -229,12 +229,24 @@ export function SammyMascot() {
   // ── Derived state ──
   const dialogue = SECTION_DIALOGUES[currentSection] ?? SECTION_DIALOGUES.hero;
 
+  const handleExpand = () => {
+    setIsMinimized(false);
+    if (!hasEntered) {
+      setHasEntered(true);
+      controls.set({ x: -window.innerWidth * 0.6, y: 60, opacity: 0, scale: 0.5, rotate: -25 });
+      controls.start({
+        x: 0, y: 0, opacity: 1, scale: 1, rotate: 0,
+        transition: { type: 'spring', stiffness: 55, damping: 14, mass: 1, duration: 1.4 },
+      });
+    }
+  };
+
   if (isMinimized) {
     return (
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        onClick={() => setIsMinimized(false)}
+        onClick={handleExpand}
         className="fixed bottom-6 right-6 z-[60] w-12 h-12 rounded-full border-2 flex items-center justify-center text-xl"
         style={{
           background: 'var(--bg-surface)',
@@ -242,7 +254,7 @@ export function SammyMascot() {
           boxShadow: '0 4px 16px rgba(212,147,13,0.3)',
           cursor: 'pointer',
         }}
-        title="Bring Sammy back"
+        title="Meet Sammy, your portfolio guide"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >

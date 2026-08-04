@@ -25,9 +25,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     if (savedTheme) {
       setThemeState(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setThemeState(prefersDark ? 'dark' : 'light');
     }
 
     if (savedDisplayMode) {

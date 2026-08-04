@@ -5,6 +5,8 @@ import { useSound } from '../providers/SoundProvider';
 import { SettingsMenu } from './SettingsMenu';
 import { useTheme } from '../providers/ThemeProvider';
 
+const resumeUrl = new URL('../../imports/Ankur_Bhatnagar_Resume.pdf', import.meta.url).href;
+
 const navItems = [
   { id: 'summary', label: 'Summary' },
   { id: 'skills', label: 'Skills' },
@@ -48,7 +50,12 @@ export function Navigation() {
   const handleSharePDF = () => {
     playSound('success');
     setShareOpen(false);
-    window.print();
+    const link = document.createElement('a');
+    link.href = resumeUrl;
+    link.download = 'Ankur_Bhatnagar_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleShareEmail = () => {
@@ -62,7 +69,7 @@ export function Navigation() {
   };
 
   const shareItems = [
-    { label: 'Download as PDF', icon: <FileDown size={15} />, action: handleSharePDF },
+    { label: 'Download Resume', icon: <FileDown size={15} />, action: handleSharePDF },
     { label: 'Share via Email', icon: <Mail size={15} />, action: handleShareEmail }
   ];
 

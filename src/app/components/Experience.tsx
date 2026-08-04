@@ -261,6 +261,7 @@ function TimelineItem({
 }) {
   const { playSound } = useSound();
   const [expanded, setExpanded] = useState(isCurrent);
+  const [isHovered, setIsHovered] = useState(false);
   const duration = getDuration(experience.period);
 
   const toggleExpand = () => {
@@ -298,13 +299,13 @@ function TimelineItem({
       />
 
       {/* Card */}
-      <div
+      <motion.div
         onClick={toggleExpand}
-        className={`rounded-2xl border cursor-pointer transition-all duration-300 ${isCurrent ? 'p-6 md:p-8' : 'p-5 md:p-6'}`}
+        onMouseEnter={() => { setIsHovered(true); playSound('hover'); }}
+        onMouseLeave={() => setIsHovered(false)}
+        whileTap={{ scale: 0.99 }}
+        className={`rounded-2xl border cursor-pointer trace-border ${isCurrent ? 'border-l-[3px] p-6 md:p-8' : 'p-5 md:p-6'} ${isCurrent || expanded || isHovered ? 'exp-card-cyan' : 'exp-card-glass'}`}
         style={{
-          borderColor: expanded ? 'var(--accent-cyan)' : 'var(--glass-border)',
-          borderLeftWidth: isCurrent ? '3px' : '1px',
-          borderLeftColor: isCurrent ? 'var(--accent-cyan)' : undefined,
           background: 'var(--glass-bg)',
           backdropFilter: 'var(--glass-filter)',
           WebkitBackdropFilter: 'var(--glass-filter)',
@@ -312,19 +313,9 @@ function TimelineItem({
             ? '0 4px 30px rgba(var(--accent-cyan-rgb), 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
             : expanded
               ? '0 2px 20px rgba(var(--accent-cyan-rgb), 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-              : 'var(--glass-shadow)',
-        }}
-        onMouseEnter={(e) => {
-          if (!expanded) {
-            e.currentTarget.style.borderColor = 'var(--accent-cyan)';
-            e.currentTarget.style.boxShadow = '0 4px 24px rgba(var(--accent-cyan-rgb), 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!expanded) {
-            e.currentTarget.style.borderColor = 'var(--glass-border)';
-            e.currentTarget.style.boxShadow = 'var(--glass-shadow)';
-          }
+              : isHovered
+                ? '0 4px 24px rgba(var(--accent-cyan-rgb), 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                : 'var(--glass-shadow)',
         }}
       >
         {/* Header — always visible */}
@@ -404,12 +395,12 @@ function TimelineItem({
               {!expanded && (
                 <motion.span
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.5 }}
+                  animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    color: 'var(--text-muted)',
+                    color: 'var(--text-primary)',
                     fontSize: '0.6rem',
                     letterSpacing: '0.06em',
                     lineHeight: 1,
@@ -446,9 +437,11 @@ function TimelineItem({
 
             <div className="flex flex-wrap gap-2">
               {experience.techStack.map((tech) => (
-                <span
+                <motion.span
                   key={tech}
-                  className="px-3 py-1 rounded-full text-xs font-semibold"
+                  whileHover={{ scale: 1.08, y: -1 }}
+                  onMouseEnter={() => playSound('hover')}
+                  className="px-3 py-1 rounded-full text-xs font-semibold cursor-pointer"
                   style={{
                     fontFamily: 'var(--font-mono)',
                     background: 'rgba(var(--accent-cyan-rgb), 0.1)',
@@ -457,12 +450,12 @@ function TimelineItem({
                   }}
                 >
                   {tech}
-                </span>
+                </motion.span>
               ))}
             </div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

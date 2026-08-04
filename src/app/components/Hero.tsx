@@ -1,11 +1,14 @@
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { ChevronDown, MapPin, Linkedin, Github } from 'lucide-react';
+import { ChevronDown, MapPin, Linkedin, Github, FileDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSound } from '../providers/SoundProvider';
 import { ImageWithFallback } from './ImageWithFallback';
-import profilePic from '../../imports/Profile_Anime.png';
+import profileAnime from '../../imports/Profile_Anime.png';
+import profilePic from '../../imports/Profile_Pic.jpg';
 import { yearsOfExperience } from '../lib/constants';
 import { HeroBackground } from './HeroBackground';
+
+const resumeUrl = new URL('../../imports/Ankur_Bhatnagar_Resume.pdf', import.meta.url).href;
 
 const roles = [
   'Technical Architect',
@@ -17,6 +20,7 @@ const roles = [
 export function Hero() {
   const { playSound } = useSound();
   const [currentRole, setCurrentRole] = useState(0);
+  const [isImageFlipped, setIsImageFlipped] = useState(false);
   const { scrollY } = useScroll();
   const gridY = useTransform(scrollY, [0, 600], [0, -120]);
 
@@ -71,29 +75,90 @@ export function Hero() {
               style={{ borderColor: 'var(--accent-amber)' }}
             />
 
-            {/* Profile Image */}
-            <motion.div
-              whileHover={{ scale: 1.05, rotate: [0, -2, 2, 0] }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-48 h-48 md:w-64 md:h-64 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 3xl:w-[28rem] 3xl:h-[28rem] 4xl:w-[36rem] 4xl:h-[36rem] rounded-2xl overflow-hidden border-4 backdrop-blur-sm cursor-pointer anim-pulse-glow"
-              style={{
-                borderColor: 'var(--accent-cyan)',
-                background: 'var(--bg-surface)'
-              }}
+            {/* Profile Image — flip card: anime front / real photo back */}
+            <div
+              className="relative w-48 h-48 md:w-64 md:h-64 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 3xl:w-[28rem] 3xl:h-[28rem] 4xl:w-[36rem] 4xl:h-[36rem]"
+              style={{ perspective: '1000px' }}
+              onMouseEnter={() => { setIsImageFlipped(true); playSound('hover'); }}
+              onMouseLeave={() => setIsImageFlipped(false)}
             >
-              <ImageWithFallback
-                src={profilePic}
-                alt="Ankur Bhatnagar"
-                className="w-full h-full object-cover object-top"
-              />
-              <div
-                className="absolute inset-0 opacity-20 group-hover:opacity-10 transition-opacity"
+              <motion.div
+                animate={{ rotateY: isImageFlipped ? 180 : 0 }}
+                transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+                whileTap={{ scale: 0.95 }}
                 style={{
-                  background: 'linear-gradient(135deg, rgba(var(--accent-cyan-rgb), 0.3) 0%, rgba(var(--accent-amber-rgb), 0.3) 100%)'
+                  transformStyle: 'preserve-3d',
+                  width: '100%',
+                  height: '100%',
+                  position: 'relative',
+                  cursor: 'pointer',
                 }}
-              />
-            </motion.div>
+              >
+                {/* Front face: anime illustration */}
+                <div
+                  className="absolute inset-0 rounded-2xl overflow-hidden border-4 backdrop-blur-sm anim-pulse-glow"
+                  style={{
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    borderColor: 'var(--accent-cyan)',
+                    background: 'var(--bg-surface)',
+                  }}
+                >
+                  <ImageWithFallback
+                    src={profileAnime}
+                    alt="Ankur Bhatnagar — illustrated"
+                    className="w-full h-full object-cover object-top"
+                  />
+                  <div
+                    className="absolute inset-0 opacity-20 transition-opacity"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(var(--accent-cyan-rgb), 0.3) 0%, rgba(var(--accent-amber-rgb), 0.3) 100%)'
+                    }}
+                  />
+                  {/* Flip hint */}
+                  <div
+                    className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full text-[0.55rem] tracking-widest select-none"
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      color: 'var(--accent-cyan)',
+                      background: 'rgba(var(--accent-cyan-rgb), 0.12)',
+                      border: '1px solid rgba(var(--accent-cyan-rgb), 0.25)',
+                    }}
+                  >
+                    HOVER ↕
+                  </div>
+                </div>
+
+                {/* Back face: real photo */}
+                <div
+                  className="absolute inset-0 rounded-2xl overflow-hidden border-4 backdrop-blur-sm"
+                  style={{
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)',
+                    borderColor: 'var(--accent-amber)',
+                    background: 'var(--bg-surface)',
+                  }}
+                >
+                  <ImageWithFallback
+                    src={profilePic}
+                    alt="Ankur Bhatnagar"
+                    className="w-full h-full object-cover object-top"
+                  />
+                  <div
+                    className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-[0.55rem] tracking-widest select-none"
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      color: 'var(--accent-amber)',
+                      background: 'rgba(var(--accent-amber-rgb), 0.12)',
+                      border: '1px solid rgba(var(--accent-amber-rgb), 0.25)',
+                    }}
+                  >
+                    THE REAL ONE
+                  </div>
+                </div>
+              </motion.div>
+            </div>
 
             {/* Hover Particles */}
             <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -235,11 +300,36 @@ export function Hero() {
           <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.6875rem', letterSpacing: '0.04em' }}>ISRO Certified</span>
         </motion.div>
 
-        {/* Contact Buttons */}
+        {/* Primary CTA — Download Resume */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.85 }}
+          transition={{ duration: 0.8, delay: 0.82 }}
+          className="mb-4"
+        >
+          <a
+            href={resumeUrl}
+            download="Ankur_Bhatnagar_Resume.pdf"
+            onClick={() => playSound('success')}
+            className="inline-flex items-center gap-2.5 px-7 py-3 rounded-xl font-semibold tracking-wide transition-all hover:scale-105 hover:brightness-110 active:scale-95"
+            style={{
+              background: 'var(--accent-cyan)',
+              color: 'var(--bg-deep)',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.9375rem',
+              boxShadow: '0 0 24px rgba(var(--accent-cyan-rgb), 0.35)',
+            }}
+          >
+            <FileDown size={18} />
+            Download Resume
+          </a>
+        </motion.div>
+
+        {/* Social Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.92 }}
           className="flex flex-wrap items-center justify-center gap-4 mb-16"
         >
           <ContactButton icon={<Linkedin size={20} />} label="LinkedIn" href="https://www.linkedin.com/in/bhatnagar-ankur" />

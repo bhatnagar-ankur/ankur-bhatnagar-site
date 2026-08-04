@@ -101,6 +101,61 @@ body > * {
   z-index: 1;
 }
 
+/* Experience card border-color helpers (avoid Framer Motion shorthand conflict) */
+.exp-card-cyan { border-color: var(--accent-cyan) !important; }
+.exp-card-glass { border-color: var(--glass-border) !important; }
+
+/* ─── Border Trace Micro-interaction ─── */
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.trace-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.trace-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0%,
+    rgba(0, 200, 255, 0.95) 5%,
+    transparent 12%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+}
+
+.trace-border:hover::before {
+  opacity: 1;
+  animation: border-trace-spin 2.5s linear infinite;
+}
+
+.trace-border-amber::before {
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0%,
+    rgba(240, 136, 62, 0.95) 5%,
+    transparent 12%
+  );
+}
+
+@keyframes border-trace-spin {
+  to { --border-angle: 360deg; }
+}
+
 /* Light mode: make sections & app wrapper semi-transparent so the blueprint grid bleeds through,
    giving glass cards something to frost over via backdrop-filter */
 .light section {

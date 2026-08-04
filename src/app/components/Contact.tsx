@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { Mail, Linkedin, Github, Heart, Copy, Check } from 'lucide-react';
 import { ContactBg } from './SectionBackgrounds';
@@ -40,7 +40,7 @@ export function Contact() {
     <section
       id="contact"
       ref={ref}
-      className="relative overflow-hidden pt-20 pb-48 px-6"
+      className="relative overflow-hidden pt-20 pb-16 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
       <ContactBg />
@@ -103,29 +103,47 @@ export function Contact() {
           <ContactLink icon={<Linkedin size={18} />} label="LinkedIn" href="https://www.linkedin.com/in/bhatnagar-ankur" />
           <ContactLink icon={<Github size={18} />} label="GitHub" href="https://github.com/bhatnagar-ankur" />
 
-          <button
+          <motion.button
             onClick={copyEmail}
-            className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all hover:scale-105"
+            whileTap={{ scale: 0.95 }}
+            className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border trace-border"
             style={{
               borderColor: 'var(--accent-cyan)',
               background: 'rgba(var(--accent-cyan-rgb), 0.08)',
               color: 'var(--accent-cyan)',
               fontFamily: 'var(--font-ui)',
-              fontSize: '0.875rem'
+              fontSize: '0.875rem',
+              cursor: 'pointer',
             }}
           >
-            {copied ? (
-              <>
-                <Check size={16} />
-                <span>Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy size={16} />
-                <span>Copy Email</span>
-              </>
-            )}
-          </button>
+            <AnimatePresence mode="wait" initial={false}>
+              {copied ? (
+                <motion.span
+                  key="copied"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex items-center gap-2"
+                >
+                  <Check size={16} />
+                  Copied!
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="copy"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex items-center gap-2"
+                >
+                  <Copy size={16} />
+                  Copy Email
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </motion.div>
 
         <motion.div

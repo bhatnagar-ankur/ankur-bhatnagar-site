@@ -200,6 +200,7 @@ export function Skills() {
               tier={tier}
               inView={inView}
               delay={tierIndex * 0.15}
+              playSound={playSound}
             />
           ))}
         </div>
@@ -208,7 +209,7 @@ export function Skills() {
   );
 }
 
-function TierBlock({ tier, inView, delay }: { tier: SkillTier; inView: boolean; delay: number }) {
+function TierBlock({ tier, inView, delay, playSound }: { tier: SkillTier; inView: boolean; delay: number; playSound: (type: string) => void }) {
   const styles = tierStyles[tier.level];
 
   return (
@@ -216,7 +217,7 @@ function TierBlock({ tier, inView, delay }: { tier: SkillTier; inView: boolean; 
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay }}
-      className="rounded-2xl border p-6"
+      className="rounded-2xl border p-6 trace-border"
       style={{
         borderColor: styles.border,
         background: 'var(--glass-bg)',
@@ -269,8 +270,9 @@ function TierBlock({ tier, inView, delay }: { tier: SkillTier; inView: boolean; 
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={inView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ duration: 0.35, delay: delay + 0.15 + groupIndex * 0.08 + skillIndex * 0.04 }}
-                  whileHover={{ scale: 1.06, boxShadow: `0 0 12px ${styles.tagBorder}` }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm cursor-default"
+                  whileHover={{ scale: 1.07, y: -2, boxShadow: `0 0 14px ${styles.tagBorder}` }}
+                  onMouseEnter={() => playSound('hover')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm cursor-pointer"
                   style={{
                     fontFamily: 'var(--font-mono)',
                     background: styles.tagBg,

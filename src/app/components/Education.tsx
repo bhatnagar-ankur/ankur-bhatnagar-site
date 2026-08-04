@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { GraduationCap, BookOpen } from 'lucide-react';
 import { EducationBg } from './SectionBackgrounds';
+import { useSound } from '../providers/SoundProvider';
 
 interface Education {
   degree: string;
@@ -24,6 +25,7 @@ const education: Education[] = [
 
 export function Education() {
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
+  const { playSound } = useSound();
 
   return (
     <section
@@ -53,8 +55,10 @@ export function Education() {
               key={edu.degree}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
+              whileHover={{ y: -4 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="p-6 rounded-2xl border"
+              onMouseEnter={() => playSound('hover')}
+              className="p-6 rounded-2xl border cursor-default trace-border"
               style={{
                 borderColor: 'var(--accent-cyan)',
                 background: 'var(--glass-bg)',
@@ -64,7 +68,9 @@ export function Education() {
               }}
             >
               <div className="flex items-start gap-4">
-                <div
+                <motion.div
+                  whileHover={{ rotate: index === 0 ? 12 : -8 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 15 }}
                   className="p-3 rounded-lg"
                   style={{
                     background: 'rgba(var(--accent-cyan-rgb), 0.1)',
@@ -72,7 +78,7 @@ export function Education() {
                   }}
                 >
                   {index === 0 ? <GraduationCap size={28} /> : <BookOpen size={28} />}
-                </div>
+                </motion.div>
                 <div className="flex-1">
                   <h3
                     style={{

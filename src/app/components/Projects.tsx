@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ProjectsBg } from './SectionBackgrounds';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
-import { Calendar, CheckCircle2, GitBranch, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
+import { useSound } from '../providers/SoundProvider';
+import { Calendar, CheckCircle2, ChevronDown, GitBranch, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
 
 interface TechLayer {
   label: string;
@@ -696,31 +697,31 @@ function DetailBlock({ icon, label, color, children }: {
 function ProjectCard({ project, index, inView, featured = false }: {
   project: Project; index: number; inView: boolean; featured?: boolean;
 }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [showDetails, setShowDetails] = useState(featured);
+  const { playSound } = useSound();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
+      whileTap={{ scale: 0.995 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group w-full rounded-2xl border overflow-hidden"
+      className="group w-full rounded-2xl border overflow-hidden trace-border"
       style={{
-        borderColor: featured ? 'rgba(var(--accent-cyan-rgb),0.3)' : 'var(--glass-border)',
+        borderColor: isHovered ? 'var(--accent-cyan)' : featured ? 'rgba(var(--accent-cyan-rgb),0.3)' : 'var(--glass-border)',
         background: 'var(--glass-bg)',
         backdropFilter: 'var(--glass-filter)',
         WebkitBackdropFilter: 'var(--glass-filter)',
-        boxShadow: featured
-          ? '0 0 48px rgba(var(--accent-cyan-rgb),0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-          : 'var(--glass-shadow)',
+        boxShadow: isHovered
+          ? '0 0 32px rgba(var(--accent-cyan-rgb),0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+          : featured
+            ? '0 0 48px rgba(var(--accent-cyan-rgb),0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+            : 'var(--glass-shadow)',
+        transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--accent-cyan)';
-        e.currentTarget.style.boxShadow = '0 0 32px rgba(var(--accent-cyan-rgb),0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = featured ? 'rgba(var(--accent-cyan-rgb),0.3)' : 'var(--glass-border)';
-        e.currentTarget.style.boxShadow = featured
-          ? '0 0 48px rgba(var(--accent-cyan-rgb),0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-          : 'var(--glass-shadow)';
-      }}
+      onMouseEnter={() => { setIsHovered(true); playSound('hover'); }}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-col lg:flex-row h-full">
         {/* Left panel: header + diagram + tech layer */}
@@ -798,7 +799,7 @@ function ProjectCard({ project, index, inView, featured = false }: {
           </div>
         </div>
 
-        {/* Right panel: metrics → description → achievements → details grid */}
+        {/* Right panel: metrics → description → achievements → collapsible details */}
         <div className="lg:w-[58%] p-5 flex flex-col gap-4">
           <MetricsBand metrics={project.metrics} />
 
@@ -820,32 +821,68 @@ function ProjectCard({ project, index, inView, featured = false }: {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t" style={{ borderColor: 'var(--bg-border)' }}>
-            <DetailBlock icon={<TrendingUp size={14} />} label="Impact" color="green">
-              {project.details.impact.map((c, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <span style={{ color: 'var(--success-green)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
-                  <span>{c}</span>
-                </div>
-              ))}
-            </DetailBlock>
+          {/* Details toggle */}
+          <div className="pt-3 border-t" style={{ borderColor: 'var(--bg-border)' }}>
+            <button
+              onClick={() => { setShowDetails(p => !p); playSound('click'); }}
+              className="flex items-center gap-2 transition-opacity hover:opacity-80"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--accent-cyan)',
+                fontSize: '0.75rem',
+                letterSpacing: '0.06em',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              <motion.span animate={{ rotate: showDetails ? 180 : 0 }} transition={{ duration: 0.22 }}>
+                <ChevronDown size={14} />
+              </motion.span>
+              {showDetails ? 'HIDE DETAILS' : 'SHOW DETAILS'}
+            </button>
 
-            <DetailBlock icon={<GitBranch size={14} />} label="Tech Decisions" color="amber">
-              <span>{project.details.techDecisions}</span>
-            </DetailBlock>
+            <AnimatePresence initial={false}>
+              {showDetails && (
+                <motion.div
+                  key="details"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                    <DetailBlock icon={<TrendingUp size={14} />} label="Impact" color="green">
+                      {project.details.impact.map((c, i) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <span style={{ color: 'var(--success-green)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
+                          <span>{c}</span>
+                        </div>
+                      ))}
+                    </DetailBlock>
 
-            <DetailBlock icon={<Zap size={14} />} label="Key Challenges" color="cyan">
-              {project.details.challenges.map((c, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <span style={{ color: 'var(--accent-cyan)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
-                  <span>{c}</span>
-                </div>
-              ))}
-            </DetailBlock>
+                    <DetailBlock icon={<GitBranch size={14} />} label="Tech Decisions" color="amber">
+                      <span>{project.details.techDecisions}</span>
+                    </DetailBlock>
 
-            <DetailBlock icon={<Users size={14} />} label="Team & Context" color="purple">
-              <span>{project.details.team}</span>
-            </DetailBlock>
+                    <DetailBlock icon={<Zap size={14} />} label="Key Challenges" color="cyan">
+                      {project.details.challenges.map((c, i) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <span style={{ color: 'var(--accent-cyan)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
+                          <span>{c}</span>
+                        </div>
+                      ))}
+                    </DetailBlock>
+
+                    <DetailBlock icon={<Users size={14} />} label="Team & Context" color="purple">
+                      <span>{project.details.team}</span>
+                    </DetailBlock>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
