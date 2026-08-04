@@ -1,7 +1,7 @@
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { ChevronDown, MapPin, Linkedin, Github } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSound } from './SoundProvider';
+import { useSound } from '../providers/SoundProvider';
 import { ImageWithFallback } from './ImageWithFallback';
 import profilePic from '../../imports/Profile_Anime.png';
 import { yearsOfExperience } from '../lib/constants';

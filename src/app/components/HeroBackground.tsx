@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { useTheme } from './ThemeProvider';
+import { useTheme } from '../providers/ThemeProvider';
 
 const W = 1440;
 const H = 900;

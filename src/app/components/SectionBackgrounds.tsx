@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { useTheme } from './ThemeProvider';
+import { useTheme } from '../providers/ThemeProvider';
 
 function Bg({
   children,

@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { Menu, X, ChevronUp, Share2, FileDown, Mail, Sun, Moon } from 'lucide-react';
-import { useSound } from './SoundProvider';
+import { useSound } from '../providers/SoundProvider';
 import { SettingsMenu } from './SettingsMenu';
-import { useTheme } from './ThemeProvider';
+import { useTheme } from '../providers/ThemeProvider';
 
 const navItems = [
   { id: 'summary', label: 'Summary' },

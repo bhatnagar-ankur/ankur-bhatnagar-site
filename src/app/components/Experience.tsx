@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { useState, useRef, Fragment } from 'react';
 import { ChevronDown, Building2, ArrowRight, ChevronsUpDown } from 'lucide-react';
 import { ExperienceBg } from './SectionBackgrounds';
-import { useSound } from './SoundProvider';
+import { useSound } from '../providers/SoundProvider';
 
 interface Experience {
   period: string;

@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { SkillsBg } from './SectionBackgrounds';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
-import { useSound } from './SoundProvider';
+import { useSound } from '../providers/SoundProvider';
 import {
   Hexagon, AtomIcon, FileCode, Braces, Code, FileJson, Layers, Palette,
   Box, Activity, MessageSquare, Database, Hash,

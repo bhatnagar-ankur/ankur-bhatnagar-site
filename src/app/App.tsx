@@ -13,9 +13,9 @@ import { Contact } from './components/Contact';
 import { BlueprintCursor } from './components/BlueprintCursor';
 import { SammyMascot } from './components/SammyMascot';
 import { SectionConnector } from './components/SectionConnector';
-import { useFavicon } from './components/useFavicon';
-import { ThemeProvider } from './components/ThemeProvider';
-import { SoundProvider } from './components/SoundProvider';
+import { useFavicon } from './hooks/useFavicon';
+import { ThemeProvider } from './providers/ThemeProvider';
+import { SoundProvider } from './providers/SoundProvider';
 
 const KONAMI = [
   'ArrowUp','ArrowUp','ArrowDown','ArrowDown',

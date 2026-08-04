@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { Mail, Linkedin, Github, Heart, Copy, Check } from 'lucide-react';
 import { ContactBg } from './SectionBackgrounds';
 import { useState } from 'react';
-import { useSound } from './SoundProvider';
+import { useSound } from '../providers/SoundProvider';
 
 export function Contact() {
   const { playSound } = useSound();

@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from 'react';
-import { useSoundEffects } from './useSoundEffects';
+import { useSoundEffects } from '../hooks/useSoundEffects';
 
 type SoundType = 'click' | 'hover' | 'toggle' | 'success' | 'transition' | 'whoosh' | 'pop' | 'bulb-on' | 'bulb-off';
 

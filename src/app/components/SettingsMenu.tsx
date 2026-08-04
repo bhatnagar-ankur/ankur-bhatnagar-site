@@ -1,8 +1,8 @@
 import { Settings, Zap, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useRef, useEffect } from 'react';
-import { useTheme } from './ThemeProvider';
-import { useSound } from './SoundProvider';
+import { useTheme } from '../providers/ThemeProvider';
+import { useSound } from '../providers/SoundProvider';
 
 export function SettingsMenu() {
   const [isOpen, setIsOpen] = useState(false);
