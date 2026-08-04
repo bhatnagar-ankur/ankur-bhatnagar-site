@@ -7,6 +7,23 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Respect OS-level reduced-motion preference for plain CSS animations
+   (Framer Motion components are handled separately via MotionConfig). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ── Cursor intent ─────────────────────────────────────────────────────────
    Browsers don't apply cursor:pointer to <button> by default on all OSes.
    ───────────────────────────────────────────────────────────────────────── */
@@ -76,8 +93,8 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 40px rgba(0, 200, 255, 0.4), 0 0 80px rgba(0, 200, 255, 0.2); }
-  50%       { box-shadow: 0 0 60px rgba(0, 200, 255, 0.6), 0 0 100px rgba(0, 200, 255, 0.3); }
+  0%, 100% { box-shadow: 0 0 40px rgba(var(--accent-cyan-rgb), 0.4), 0 0 80px rgba(var(--accent-cyan-rgb), 0.2); }
+  50%       { box-shadow: 0 0 60px rgba(var(--accent-cyan-rgb), 0.6), 0 0 100px rgba(var(--accent-cyan-rgb), 0.3); }
 }
 
 .anim-grid-fade  { animation: gridFade   4s ease-in-out infinite alternate; }
@@ -102,6 +119,7 @@ body {
   background: var(--accent-cyan);
   color: var(--bg-deep);
 }
+
 
 /* ── Print styles for PDF export ──────────────────────────────────────── */
 @media print {
@@ -129,11 +147,32 @@ body {
     display: none !important;
   }
 
+  /* Force a fixed, readable light-paper palette for print, regardless of
+     which on-screen theme (dark/light/sunlight) was active when exporting. */
+  :root,
+  .dark,
+  .light,
+  .sunlight-mode {
+    --bg-deep: #ffffff !important;
+    --bg-surface: #ffffff !important;
+    --bg-border: #d7dce2 !important;
+    --text-primary: #10151c !important;
+    --text-muted: #4b5563 !important;
+    --accent-cyan: #0077a3 !important;
+    --accent-amber: #b85c00 !important;
+    --success-green: #1a7a3c !important;
+    --grid-line: transparent !important;
+    --glass-bg: #ffffff !important;
+    --glass-border: #d7dce2 !important;
+    --glass-filter: none !important;
+    --glass-shadow: none !important;
+  }
+
   html,
   body,
   #root {
-    background: #0d1117 !important;
-    color: #e6edf3 !important;
+    background: #ffffff !important;
+    color: #10151c !important;
     margin: 0 !important;
     overflow: visible !important;
   }
@@ -167,22 +206,12 @@ body {
     transform: none !important;
   }
 
-  [style*="color: var(--accent-cyan)"],
-  [style*="color:var(--accent-cyan)"] {
-    color: #00c8ff !important;
-  }
-
-  [style*="color: var(--accent-amber)"],
-  [style*="color:var(--accent-amber)"] {
-    color: #f0883e !important;
-  }
-
   .screen-counter { display: none !important;   }
   .print-counter  { display: inline !important;  }
 
   .skill-meter {
     width: var(--skill-level) !important;
-    background: linear-gradient(90deg, #3fb950, #00c8ff) !important;
+    background: linear-gradient(90deg, #1a7a3c, #0077a3) !important;
   }
 
   .experience-details {
@@ -223,7 +252,7 @@ body {
   a[href^="mailto"]::after {
     content: " (" attr(href) ")";
     font-size: 8pt;
-    color: #8b949e;
+    color: var(--text-muted);
   }
 
   svg {

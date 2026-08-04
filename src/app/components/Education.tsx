@@ -54,18 +54,20 @@ export function Education() {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="p-6 rounded-lg border"
+              className="p-6 rounded-2xl border"
               style={{
                 borderColor: 'var(--accent-cyan)',
-                background: 'var(--bg-deep)',
-                boxShadow: '0 4px 20px rgba(0, 200, 255, 0.1)'
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--glass-filter)',
+                WebkitBackdropFilter: 'var(--glass-filter)',
+                boxShadow: '0 4px 20px rgba(var(--accent-cyan-rgb), 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
               }}
             >
               <div className="flex items-start gap-4">
                 <div
                   className="p-3 rounded-lg"
                   style={{
-                    background: 'rgba(0, 200, 255, 0.1)',
+                    background: 'rgba(var(--accent-cyan-rgb), 0.1)',
                     color: 'var(--accent-cyan)'
                   }}
                 >

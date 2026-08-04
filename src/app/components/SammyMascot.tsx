@@ -254,7 +254,7 @@ export function SammyMascot() {
   return (
     <motion.div
       ref={mascotRef}
-      className="fixed bottom-6 right-6 z-[60]"
+      className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40"
       style={{ x: pos.x, y: pos.y, touchAction: 'none', pointerEvents: hasEntered ? 'auto' : 'none' }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -276,8 +276,8 @@ export function SammyMascot() {
               borderColor: 'var(--bg-border)',
               color: 'var(--text-primary)',
               fontFamily: 'var(--font-body)',
-              minWidth: 210,
-              maxWidth: 270,
+              minWidth: 'min(60vw, 210px)',
+              maxWidth: 'min(78vw, 270px)',
               boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
             }}
           >
@@ -314,12 +314,13 @@ export function SammyMascot() {
 
       {/* Samosa SVG */}
       <motion.div
+        className="w-20 md:w-[120px]"
         animate={isDragging ? {} : { y: [0, -5, 0] }}
         transition={isDragging ? {} : { repeat: Infinity, duration: 2, ease: 'easeInOut' }}
         style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
         onMouseEnter={() => { if (!bubbleVisible) showRandomTip(); }}
       >
-        <svg width="120" height="140" viewBox="0 0 150 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="100%" height="auto" viewBox="0 0 150 170" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Shadow */}
           <ellipse cx="75" cy="165" rx="30" ry="4" fill="rgba(0,0,0,0.15)" />
 
@@ -409,7 +410,7 @@ export function SammyMascot() {
       {/* Minimize button */}
       <button
         onClick={(e) => { e.stopPropagation(); setIsMinimized(true); setBubbleVisible(false); }}
-        className="absolute -top-1 -left-1 w-5 h-5 rounded-full border flex items-center justify-center text-[10px] leading-none opacity-0 hover:opacity-100 transition-opacity"
+        className="absolute -top-1 -left-1 w-5 h-5 rounded-full border flex items-center justify-center text-[10px] leading-none opacity-60 md:opacity-0 md:hover:opacity-100 hover:opacity-100 transition-opacity"
         style={{
           background: 'var(--bg-surface)',
           borderColor: 'var(--bg-border)',

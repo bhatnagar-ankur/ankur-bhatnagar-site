@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
 import { Summary } from './components/Summary';
@@ -68,34 +68,51 @@ function AppContent() {
       background: 'var(--bg-deep)',
       color: 'var(--text-primary)'
     }}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-lg"
+        style={{
+          background: 'var(--bg-surface)',
+          color: 'var(--accent-cyan)',
+          border: '1px solid var(--accent-cyan)',
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.875rem',
+        }}
+      >
+        Skip to content
+      </a>
+
       <BlueprintCursor />
       <SammyMascot />
       <Navigation />
-      <Hero />
 
-      <SectionConnector label="PROFESSIONAL SUMMARY" variant="deep-to-surface" />
-      <Summary />
+      <main id="main-content">
+        <Hero />
 
-      <SectionConnector label="TECHNICAL PROFILE" variant="surface-to-deep" />
-      <Skills />
+        <SectionConnector label="PROFESSIONAL SUMMARY" variant="deep-to-surface" />
+        <Summary />
 
-      <SectionConnector label="AI LEADERSHIP" variant="deep-to-surface" />
-      <AISection />
+        <SectionConnector label="TECHNICAL PROFILE" variant="surface-to-deep" />
+        <Skills />
 
-      <SectionConnector label="CAREER TIMELINE" variant="deep-to-surface" />
-      <Experience />
+        <SectionConnector label="AI LEADERSHIP" variant="deep-to-surface" />
+        <AISection />
 
-      <SectionConnector label="DELIVERED WORK" variant="surface-to-deep" />
-      <Projects />
+        <SectionConnector label="CAREER TIMELINE" variant="deep-to-surface" />
+        <Experience />
 
-      <SectionConnector label="RECOGNITION" variant="deep-to-surface" />
-      <Achievements />
+        <SectionConnector label="DELIVERED WORK" variant="surface-to-deep" />
+        <Projects />
 
-      <SectionConnector label="FOUNDATIONS" variant="surface-to-deep" />
-      <Education />
+        <SectionConnector label="RECOGNITION" variant="deep-to-surface" />
+        <Achievements />
 
-      <SectionConnector label="GET IN TOUCH" variant="deep-to-surface" />
-      <Contact />
+        <SectionConnector label="FOUNDATIONS" variant="surface-to-deep" />
+        <Education />
+
+        <SectionConnector label="GET IN TOUCH" variant="deep-to-surface" />
+        <Contact />
+      </main>
 
       {/* Konami Easter Egg Toast */}
       <AnimatePresence>
@@ -109,7 +126,7 @@ function AppContent() {
             style={{
               background: 'var(--bg-surface)',
               borderColor: 'var(--accent-cyan)',
-              boxShadow: '0 0 40px rgba(0, 200, 255, 0.35), 0 8px 32px rgba(0,0,0,0.4)',
+              boxShadow: '0 0 40px rgba(var(--accent-cyan-rgb), 0.35), 0 8px 32px rgba(0,0,0,0.4)',
               minWidth: '280px',
               maxWidth: '360px'
             }}
@@ -148,10 +165,12 @@ export default function App() {
   useFavicon('⚡');
 
   return (
-    <ThemeProvider>
-      <SoundProvider>
-        <AppContent />
-      </SoundProvider>
-    </ThemeProvider>
+    <MotionConfig reducedMotion="user">
+      <ThemeProvider>
+        <SoundProvider>
+          <AppContent />
+        </SoundProvider>
+      </ThemeProvider>
+    </MotionConfig>
   );
 }

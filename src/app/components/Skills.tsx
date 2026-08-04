@@ -124,20 +124,20 @@ const skillTiers: SkillTier[] = [
 const tierStyles = {
   primary: {
     border: 'var(--accent-cyan)',
-    labelBg: 'rgba(0, 200, 255, 0.12)',
+    labelBg: 'rgba(var(--accent-cyan-rgb), 0.12)',
     labelColor: 'var(--accent-cyan)',
-    tagBg: 'rgba(0, 200, 255, 0.08)',
-    tagBorder: 'rgba(0, 200, 255, 0.35)',
+    tagBg: 'rgba(var(--accent-cyan-rgb), 0.08)',
+    tagBorder: 'rgba(var(--accent-cyan-rgb), 0.35)',
     tagColor: 'var(--text-primary)',
     iconColor: 'var(--accent-cyan)',
-    glow: '0 0 30px rgba(0, 200, 255, 0.12)'
+    glow: '0 0 30px rgba(var(--accent-cyan-rgb), 0.12)'
   },
   secondary: {
     border: 'var(--bg-border)',
-    labelBg: 'rgba(240, 136, 62, 0.1)',
+    labelBg: 'rgba(var(--accent-amber-rgb), 0.1)',
     labelColor: 'var(--accent-amber)',
-    tagBg: 'rgba(240, 136, 62, 0.06)',
-    tagBorder: 'rgba(240, 136, 62, 0.25)',
+    tagBg: 'rgba(var(--accent-amber-rgb), 0.06)',
+    tagBorder: 'rgba(var(--accent-amber-rgb), 0.25)',
     tagColor: 'var(--text-primary)',
     iconColor: 'var(--accent-amber)',
     glow: 'none'
@@ -216,11 +216,15 @@ function TierBlock({ tier, inView, delay }: { tier: SkillTier; inView: boolean; 
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay }}
-      className="rounded-xl border p-6"
+      className="rounded-2xl border p-6"
       style={{
         borderColor: styles.border,
-        background: 'var(--bg-deep)',
-        boxShadow: styles.glow
+        background: 'var(--glass-bg)',
+        backdropFilter: 'var(--glass-filter)',
+        WebkitBackdropFilter: 'var(--glass-filter)',
+        boxShadow: styles.glow !== 'none'
+          ? `${styles.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.05)`
+          : 'var(--glass-shadow)',
       }}
     >
       {/* Tier header */}

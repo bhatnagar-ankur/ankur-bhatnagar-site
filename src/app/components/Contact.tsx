@@ -108,7 +108,7 @@ export function Contact() {
             className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all hover:scale-105"
             style={{
               borderColor: 'var(--accent-cyan)',
-              background: 'rgba(0, 200, 255, 0.08)',
+              background: 'rgba(var(--accent-cyan-rgb), 0.08)',
               color: 'var(--accent-cyan)',
               fontFamily: 'var(--font-ui)',
               fontSize: '0.875rem'
@@ -179,16 +179,19 @@ function ContactLink({ icon, label, href }: { icon: React.ReactNode; label: stri
       rel="noopener noreferrer"
       onClick={() => playSound('click')}
       onMouseEnter={() => playSound('hover')}
-      className="group flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all hover:scale-105"
+      className="group flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all hover:scale-105"
       style={{
-        borderColor: 'var(--bg-border)',
-        background: 'var(--bg-deep)',
+        borderColor: 'var(--glass-border)',
+        background: 'var(--glass-bg)',
+        backdropFilter: 'var(--glass-filter)',
+        WebkitBackdropFilter: 'var(--glass-filter)',
+        boxShadow: 'var(--glass-shadow)',
         color: 'var(--text-primary)',
         fontFamily: 'var(--font-ui)',
         fontSize: '0.875rem'
       }}
     >
-      <span style={{ color: 'var(--accent-cyan)' }} className="group-hover:drop-shadow-[0_0_8px_rgba(0,200,255,0.8)] transition-all">
+      <span style={{ color: 'var(--accent-cyan)' }} className="group-hover:drop-shadow-[0_0_8px_rgba(var(--accent-cyan-rgb),0.8)] transition-all">
         {icon}
       </span>
       <span>{label}</span>

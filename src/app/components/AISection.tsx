@@ -96,13 +96,15 @@ export function AISection() {
               transition={{ duration: 0.6, delay: 0.3 + index * 0.15 }}
               whileHover={{
                 y: -4,
-                boxShadow: '0 12px 40px rgba(0, 200, 255, 0.2)'
+                boxShadow: '0 12px 40px rgba(var(--accent-cyan-rgb), 0.2)'
               }}
-              className="relative rounded-xl border p-6 flex flex-col"
+              className="relative rounded-2xl border p-6 flex flex-col"
               style={{
-                borderColor: 'var(--bg-border)',
-                background: 'var(--bg-surface)',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+                borderColor: 'var(--glass-border)',
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--glass-filter)',
+                WebkitBackdropFilter: 'var(--glass-filter)',
+                boxShadow: 'var(--glass-shadow)',
               }}
             >
               {/* Blueprint corner mark */}
@@ -114,7 +116,7 @@ export function AISection() {
               {/* Icon */}
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
-                style={{ background: 'rgba(0, 200, 255, 0.1)', color: 'var(--accent-cyan)' }}
+                style={{ background: 'rgba(var(--accent-cyan-rgb), 0.1)', color: 'var(--accent-cyan)' }}
               >
                 {item.icon}
               </div>
@@ -155,9 +157,9 @@ export function AISection() {
                     className="px-2 py-1 rounded text-xs"
                     style={{
                       fontFamily: 'var(--font-mono)',
-                      background: 'rgba(0, 200, 255, 0.08)',
+                      background: 'rgba(var(--accent-cyan-rgb), 0.08)',
                       color: 'var(--accent-cyan)',
-                      border: '1px solid rgba(0, 200, 255, 0.2)'
+                      border: '1px solid rgba(var(--accent-cyan-rgb), 0.2)'
                     }}
                   >
                     {tool}
@@ -181,10 +183,13 @@ export function AISection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-10 p-6 rounded-lg border-l-4 flex items-start gap-4"
+          className="mt-10 p-6 rounded-2xl border-l-4 flex items-start gap-4"
           style={{
             borderColor: 'var(--accent-cyan)',
-            background: 'rgba(0, 200, 255, 0.04)'
+            background: 'var(--glass-bg)',
+            backdropFilter: 'var(--glass-filter)',
+            WebkitBackdropFilter: 'var(--glass-filter)',
+            boxShadow: 'var(--glass-shadow)',
           }}
         >
           <BrainCircuit size={24} style={{ color: 'var(--accent-cyan)', flexShrink: 0, marginTop: 2 }} />

@@ -185,7 +185,7 @@ export function Experience() {
             style={{
               scaleY: lineScaleY,
               background: 'linear-gradient(180deg, var(--accent-cyan) 0%, var(--accent-amber) 100%)',
-              boxShadow: '0 0 8px rgba(0, 200, 255, 0.3)',
+              boxShadow: '0 0 8px rgba(var(--accent-cyan-rgb), 0.3)',
             }}
           />
 
@@ -230,8 +230,8 @@ function AcquisitionMarker({ inView }: { inView: boolean }) {
       <div
         className="flex items-center gap-3 px-4 py-2 rounded"
         style={{
-          border: '1px dashed rgba(240, 136, 62, 0.4)',
-          background: 'rgba(240, 136, 62, 0.04)',
+          border: '1px dashed rgba(var(--accent-amber-rgb), 0.4)',
+          background: 'rgba(var(--accent-amber-rgb), 0.04)',
         }}
       >
         <ArrowRight size={14} style={{ color: 'var(--accent-amber)', flexShrink: 0 }} />
@@ -292,36 +292,38 @@ function TimelineItem({
           border: `2px solid ${isCurrent ? 'var(--accent-cyan)' : 'var(--accent-amber)'}`,
           background: isCurrent ? 'var(--accent-cyan)' : 'var(--bg-deep)',
           boxShadow: isCurrent
-            ? '0 0 14px rgba(0, 200, 255, 0.6), 0 0 28px rgba(0, 200, 255, 0.2)'
-            : `0 0 ${Math.max(4, (6 - index) * 2)}px rgba(240, 136, 62, ${0.15 + (5 - index) * 0.06})`,
+            ? '0 0 14px rgba(var(--accent-cyan-rgb), 0.6), 0 0 28px rgba(var(--accent-cyan-rgb), 0.2)'
+            : `0 0 ${Math.max(4, (6 - index) * 2)}px rgba(var(--accent-amber-rgb), ${0.15 + (5 - index) * 0.06})`,
         }}
       />
 
       {/* Card */}
       <div
         onClick={toggleExpand}
-        className={`rounded-lg border cursor-pointer transition-all duration-300 ${isCurrent ? 'p-6 md:p-8' : 'p-5 md:p-6'}`}
+        className={`rounded-2xl border cursor-pointer transition-all duration-300 ${isCurrent ? 'p-6 md:p-8' : 'p-5 md:p-6'}`}
         style={{
-          borderColor: expanded ? 'var(--accent-cyan)' : 'var(--bg-border)',
+          borderColor: expanded ? 'var(--accent-cyan)' : 'var(--glass-border)',
           borderLeftWidth: isCurrent ? '3px' : '1px',
           borderLeftColor: isCurrent ? 'var(--accent-cyan)' : undefined,
-          background: 'var(--bg-surface)',
+          background: 'var(--glass-bg)',
+          backdropFilter: 'var(--glass-filter)',
+          WebkitBackdropFilter: 'var(--glass-filter)',
           boxShadow: isCurrent
-            ? '0 4px 30px rgba(0, 200, 255, 0.12)'
+            ? '0 4px 30px rgba(var(--accent-cyan-rgb), 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
             : expanded
-              ? '0 2px 20px rgba(0, 200, 255, 0.08)'
-              : '0 2px 10px rgba(0, 0, 0, 0.15)',
+              ? '0 2px 20px rgba(var(--accent-cyan-rgb), 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+              : 'var(--glass-shadow)',
         }}
         onMouseEnter={(e) => {
           if (!expanded) {
             e.currentTarget.style.borderColor = 'var(--accent-cyan)';
-            e.currentTarget.style.boxShadow = '0 2px 20px rgba(0, 200, 255, 0.1)';
+            e.currentTarget.style.boxShadow = '0 4px 24px rgba(var(--accent-cyan-rgb), 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
           }
         }}
         onMouseLeave={(e) => {
           if (!expanded) {
-            e.currentTarget.style.borderColor = 'var(--bg-border)';
-            e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.15)';
+            e.currentTarget.style.borderColor = 'var(--glass-border)';
+            e.currentTarget.style.boxShadow = 'var(--glass-shadow)';
           }
         }}
       >
@@ -348,9 +350,9 @@ function TimelineItem({
                   className="px-2 py-0.5 rounded text-xs tracking-wider"
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    background: 'rgba(0, 200, 255, 0.1)',
+                    background: 'rgba(var(--accent-cyan-rgb), 0.1)',
                     color: 'var(--accent-cyan)',
-                    border: '1px solid rgba(0, 200, 255, 0.25)',
+                    border: '1px solid rgba(var(--accent-cyan-rgb), 0.25)',
                   }}
                 >
                   CURRENT
@@ -449,9 +451,9 @@ function TimelineItem({
                   className="px-3 py-1 rounded-full text-xs font-semibold"
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    background: 'rgba(0, 200, 255, 0.1)',
+                    background: 'rgba(var(--accent-cyan-rgb), 0.1)',
                     color: 'var(--accent-cyan)',
-                    border: '1px solid rgba(0, 200, 255, 0.2)',
+                    border: '1px solid rgba(var(--accent-cyan-rgb), 0.2)',
                   }}
                 >
                   {tech}

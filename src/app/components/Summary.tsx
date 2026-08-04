@@ -57,10 +57,13 @@ export function Summary() {
 
           {/* Summary Quote */}
           <blockquote
-            className="relative pl-8 py-8 mb-12 border-l-4"
+            className="relative pl-8 py-8 mb-12 rounded-2xl border-l-4"
             style={{
               borderColor: "var(--accent-cyan)",
-              background: "rgba(0, 200, 255, 0.05)",
+              background: "var(--glass-bg)",
+              backdropFilter: "var(--glass-filter)",
+              WebkitBackdropFilter: "var(--glass-filter)",
+              boxShadow: "var(--glass-shadow)",
             }}
           >
             <p
@@ -130,10 +133,12 @@ export function Summary() {
                     delay: 0.6 + index * 0.05,
                     ease: "easeOut",
                   }}
-                  className="px-4 py-2 rounded-full border backdrop-blur-sm flex items-center gap-2 relative overflow-hidden"
+                  className="px-4 py-2 rounded-full border flex items-center gap-2 relative overflow-hidden"
                   style={{
-                    borderColor: "var(--bg-border)",
-                    background: "var(--bg-surface)",
+                    borderColor: "var(--glass-border)",
+                    background: "var(--glass-bg)",
+                    backdropFilter: "var(--glass-filter)",
+                    WebkitBackdropFilter: "var(--glass-filter)",
                     color: "var(--text-primary)",
                     fontFamily: "var(--font-mono)",
                     fontSize: "0.875rem",
@@ -154,7 +159,7 @@ export function Summary() {
                     }}
                     style={{
                       background:
-                        "radial-gradient(circle, rgba(0, 200, 255, 0.3) 0%, transparent 70%)",
+                        "radial-gradient(circle, rgba(var(--accent-cyan-rgb), 0.3) 0%, transparent 70%)",
                     }}
                   />
                   <motion.div
@@ -220,11 +225,13 @@ function StatCard({
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay }}
-      className="p-8 rounded-lg border backdrop-blur-sm text-center"
+      className="p-8 rounded-2xl border text-center"
       style={{
-        borderColor: "var(--bg-border)",
-        background: "var(--bg-surface)",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+        borderColor: "var(--glass-border)",
+        background: "var(--glass-bg)",
+        backdropFilter: "var(--glass-filter)",
+        WebkitBackdropFilter: "var(--glass-filter)",
+        boxShadow: "var(--glass-shadow)",
       }}
     >
       <div

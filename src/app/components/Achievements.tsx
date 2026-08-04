@@ -92,24 +92,26 @@ export function Achievements() {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group p-6 rounded-lg border transition-all hover:scale-105"
+              className="group p-6 rounded-2xl border transition-all hover:scale-105"
               style={{
                 borderColor: 'var(--accent-amber)',
-                background: 'var(--bg-surface)',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--glass-filter)',
+                WebkitBackdropFilter: 'var(--glass-filter)',
+                boxShadow: 'var(--glass-shadow)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(240, 136, 62, 0.3)';
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(var(--accent-amber-rgb), 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+                e.currentTarget.style.boxShadow = 'var(--glass-shadow)';
               }}
             >
               <div className="flex items-start gap-4">
                 <div
                   className="p-3 rounded-lg"
                   style={{
-                    background: 'rgba(240, 136, 62, 0.1)',
+                    background: 'rgba(var(--accent-amber-rgb), 0.1)',
                     color: 'var(--accent-amber)'
                   }}
                 >
@@ -168,10 +170,13 @@ export function Achievements() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="p-6 rounded-lg border"
+          className="p-6 rounded-2xl border"
           style={{
-            borderColor: 'var(--bg-border)',
-            background: 'var(--bg-surface)'
+            borderColor: 'var(--glass-border)',
+            background: 'var(--glass-bg)',
+            backdropFilter: 'var(--glass-filter)',
+            WebkitBackdropFilter: 'var(--glass-filter)',
+            boxShadow: 'var(--glass-shadow)',
           }}
         >
           <h3
@@ -190,18 +195,21 @@ export function Achievements() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                className="group p-4 rounded border transition-all hover:scale-105 hover:shadow-lg"
+                className="group p-4 rounded-2xl border transition-all hover:scale-105"
                 style={{
-                  borderColor: 'var(--bg-border)',
-                  background: 'var(--bg-deep)'
+                  borderColor: 'var(--glass-border)',
+                  background: 'var(--glass-bg)',
+                  backdropFilter: 'var(--glass-filter)',
+                  WebkitBackdropFilter: 'var(--glass-filter)',
+                  boxShadow: 'var(--glass-shadow)',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = 'var(--accent-cyan)';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 200, 255, 0.2)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(var(--accent-cyan-rgb), 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--bg-border)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = 'var(--glass-border)';
+                  e.currentTarget.style.boxShadow = 'var(--glass-shadow)';
                 }}
               >
                 {/* Icon */}
@@ -209,7 +217,7 @@ export function Achievements() {
                   <div
                     className="p-3 rounded-lg transition-all group-hover:scale-110"
                     style={{
-                      background: 'rgba(0, 200, 255, 0.1)',
+                      background: 'rgba(var(--accent-cyan-rgb), 0.1)',
                       color: 'var(--accent-cyan)'
                     }}
                   >
@@ -250,7 +258,7 @@ export function Achievements() {
                     className="px-2 py-1 rounded"
                     style={{
                       fontFamily: 'var(--font-mono)',
-                      background: 'rgba(0, 200, 255, 0.1)',
+                      background: 'rgba(var(--accent-cyan-rgb), 0.1)',
                       color: 'var(--accent-cyan)',
                       fontSize: '0.75rem'
                     }}

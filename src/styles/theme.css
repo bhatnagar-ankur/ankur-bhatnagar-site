@@ -4,13 +4,21 @@
   --bg-surface: #161B22;
   --bg-border: #21262D;
   --accent-cyan: #00C8FF;
+  --accent-cyan-rgb: 0, 200, 255;
   --accent-amber: #F0883E;
+  --accent-amber-rgb: 240, 136, 62;
   --text-primary: #E6EDF3;
   --text-muted: #8B949E;
   --success-green: #3FB950;
   --grid-line: #00C8FF14;
   --nav-bg-scrolled: rgba(13, 17, 23, 0.95);
   --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+  /* Glassmorphism — dark frosted glass, lighter at top-left like overhead light */
+  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.04) 100%);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-filter: blur(6px) saturate(200%);
+  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 
   --font-display: 'IBM Plex Sans', sans-serif;
   --font-body: 'Fira Sans', sans-serif;
@@ -24,13 +32,25 @@
   --bg-surface: #FFFFFF;
   --bg-border: #E1E8ED;
   --accent-cyan: #0099CC;
+  --accent-cyan-rgb: 0, 153, 204;
   --accent-amber: #D87333;
+  --accent-amber-rgb: 216, 115, 51;
   --text-primary: #1A2332;
   --text-muted: #5C6B7D;
   --success-green: #2D8A4F;
-  --grid-line: #0099CC1F;
-  --nav-bg-scrolled: rgba(255, 255, 255, 0.95);
+  --grid-line: #0099CC30;
+  --nav-bg-scrolled: rgba(245, 247, 250, 0.72);
   --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  /* Semi-transparent section backgrounds — grid bleeds through */
+  --bg-deep-section: rgba(245, 247, 250, 0.75);
+  --bg-surface-section: rgba(255, 255, 255, 0.60);
+
+  /* Glassmorphism — translucent frost so grid bleeds through */
+  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.40) 0%, rgba(220, 238, 255, 0.22) 100%);
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-filter: blur(3px) saturate(180%);
+  --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 153, 204, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.70);
 }
 
 /* Sunlight mode — warm cream, max contrast for outdoor use */
@@ -41,11 +61,19 @@
   --text-primary: #000000 !important;
   --text-muted: #2A2A2A !important;
   --accent-cyan: #006B8F !important;
+  --accent-cyan-rgb: 0, 107, 143 !important;
   --accent-amber: #B85C00 !important;
+  --accent-amber-rgb: 184, 92, 0 !important;
   --success-green: #1A5C30 !important;
   --grid-line: #00000014 !important;
   --nav-bg-scrolled: rgba(255, 253, 247, 0.98) !important;
   --nav-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+
+  /* Glassmorphism — warm frosted glass for outdoor reading */
+  --glass-bg: linear-gradient(135deg, rgba(255, 253, 247, 0.88) 0%, rgba(255, 248, 225, 0.68) 100%) !important;
+  --glass-border: rgba(255, 255, 255, 0.65) !important;
+  --glass-filter: blur(12px) saturate(140%) !important;
+  --glass-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
 

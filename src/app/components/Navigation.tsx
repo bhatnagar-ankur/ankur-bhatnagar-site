@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll } from 'motion/react';
-import { Menu, X, ChevronUp, Share2, FileDown, Mail } from 'lucide-react';
+import { Menu, X, ChevronUp, Share2, FileDown, Mail, Sun, Moon } from 'lucide-react';
 import { useSound } from './SoundProvider';
 import { SettingsMenu } from './SettingsMenu';
 import { useTheme } from './ThemeProvider';
@@ -32,8 +32,17 @@ export function Navigation() {
         setShareOpen(false);
       }
     };
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setShareOpen(false);
+      setMobileMenuOpen(false);
+    };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, []);
 
   const handleSharePDF = () => {
@@ -111,9 +120,10 @@ export function Navigation() {
         className="fixed top-0 left-0 right-0 z-50 transition-all"
         style={{
           background: isScrolled ? 'var(--nav-bg-scrolled)' : 'transparent',
-          backdropFilter: isScrolled ? 'blur(10px)' : 'none',
-          borderBottom: isScrolled ? '1px solid var(--bg-border)' : 'none',
-          boxShadow: isScrolled ? 'var(--nav-shadow)' : 'none'
+          backdropFilter: isScrolled ? 'var(--glass-filter)' : 'none',
+          WebkitBackdropFilter: isScrolled ? 'var(--glass-filter)' : 'none',
+          borderBottom: isScrolled ? '1px solid var(--glass-border)' : 'none',
+          boxShadow: isScrolled ? `var(--nav-shadow), inset 0 -1px 0 rgba(255, 255, 255, 0.04)` : 'none',
         }}
       >
         {/* Scroll progress bar */}
@@ -122,7 +132,7 @@ export function Navigation() {
           style={{
             scaleX: scrollYProgress,
             background: 'linear-gradient(90deg, var(--accent-cyan), var(--accent-amber))',
-            boxShadow: '0 0 6px rgba(0, 200, 255, 0.6)'
+            boxShadow: '0 0 6px rgba(var(--accent-cyan-rgb), 0.6)'
           }}
         />
 
@@ -148,7 +158,7 @@ export function Navigation() {
                   fontFamily: 'var(--font-ui)',
                   fontSize: '0.875rem',
                   color: activeSection === item.id ? 'var(--accent-cyan)' : 'var(--text-muted)',
-                  background: activeSection === item.id ? 'rgba(0, 200, 255, 0.1)' : 'transparent'
+                  background: activeSection === item.id ? 'rgba(var(--accent-cyan-rgb), 0.1)' : 'transparent'
                 }}
               >
                 {item.label}
@@ -176,7 +186,7 @@ export function Navigation() {
                 style={{
                   borderColor: 'var(--accent-cyan)',
                   color: 'var(--accent-cyan)',
-                  background: shareOpen ? 'rgba(0, 200, 255, 0.15)' : 'rgba(0, 200, 255, 0.05)'
+                  background: shareOpen ? 'rgba(var(--accent-cyan-rgb), 0.15)' : 'rgba(var(--accent-cyan-rgb), 0.05)'
                 }}
               >
                 <Share2 size={16} />
@@ -189,11 +199,13 @@ export function Navigation() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -8, scale: 0.95 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-52 rounded-lg border overflow-hidden z-50"
+                    className="absolute right-0 mt-2 w-52 rounded-2xl border overflow-hidden z-50"
                     style={{
-                      background: 'var(--bg-surface)',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--glass-filter)',
+                      WebkitBackdropFilter: 'var(--glass-filter)',
                       borderColor: 'var(--accent-cyan)',
-                      boxShadow: '0 8px 30px rgba(0, 200, 255, 0.2)'
+                      boxShadow: '0 8px 30px rgba(var(--accent-cyan-rgb), 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
                     }}
                   >
                     {shareItems.map(({ label, icon, action }) => (
@@ -238,8 +250,10 @@ export function Navigation() {
               transition={{ duration: 0.3 }}
               className="md:hidden overflow-hidden border-t"
               style={{
-                background: 'var(--bg-deep)',
-                borderColor: 'var(--bg-border)'
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--glass-filter)',
+                WebkitBackdropFilter: 'var(--glass-filter)',
+                borderColor: 'var(--glass-border)',
               }}
             >
               <div className="px-6 py-4 space-y-2">
@@ -251,7 +265,7 @@ export function Navigation() {
                     style={{
                       fontFamily: 'var(--font-mono)',
                       color: activeSection === item.id ? 'var(--accent-cyan)' : 'var(--text-muted)',
-                      background: activeSection === item.id ? 'rgba(0, 200, 255, 0.1)' : 'transparent'
+                      background: activeSection === item.id ? 'rgba(var(--accent-cyan-rgb), 0.1)' : 'transparent'
                     }}
                   >
                     {item.label}
@@ -281,6 +295,19 @@ export function Navigation() {
                     </button>
                   ))}
                 </div>
+
+                <div className="pt-2 border-t flex items-center justify-between" style={{ borderColor: 'var(--bg-border)' }}>
+                  <p
+                    className="px-4 text-xs uppercase tracking-widest"
+                    style={{ fontFamily: 'var(--font-ui)', color: 'var(--text-muted)' }}
+                  >
+                    Display
+                  </p>
+                  <div className="flex items-center gap-1 pr-2">
+                    <SettingsMenu />
+                    <MobileBulbToggle />
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}
@@ -299,9 +326,11 @@ export function Navigation() {
             className="fixed bottom-8 left-8 p-4 rounded-full border z-50 hover:scale-110 transition-transform"
             style={{
               borderColor: 'var(--accent-cyan)',
-              background: 'var(--bg-surface)',
+              background: 'var(--glass-bg)',
+              backdropFilter: 'var(--glass-filter)',
+              WebkitBackdropFilter: 'var(--glass-filter)',
               color: 'var(--accent-cyan)',
-              boxShadow: '0 4px 20px rgba(0, 200, 255, 0.3)'
+              boxShadow: '0 4px 20px rgba(var(--accent-cyan-rgb), 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
             }}
           >
             <ChevronUp size={24} />
@@ -461,6 +490,33 @@ function WireElectricity() {
   );
 }
 
+function MobileBulbToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const { playSound } = useSound();
+  const isLight = theme === 'light';
+
+  const handleToggle = () => {
+    playSound(isLight ? 'bulb-off' : 'bulb-on');
+    toggleTheme();
+  };
+
+  return (
+    <button
+      onClick={handleToggle}
+      aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+      title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+      className="flex items-center justify-center w-9 h-9 rounded-lg border transition-all hover:scale-105"
+      style={{
+        borderColor: 'var(--accent-cyan)',
+        color: 'var(--accent-cyan)',
+        background: 'rgba(var(--accent-cyan-rgb), 0.05)'
+      }}
+    >
+      {isLight ? <Moon size={16} /> : <Sun size={16} />}
+    </button>
+  );
+}
+
 function BulbToggle() {
   const { theme, toggleTheme } = useTheme();
   const { playSound } = useSound();
@@ -526,7 +582,7 @@ function BulbToggle() {
               <div style={{
                 padding: '5px 10px',
                 borderRadius: 6,
-                border: '1px solid rgba(240,136,62,0.45)',
+                border: '1px solid rgba(var(--accent-amber-rgb),0.45)',
                 background: 'rgba(13,17,23,0.9)',
                 backdropFilter: 'blur(8px)',
                 whiteSpace: 'nowrap',
@@ -539,7 +595,7 @@ function BulbToggle() {
                 width: 0, height: 0,
                 borderTop: '5px solid transparent',
                 borderBottom: '5px solid transparent',
-                borderLeft: '6px solid rgba(240,136,62,0.45)',
+                borderLeft: '6px solid rgba(var(--accent-amber-rgb),0.45)',
                 marginLeft: -1, flexShrink: 0,
               }} />
             </motion.div>

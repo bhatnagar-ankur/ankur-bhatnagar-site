@@ -16,8 +16,15 @@ export function SettingsMenu() {
         setIsOpen(false);
       }
     };
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, []);
 
   const handleDisplayModeToggle = () => {
@@ -43,7 +50,7 @@ export function SettingsMenu() {
         style={{
           borderColor: 'var(--accent-amber)',
           color: 'var(--accent-amber)',
-          background: isOpen ? 'rgba(240, 136, 62, 0.15)' : 'rgba(240, 136, 62, 0.05)'
+          background: isOpen ? 'rgba(var(--accent-amber-rgb), 0.15)' : 'rgba(var(--accent-amber-rgb), 0.05)'
         }}
       >
         <Settings size={16} />
@@ -60,7 +67,7 @@ export function SettingsMenu() {
             style={{
               background: 'var(--bg-surface)',
               borderColor: 'var(--accent-amber)',
-              boxShadow: '0 8px 30px rgba(240, 136, 62, 0.2)'
+              boxShadow: '0 8px 30px rgba(var(--accent-amber-rgb), 0.2)'
             }}
           >
             <div className="p-4 space-y-4">

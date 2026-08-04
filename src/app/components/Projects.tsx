@@ -217,8 +217,8 @@ const projects: Project[] = [
 ];
 
 const layerColors = {
-  cyan: { bg: 'rgba(0,200,255,0.1)', color: 'var(--accent-cyan)' },
-  amber: { bg: 'rgba(240,136,62,0.12)', color: 'var(--accent-amber)' },
+  cyan: { bg: 'rgba(var(--accent-cyan-rgb),0.1)', color: 'var(--accent-cyan)' },
+  amber: { bg: 'rgba(var(--accent-amber-rgb),0.12)', color: 'var(--accent-amber)' },
   green: { bg: 'rgba(63,185,80,0.1)', color: 'var(--success-green)' },
 };
 
@@ -281,13 +281,13 @@ function BlueprintDiagram({ type }: { type: Project['diagramType']; featured?: b
         <text x="10" y="16" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.6">CLIENT PORTFOLIO · MIXED ARCHITECTURE</text>
 
         {/* Client A — darkest tint, center y=42 */}
-        <rect x="8" y="30" width="44" height="24" rx="3" fill="rgba(0,200,255,0.08)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="8" y="30" width="44" height="24" rx="3" fill="rgba(var(--accent-cyan-rgb),0.08)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
         <text x="30" y="46" textAnchor="middle" fill={C} fontSize="9" style={{ fontFamily: mono }}>Client A</text>
         {/* Client B — center y=90 */}
-        <rect x="8" y="78" width="44" height="24" rx="3" fill="rgba(0,200,255,0.05)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="8" y="78" width="44" height="24" rx="3" fill="rgba(var(--accent-cyan-rgb),0.05)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
         <text x="30" y="94" textAnchor="middle" fill={C} fontSize="9" style={{ fontFamily: mono }}>Client B</text>
         {/* Client C — lightest tint, center y=138 */}
-        <rect x="8" y="126" width="44" height="24" rx="3" fill="rgba(0,200,255,0.02)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="8" y="126" width="44" height="24" rx="3" fill="rgba(var(--accent-cyan-rgb),0.02)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
         <text x="30" y="142" textAnchor="middle" fill={C} fontSize="9" style={{ fontFamily: mono }}>Client C</text>
 
         {/* Converging arrows → Angular center-left (68,90) */}
@@ -296,13 +296,13 @@ function BlueprintDiagram({ type }: { type: Project['diagramType']; featured?: b
         <line x1="52" y1="138" x2="68" y2="90" stroke={C} strokeWidth="0.8" markerEnd={`url(#arr-${uid})`} />
 
         {/* Angular / React — center y=90 */}
-        <rect x="64" y="46" width="80" height="88" rx="4" fill="rgba(0,200,255,0.05)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
+        <rect x="64" y="46" width="80" height="88" rx="4" fill="rgba(var(--accent-cyan-rgb),0.05)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
         <text x="104" y="84" textAnchor="middle" fill={C} fontSize="9" style={{ fontFamily: mono }}>Angular / React</text>
         <text x="104" y="99" textAnchor="middle" fill={C} fontSize="7" style={{ fontFamily: mono }} opacity="0.6">TS · SCSS</text>
         <line x1="144" y1="90" x2="154" y2="90" stroke={A} strokeWidth="0.8" markerEnd={`url(#arr-a-${uid})`} />
 
         {/* AI Pipeline — center y=90 */}
-        <rect x="154" y="46" width="68" height="88" rx="4" fill="rgba(240,136,62,0.05)" stroke={A} strokeWidth="1.2" strokeDasharray="4,3" />
+        <rect x="154" y="46" width="68" height="88" rx="4" fill="rgba(var(--accent-amber-rgb),0.05)" stroke={A} strokeWidth="1.2" strokeDasharray="4,3" />
         <text x="188" y="78" textAnchor="middle" fill={A} fontSize="9" style={{ fontFamily: mono }}>AI Pipeline</text>
         <text x="188" y="94" textAnchor="middle" fill={A} fontSize="7" style={{ fontFamily: mono }} opacity="0.65">Claude · Copilot</text>
         <text x="188" y="106" textAnchor="middle" fill={A} fontSize="7" style={{ fontFamily: mono }} opacity="0.65">· Codex</text>
@@ -329,7 +329,7 @@ function BlueprintDiagram({ type }: { type: Project['diagramType']; featured?: b
         <text x="10" y="16" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.6">TRAINUP · REUSABLE COMPONENT ARCHITECTURE</text>
 
         {/* Shared Component Library bar */}
-        <rect x="8" y="24" width="208" height="24" rx="3" fill="rgba(0,200,255,0.06)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
+        <rect x="8" y="24" width="208" height="24" rx="3" fill="rgba(var(--accent-cyan-rgb),0.06)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
         <text x="112" y="40" textAnchor="middle" fill={C} fontSize="9.5" style={{ fontFamily: mono }}>Shared Component Library · Angular</text>
 
         {/* "+ n clients" hint box */}
@@ -341,14 +341,14 @@ function BlueprintDiagram({ type }: { type: Project['diagramType']; featured?: b
         <line x1="208" y1="48" x2="208" y2="62" stroke={C} strokeWidth="0.8" markerEnd={`url(#arr-${uid})`} />
 
         {/* Client A */}
-        <rect x="8" y="62" width="128" height="76" rx="3" fill="rgba(0,200,255,0.03)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="8" y="62" width="128" height="76" rx="3" fill="rgba(var(--accent-cyan-rgb),0.03)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
         <text x="72" y="80" textAnchor="middle" fill={C} fontSize="10" style={{ fontFamily: mono }}>Client A</text>
         <text x="72" y="95" textAnchor="middle" fill={C} fontSize="7.5" style={{ fontFamily: mono }} opacity="0.6">Angular · own codebase</text>
         <text x="72" y="108" textAnchor="middle" fill={A} fontSize="7.5" style={{ fontFamily: mono }} opacity="0.6">MVC API · SQL DB</text>
         <text x="72" y="122" textAnchor="middle" fill={G} fontSize="7" style={{ fontFamily: mono }} opacity="0.7">★ own hosting + deploy</text>
 
         {/* Client B */}
-        <rect x="144" y="62" width="128" height="76" rx="3" fill="rgba(0,200,255,0.03)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="144" y="62" width="128" height="76" rx="3" fill="rgba(var(--accent-cyan-rgb),0.03)" stroke={C} strokeWidth="1" strokeDasharray="4,3" />
         <text x="208" y="80" textAnchor="middle" fill={C} fontSize="10" style={{ fontFamily: mono }}>Client B</text>
         <text x="208" y="95" textAnchor="middle" fill={C} fontSize="7.5" style={{ fontFamily: mono }} opacity="0.6">Angular · own codebase</text>
         <text x="208" y="108" textAnchor="middle" fill={A} fontSize="7.5" style={{ fontFamily: mono }} opacity="0.6">MVC API · SQL DB</text>
@@ -370,31 +370,31 @@ function BlueprintDiagram({ type }: { type: Project['diagramType']; featured?: b
         <text x="10" y="16" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.6">IMS · STRANGLER-FIG · REPORT ENGINE</text>
 
         {/* Shell App outer box — center y=74 */}
-        <rect x="8" y="24" width="180" height="100" rx="4" fill="rgba(0,200,255,0.03)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
+        <rect x="8" y="24" width="180" height="100" rx="4" fill="rgba(var(--accent-cyan-rgb),0.03)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
         <text x="98" y="38" textAnchor="middle" fill={C} fontSize="10" style={{ fontFamily: mono }}>Shell App</text>
         <line x1="12" y1="44" x2="184" y2="44" stroke={C} strokeWidth="0.5" opacity="0.2" />
         <line x1="98" y1="46" x2="98" y2="122" stroke={C} strokeWidth="0.4" opacity="0.15" />
 
         {/* Left: strangler-fig migration */}
-        <rect x="14" y="50" width="78" height="22" rx="3" fill="rgba(240,136,62,0.08)" stroke={A} strokeWidth="0.8" strokeDasharray="3,3" />
+        <rect x="14" y="50" width="78" height="22" rx="3" fill="rgba(var(--accent-amber-rgb),0.08)" stroke={A} strokeWidth="0.8" strokeDasharray="3,3" />
         <text x="53" y="65" textAnchor="middle" fill={A} fontSize="8" style={{ fontFamily: mono }}>AngularJS routes</text>
         <line x1="53" y1="72" x2="53" y2="84" stroke={A} strokeWidth="1" markerEnd={`url(#arr-a-${uid})`} opacity="0.65" />
-        <rect x="14" y="86" width="78" height="22" rx="3" fill="rgba(0,200,255,0.08)" stroke={C} strokeWidth="0.8" strokeDasharray="3,3" />
+        <rect x="14" y="86" width="78" height="22" rx="3" fill="rgba(var(--accent-cyan-rgb),0.08)" stroke={C} strokeWidth="0.8" strokeDasharray="3,3" />
         <text x="53" y="101" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }}>Angular routes</text>
 
         {/* Right: component library */}
-        <rect x="104" y="50" width="76" height="20" rx="3" fill="rgba(0,200,255,0.05)" stroke={C} strokeWidth="0.8" strokeDasharray="3,3" />
+        <rect x="104" y="50" width="76" height="20" rx="3" fill="rgba(var(--accent-cyan-rgb),0.05)" stroke={C} strokeWidth="0.8" strokeDasharray="3,3" />
         <text x="142" y="64" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }}>Angular Library</text>
-        <rect x="104" y="74" width="76" height="24" rx="3" fill="rgba(240,136,62,0.08)" stroke={A} strokeWidth="0.8" strokeDasharray="3,3" />
+        <rect x="104" y="74" width="76" height="24" rx="3" fill="rgba(var(--accent-amber-rgb),0.08)" stroke={A} strokeWidth="0.8" strokeDasharray="3,3" />
         <text x="142" y="90" textAnchor="middle" fill={A} fontSize="9" style={{ fontFamily: mono }}>DevExtreme</text>
-        <rect x="104" y="102" width="76" height="16" rx="3" fill="rgba(0,200,255,0.03)" stroke={C} strokeWidth="0.6" strokeDasharray="3,3" opacity="0.7" />
+        <rect x="104" y="102" width="76" height="16" rx="3" fill="rgba(var(--accent-cyan-rgb),0.03)" stroke={C} strokeWidth="0.6" strokeDasharray="3,3" opacity="0.7" />
         <text x="142" y="113" textAnchor="middle" fill={C} fontSize="6.5" style={{ fontFamily: mono }} opacity="0.65">Report Builder</text>
 
         {/* Arrow Shell center-right → MVC center-left (aligned at y=74) */}
         <line x1="188" y1="74" x2="196" y2="74" stroke={C} strokeWidth="0.8" markerEnd={`url(#arr-${uid})`} />
 
         {/* Identity Provider */}
-        <rect x="196" y="24" width="86" height="24" rx="3" fill="rgba(240,136,62,0.06)" stroke={A} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="196" y="24" width="86" height="24" rx="3" fill="rgba(var(--accent-amber-rgb),0.06)" stroke={A} strokeWidth="1" strokeDasharray="4,3" />
         <text x="239" y="40" textAnchor="middle" fill={A} fontSize="8" style={{ fontFamily: mono }}>Identity Provider</text>
         <line x1="239" y1="48" x2="239" y2="60" stroke={A} strokeWidth="0.8" markerEnd={`url(#arr-a-${uid})`} />
 
@@ -428,31 +428,31 @@ function BlueprintDiagram({ type }: { type: Project['diagramType']; featured?: b
         <line x1="145" y1="42" x2="145" y2="54" stroke={C} strokeWidth="0.8" markerEnd={`url(#arr-${uid})`} />
 
         {/* Aurelia SPA — wide middle block */}
-        <rect x="8" y="54" width="274" height="90" rx="4" fill="rgba(0,200,255,0.04)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
+        <rect x="8" y="54" width="274" height="90" rx="4" fill="rgba(var(--accent-cyan-rgb),0.04)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
         <text x="145" y="67" textAnchor="middle" fill={C} fontSize="10" style={{ fontFamily: mono }}>Aurelia SPA</text>
         <line x1="12" y1="74" x2="278" y2="74" stroke={C} strokeWidth="0.5" opacity="0.2" />
 
         {/* Module chips row 1 */}
-        <rect x="14" y="79" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="14" y="79" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="54" y="93" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">TL Booking</text>
-        <rect x="105" y="79" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="105" y="79" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="145" y="93" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Operators</text>
-        <rect x="196" y="79" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="196" y="79" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="236" y="93" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Activities</text>
 
         {/* Module chips row 2 */}
-        <rect x="14" y="110" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="14" y="110" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="54" y="124" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Tracking</text>
-        <rect x="105" y="110" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="105" y="110" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="145" y="124" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Trucks</text>
-        <rect x="196" y="110" width="80" height="20" rx="2" fill="rgba(240,136,62,0.1)" />
+        <rect x="196" y="110" width="80" height="20" rx="2" fill="rgba(var(--accent-amber-rgb),0.1)" />
         <text x="236" y="124" textAnchor="middle" fill={A} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">SignalR RT</text>
 
         {/* Arrow SPA → LB */}
         <line x1="35" y1="144" x2="35" y2="158" stroke={A} strokeWidth="0.8" markerEnd={`url(#arr-a-${uid})`} />
 
         {/* LB */}
-        <rect x="20" y="158" width="30" height="30" rx="3" fill="rgba(240,136,62,0.06)" stroke={A} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="20" y="158" width="30" height="30" rx="3" fill="rgba(var(--accent-amber-rgb),0.06)" stroke={A} strokeWidth="1" strokeDasharray="4,3" />
         <text x="35" y="177" textAnchor="middle" fill={A} fontSize="10" style={{ fontFamily: mono }}>LB</text>
 
         {/* LB → MVC */}
@@ -491,31 +491,31 @@ function BlueprintDiagram({ type }: { type: Project['diagramType']; featured?: b
         <line x1="145" y1="42" x2="145" y2="54" stroke={C} strokeWidth="0.8" markerEnd={`url(#arr-${uid})`} />
 
         {/* Durandal SPA */}
-        <rect x="8" y="54" width="274" height="90" rx="4" fill="rgba(0,200,255,0.04)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
+        <rect x="8" y="54" width="274" height="90" rx="4" fill="rgba(var(--accent-cyan-rgb),0.04)" stroke={C} strokeWidth="1.2" strokeDasharray="4,3" />
         <text x="145" y="67" textAnchor="middle" fill={C} fontSize="10" style={{ fontFamily: mono }}>Durandal SPA</text>
         <line x1="12" y1="74" x2="278" y2="74" stroke={C} strokeWidth="0.5" opacity="0.2" />
 
         {/* Module chips row 1 */}
-        <rect x="14" y="79" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="14" y="79" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="54" y="93" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">LTL Quote</text>
-        <rect x="105" y="79" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="105" y="79" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="145" y="93" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">TL Quote</text>
-        <rect x="196" y="79" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="196" y="79" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="236" y="93" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Tracking</text>
 
         {/* Module chips row 2 */}
-        <rect x="14" y="110" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="14" y="110" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="54" y="124" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Reports</text>
-        <rect x="105" y="110" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="105" y="110" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="145" y="124" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Addresses</text>
-        <rect x="196" y="110" width="80" height="20" rx="2" fill="rgba(0,200,255,0.07)" />
+        <rect x="196" y="110" width="80" height="20" rx="2" fill="rgba(var(--accent-cyan-rgb),0.07)" />
         <text x="236" y="124" textAnchor="middle" fill={C} fontSize="8" style={{ fontFamily: mono }} opacity="0.85">Location</text>
 
         {/* Arrow SPA → LB — padded gap */}
         <line x1="35" y1="144" x2="35" y2="158" stroke={A} strokeWidth="0.8" markerEnd={`url(#arr-a-${uid})`} />
 
         {/* LB */}
-        <rect x="20" y="158" width="30" height="30" rx="3" fill="rgba(240,136,62,0.06)" stroke={A} strokeWidth="1" strokeDasharray="4,3" />
+        <rect x="20" y="158" width="30" height="30" rx="3" fill="rgba(var(--accent-amber-rgb),0.06)" stroke={A} strokeWidth="1" strokeDasharray="4,3" />
         <text x="35" y="177" textAnchor="middle" fill={A} fontSize="10" style={{ fontFamily: mono }}>LB</text>
 
         {/* LB → MVC */}
@@ -615,8 +615,8 @@ function MetricsBand({ metrics }: { metrics: Metric[] }) {
     <div
       className="grid grid-cols-3 gap-2 rounded-md p-3"
       style={{
-        background: 'linear-gradient(135deg, rgba(0,200,255,0.06), rgba(63,185,80,0.04))',
-        border: '1px solid rgba(0,200,255,0.15)',
+        background: 'linear-gradient(135deg, rgba(var(--accent-cyan-rgb),0.06), rgba(63,185,80,0.04))',
+        border: '1px solid rgba(var(--accent-cyan-rgb),0.15)',
       }}
     >
       {metrics.map((m, i) => (
@@ -652,18 +652,41 @@ function MetricsBand({ metrics }: { metrics: Metric[] }) {
 function DetailBlock({ icon, label, color, children }: {
   icon: React.ReactNode;
   label: string;
-  color: 'cyan' | 'amber' | 'green';
+  color: 'cyan' | 'amber' | 'green' | 'purple';
   children: React.ReactNode;
 }) {
-  const fg = color === 'cyan' ? 'var(--accent-cyan)' : color === 'amber' ? 'var(--accent-amber)' : 'var(--success-green)';
-  const bg = color === 'cyan' ? 'rgba(0,200,255,0.05)' : color === 'amber' ? 'rgba(240,136,62,0.05)' : 'rgba(63,185,80,0.05)';
+  const palette = {
+    cyan:   { fg: 'var(--accent-cyan)',   bg: 'rgba(var(--accent-cyan-rgb), 0.07)',  border: 'rgba(var(--accent-cyan-rgb), 0.2)',  chip: 'rgba(var(--accent-cyan-rgb), 0.12)'  },
+    amber:  { fg: 'var(--accent-amber)',  bg: 'rgba(var(--accent-amber-rgb), 0.07)', border: 'rgba(var(--accent-amber-rgb), 0.2)', chip: 'rgba(var(--accent-amber-rgb), 0.12)' },
+    green:  { fg: 'var(--success-green)', bg: 'rgba(63, 185, 80, 0.07)',  border: 'rgba(63, 185, 80, 0.2)',  chip: 'rgba(63, 185, 80, 0.12)'  },
+    purple: { fg: 'rgb(167, 139, 250)',   bg: 'rgba(139, 92, 246, 0.07)', border: 'rgba(139, 92, 246, 0.2)', chip: 'rgba(139, 92, 246, 0.12)' },
+  };
+  const p = palette[color];
+
   return (
-    <div className="rounded-md p-3 flex flex-col gap-2" style={{ background: bg, border: `1px solid ${fg}22` }}>
-      <div className="flex items-center gap-1.5" style={{ color: fg }}>
-        {icon}
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</span>
+    <div className="rounded-xl p-4 flex flex-col gap-3" style={{ background: p.bg, border: `1px solid ${p.border}` }}>
+      {/* Pill-chip label — scannable at a glance */}
+      <div
+        className="flex items-center gap-1.5 w-fit px-2.5 py-1 rounded-full"
+        style={{ background: p.chip, border: `1px solid ${p.border}` }}
+      >
+        <span style={{ color: p.fg, display: 'flex', alignItems: 'center' }}>{icon}</span>
+        <span style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.6875rem',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          fontWeight: 600,
+          color: p.fg,
+        }}>
+          {label}
+        </span>
       </div>
-      <div style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }} className="flex flex-col gap-1 fluid-caption">
+      {/* Content — readable size, primary color for contrast */}
+      <div
+        style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)', fontSize: '0.8125rem', lineHeight: 1.6 }}
+        className="flex flex-col gap-1.5"
+      >
         {children}
       </div>
     </div>
@@ -678,26 +701,32 @@ function ProjectCard({ project, index, inView, featured = false }: {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group w-full rounded-lg border overflow-hidden"
+      className="group w-full rounded-2xl border overflow-hidden"
       style={{
-        borderColor: featured ? 'rgba(0,200,255,0.3)' : 'var(--bg-border)',
-        background: 'var(--bg-surface)',
-        boxShadow: featured ? '0 0 48px rgba(0,200,255,0.1)' : '0 4px 20px rgba(0,0,0,0.25)',
+        borderColor: featured ? 'rgba(var(--accent-cyan-rgb),0.3)' : 'var(--glass-border)',
+        background: 'var(--glass-bg)',
+        backdropFilter: 'var(--glass-filter)',
+        WebkitBackdropFilter: 'var(--glass-filter)',
+        boxShadow: featured
+          ? '0 0 48px rgba(var(--accent-cyan-rgb),0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+          : 'var(--glass-shadow)',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = 'var(--accent-cyan)';
-        e.currentTarget.style.boxShadow = '0 0 32px rgba(0,200,255,0.2)';
+        e.currentTarget.style.boxShadow = '0 0 32px rgba(var(--accent-cyan-rgb),0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = featured ? 'rgba(0,200,255,0.3)' : 'var(--bg-border)';
-        e.currentTarget.style.boxShadow = featured ? '0 0 48px rgba(0,200,255,0.1)' : '0 4px 20px rgba(0,0,0,0.25)';
+        e.currentTarget.style.borderColor = featured ? 'rgba(var(--accent-cyan-rgb),0.3)' : 'var(--glass-border)';
+        e.currentTarget.style.boxShadow = featured
+          ? '0 0 48px rgba(var(--accent-cyan-rgb),0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+          : 'var(--glass-shadow)';
       }}
     >
       <div className="flex flex-col lg:flex-row h-full">
         {/* Left panel: header + diagram + tech layer */}
         <div
           className="lg:w-[42%] border-b lg:border-b-0 lg:border-r p-5 flex flex-col gap-3"
-          style={{ borderColor: 'var(--bg-border)', background: 'rgba(0,200,255,0.02)' }}
+          style={{ borderColor: 'var(--bg-border)', background: 'rgba(var(--accent-cyan-rgb),0.02)' }}
         >
           <div>
             <div className="flex items-center gap-2 flex-wrap mb-2">
@@ -712,9 +741,9 @@ function ProjectCard({ project, index, inView, featured = false }: {
                   className="px-2 py-0.5 rounded-full text-xs shrink-0"
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    background: 'rgba(0,200,255,0.15)',
+                    background: 'rgba(var(--accent-cyan-rgb),0.15)',
                     color: 'var(--accent-cyan)',
-                    border: '1px solid rgba(0,200,255,0.35)',
+                    border: '1px solid rgba(var(--accent-cyan-rgb),0.35)',
                     letterSpacing: '0.04em',
                   }}
                 >
@@ -726,9 +755,9 @@ function ProjectCard({ project, index, inView, featured = false }: {
                   className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs shrink-0"
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    background: 'rgba(240,136,62,0.15)',
+                    background: 'rgba(var(--accent-amber-rgb),0.15)',
                     color: 'var(--accent-amber)',
-                    border: '1px solid rgba(240,136,62,0.3)'
+                    border: '1px solid rgba(var(--accent-amber-rgb),0.3)'
                   }}
                 >
                   <Sparkles size={10} />
@@ -792,29 +821,29 @@ function ProjectCard({ project, index, inView, featured = false }: {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t" style={{ borderColor: 'var(--bg-border)' }}>
-            <DetailBlock icon={<TrendingUp size={12} />} label="Impact" color="green">
+            <DetailBlock icon={<TrendingUp size={14} />} label="Impact" color="green">
               {project.details.impact.map((c, i) => (
-                <div key={i} className="flex items-start gap-1.5">
-                  <span style={{ color: 'var(--success-green)', flexShrink: 0, marginTop: '2px' }}>·</span>
+                <div key={i} className="flex items-start gap-2">
+                  <span style={{ color: 'var(--success-green)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
                   <span>{c}</span>
                 </div>
               ))}
             </DetailBlock>
 
-            <DetailBlock icon={<GitBranch size={12} />} label="Tech Decisions" color="amber">
+            <DetailBlock icon={<GitBranch size={14} />} label="Tech Decisions" color="amber">
               <span>{project.details.techDecisions}</span>
             </DetailBlock>
 
-            <DetailBlock icon={<Zap size={12} />} label="Key Challenges" color="cyan">
+            <DetailBlock icon={<Zap size={14} />} label="Key Challenges" color="cyan">
               {project.details.challenges.map((c, i) => (
-                <div key={i} className="flex items-start gap-1.5">
-                  <span style={{ color: 'var(--accent-cyan)', flexShrink: 0, marginTop: '2px' }}>·</span>
+                <div key={i} className="flex items-start gap-2">
+                  <span style={{ color: 'var(--accent-cyan)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
                   <span>{c}</span>
                 </div>
               ))}
             </DetailBlock>
 
-            <DetailBlock icon={<Users size={12} />} label="Team & Context" color="amber">
+            <DetailBlock icon={<Users size={14} />} label="Team & Context" color="purple">
               <span>{project.details.team}</span>
             </DetailBlock>
           </div>

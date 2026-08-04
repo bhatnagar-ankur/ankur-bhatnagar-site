@@ -3,7 +3,7 @@ import { ChevronDown, MapPin, Linkedin, Github } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSound } from './SoundProvider';
 import { ImageWithFallback } from './ImageWithFallback';
-import profilePic from '../../imports/Profile_Pic.jpg';
+import profilePic from '../../imports/Profile_Anime.png';
 import { yearsOfExperience } from '../lib/constants';
 import { HeroBackground } from './HeroBackground';
 
@@ -90,7 +90,7 @@ export function Hero() {
               <div
                 className="absolute inset-0 opacity-20 group-hover:opacity-10 transition-opacity"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(0, 200, 255, 0.3) 0%, rgba(240, 136, 62, 0.3) 100%)'
+                  background: 'linear-gradient(135deg, rgba(var(--accent-cyan-rgb), 0.3) 0%, rgba(var(--accent-amber-rgb), 0.3) 100%)'
                 }}
               />
             </motion.div>
@@ -124,8 +124,8 @@ export function Hero() {
               className="inline-block px-6 py-3 rounded-full border-2 backdrop-blur-sm"
               style={{
                 borderColor: 'var(--accent-cyan)',
-                background: 'rgba(0, 200, 255, 0.1)',
-                boxShadow: '0 0 30px rgba(0, 200, 255, 0.3)'
+                background: 'rgba(var(--accent-cyan-rgb), 0.1)',
+                boxShadow: '0 0 30px rgba(var(--accent-cyan-rgb), 0.3)'
               }}
             >
               <span style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }} className="text-xl font-semibold tracking-wider">
@@ -285,7 +285,7 @@ function ContactButton({ icon, label, href }: { icon: React.ReactNode; label: st
         fontFamily: 'var(--font-body)'
       }}
     >
-      <span style={{ color: 'var(--accent-cyan)' }} className="transition-colors group-hover:drop-shadow-[0_0_8px_rgba(0,200,255,0.8)]">
+      <span style={{ color: 'var(--accent-cyan)' }} className="transition-colors group-hover:drop-shadow-[0_0_8px_rgba(var(--accent-cyan-rgb),0.8)]">
         {icon}
       </span>
       <span className="text-sm">{label}</span>
