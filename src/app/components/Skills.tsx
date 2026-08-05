@@ -271,7 +271,6 @@ function TierBlock({ tier, inView, delay, playSound }: { tier: SkillTier; inView
                   animate={inView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ duration: 0.35, delay: delay + 0.15 + groupIndex * 0.08 + skillIndex * 0.04 }}
                   whileHover={{ scale: 1.07, y: -2, boxShadow: `0 0 14px ${styles.tagBorder}` }}
-                  onMouseEnter={() => playSound('hover')}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm cursor-pointer"
                   style={{
                     fontFamily: 'var(--font-mono)',

@@ -1,9 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
-import { useState } from 'react';
 import { Award, Trophy, Sparkles, Satellite, Building2, Search } from 'lucide-react';
 import { AchievementsBg } from './SectionBackgrounds';
-import { useSound } from '../providers/SoundProvider';
 
 interface Achievement {
   title: string;
@@ -61,9 +59,6 @@ const getCertificationIcon = (issuer: string) => {
 };
 
 function AchievementCard({ achievement, index, inView }: { achievement: Achievement; index: number; inView: boolean }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const { playSound } = useSound();
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -76,14 +71,9 @@ function AchievementCard({ achievement, index, inView }: { achievement: Achievem
         background: 'var(--glass-bg)',
         backdropFilter: 'var(--glass-filter)',
         WebkitBackdropFilter: 'var(--glass-filter)',
-        boxShadow: isHovered
-          ? '0 0 30px rgba(var(--accent-amber-rgb), 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-          : 'var(--glass-shadow)',
-        transition: 'box-shadow 0.25s ease',
+        boxShadow: 'var(--glass-shadow)',
         cursor: 'default',
       }}
-      onMouseEnter={() => { setIsHovered(true); playSound('hover'); }}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-start gap-4">
         <motion.div
@@ -140,9 +130,6 @@ function AchievementCard({ achievement, index, inView }: { achievement: Achievem
 }
 
 function CertCard({ cert, index, inView }: { cert: typeof certifications[0]; index: number; inView: boolean }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const { playSound } = useSound();
-
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -151,18 +138,13 @@ function CertCard({ cert, index, inView }: { cert: typeof certifications[0]; ind
       transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
       className="group p-4 rounded-2xl border trace-border"
       style={{
-        borderColor: isHovered ? 'var(--accent-cyan)' : 'var(--glass-border)',
+        borderColor: 'var(--glass-border)',
         background: 'var(--glass-bg)',
         backdropFilter: 'var(--glass-filter)',
         WebkitBackdropFilter: 'var(--glass-filter)',
-        boxShadow: isHovered
-          ? '0 0 20px rgba(var(--accent-cyan-rgb), 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-          : 'var(--glass-shadow)',
-        transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+        boxShadow: 'var(--glass-shadow)',
         cursor: 'default',
       }}
-      onMouseEnter={() => { setIsHovered(true); playSound('hover'); }}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-center justify-center mb-4">
         <motion.div

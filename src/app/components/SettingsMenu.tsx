@@ -1,14 +1,16 @@
-import { Settings, Zap, Volume2, VolumeX } from 'lucide-react';
+import { Settings, Zap, Volume2, VolumeX, Music } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../providers/ThemeProvider';
 import { useSound } from '../providers/SoundProvider';
+import { useBgMusicContext } from '../providers/BgMusicProvider';
 
 export function SettingsMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { displayMode, toggleDisplayMode } = useTheme();
   const { playSound, toggleSound, isEnabled: soundEnabled } = useSound();
+  const { isEnabled: musicEnabled, toggle: toggleMusic } = useBgMusicContext();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -95,6 +97,35 @@ export function SettingsMenu() {
                   <motion.div
                     className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md"
                     animate={{ left: displayMode === 'sunlight' ? 'calc(100% - 22px)' : '2px' }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                </button>
+              </div>
+
+              <div style={{ borderTop: '1px solid var(--bg-border)' }} />
+
+              {/* Background Music Toggle */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Music size={18} style={{ color: musicEnabled ? 'var(--accent-amber)' : 'var(--text-muted)' }} />
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.875rem', color: 'var(--text-primary)' }}>
+                      Background Music
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      Ambient · fades in gently
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={toggleMusic}
+                  className="relative w-12 h-6 rounded-full transition-colors duration-300"
+                  style={{ backgroundColor: musicEnabled ? 'var(--accent-amber)' : 'var(--bg-border)' }}
+                  aria-label={musicEnabled ? 'Disable background music' : 'Enable background music'}
+                >
+                  <motion.div
+                    className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md"
+                    animate={{ left: musicEnabled ? 'calc(100% - 22px)' : '2px' }}
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />
                 </button>

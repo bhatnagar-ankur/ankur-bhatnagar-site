@@ -11,7 +11,7 @@
   --text-muted: #8B949E;
   --success-green: #3FB950;
   --grid-line: #00C8FF14;
-  --nav-bg-scrolled: rgba(13, 17, 23, 0.95);
+  --nav-bg-scrolled: rgba(13, 17, 23, 0.75);
   --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 
   /* Glassmorphism — dark frosted glass, lighter at top-left like overhead light */

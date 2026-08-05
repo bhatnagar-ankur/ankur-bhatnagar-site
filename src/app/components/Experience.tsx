@@ -261,7 +261,6 @@ function TimelineItem({
 }) {
   const { playSound } = useSound();
   const [expanded, setExpanded] = useState(isCurrent);
-  const [isHovered, setIsHovered] = useState(false);
   const duration = getDuration(experience.period);
 
   const toggleExpand = () => {
@@ -301,10 +300,8 @@ function TimelineItem({
       {/* Card */}
       <motion.div
         onClick={toggleExpand}
-        onMouseEnter={() => { setIsHovered(true); playSound('hover'); }}
-        onMouseLeave={() => setIsHovered(false)}
         whileTap={{ scale: 0.99 }}
-        className={`rounded-2xl border cursor-pointer trace-border ${isCurrent ? 'border-l-[3px] p-6 md:p-8' : 'p-5 md:p-6'} ${isCurrent || expanded || isHovered ? 'exp-card-cyan' : 'exp-card-glass'}`}
+        className={`rounded-2xl border cursor-pointer trace-border ${isCurrent ? 'border-l-[3px] p-6 md:p-8' : 'p-5 md:p-6'} ${isCurrent || expanded ? 'exp-card-cyan' : 'exp-card-glass'}`}
         style={{
           background: 'var(--glass-bg)',
           backdropFilter: 'var(--glass-filter)',
@@ -313,9 +310,7 @@ function TimelineItem({
             ? '0 4px 30px rgba(var(--accent-cyan-rgb), 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
             : expanded
               ? '0 2px 20px rgba(var(--accent-cyan-rgb), 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-              : isHovered
-                ? '0 4px 24px rgba(var(--accent-cyan-rgb), 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                : 'var(--glass-shadow)',
+              : 'var(--glass-shadow)',
         }}
       >
         {/* Header — always visible */}
@@ -440,7 +435,6 @@ function TimelineItem({
                 <motion.span
                   key={tech}
                   whileHover={{ scale: 1.08, y: -1 }}
-                  onMouseEnter={() => playSound('hover')}
                   className="px-3 py-1 rounded-full text-xs font-semibold cursor-pointer"
                   style={{
                     fontFamily: 'var(--font-mono)',

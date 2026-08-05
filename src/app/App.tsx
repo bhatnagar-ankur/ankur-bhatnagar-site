@@ -12,10 +12,12 @@ import { Education } from './components/Education';
 import { Contact } from './components/Contact';
 import { BlueprintCursor } from './components/BlueprintCursor';
 import { SammyMascot } from './components/SammyMascot';
+import { FloatingControls } from './components/FloatingControls';
 import { SectionConnector } from './components/SectionConnector';
 import { useFavicon } from './hooks/useFavicon';
 import { ThemeProvider } from './providers/ThemeProvider';
 import { SoundProvider } from './providers/SoundProvider';
+import { BgMusicProvider } from './providers/BgMusicProvider';
 
 const KONAMI = [
   'ArrowUp','ArrowUp','ArrowDown','ArrowDown',
@@ -84,6 +86,7 @@ function AppContent() {
 
       <BlueprintCursor />
       <SammyMascot />
+      <FloatingControls />
       <Navigation />
 
       <main id="main-content">
@@ -162,13 +165,15 @@ function AppContent() {
 }
 
 export default function App() {
-  useFavicon('⚡');
+  // useFavicon('⚡');
 
   return (
     <MotionConfig reducedMotion="user">
       <ThemeProvider>
         <SoundProvider>
-          <AppContent />
+          <BgMusicProvider>
+            <AppContent />
+          </BgMusicProvider>
         </SoundProvider>
       </ThemeProvider>
     </MotionConfig>

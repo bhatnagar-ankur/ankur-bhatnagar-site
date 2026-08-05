@@ -79,7 +79,7 @@ export function Hero() {
             <div
               className="relative w-48 h-48 md:w-64 md:h-64 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 3xl:w-[28rem] 3xl:h-[28rem] 4xl:w-[36rem] 4xl:h-[36rem]"
               style={{ perspective: '1000px' }}
-              onMouseEnter={() => { setIsImageFlipped(true); playSound('hover'); }}
+              onMouseEnter={() => setIsImageFlipped(true)}
               onMouseLeave={() => setIsImageFlipped(false)}
             >
               <motion.div
@@ -367,15 +367,10 @@ function ContactButton({ icon, label, href }: { icon: React.ReactNode; label: st
       rel="noopener noreferrer"
       onClick={() => playSound('click')}
       onMouseEnter={() => playSound('hover')}
-      className="group flex items-center gap-3 px-5 py-3 rounded-lg border transition-all hover:scale-105"
-      style={{
-        borderColor: 'var(--bg-border)',
-        background: 'var(--bg-surface)',
-        color: 'var(--text-primary)',
-        fontFamily: 'var(--font-body)'
-      }}
+      className="btn-fill-ltr group flex items-center gap-3 px-5 py-3 rounded-lg border hover:scale-105"
+      style={{ fontFamily: 'var(--font-body)' }}
     >
-      <span style={{ color: 'var(--accent-cyan)' }} className="transition-colors group-hover:drop-shadow-[0_0_8px_rgba(var(--accent-cyan-rgb),0.8)]">
+      <span className="fill-btn-icon">
         {icon}
       </span>
       <span className="text-sm">{label}</span>

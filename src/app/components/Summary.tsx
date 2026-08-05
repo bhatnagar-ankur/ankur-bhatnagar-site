@@ -2,7 +2,6 @@ import { motion } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import { yearsOfExperience } from "../lib/constants";
 import { SummaryBg } from './SectionBackgrounds';
-import { useSound } from '../providers/SoundProvider';
 import {
   Triangle,
   Atom,
@@ -23,7 +22,6 @@ import {
 
 export function Summary() {
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
-  const { playSound } = useSound();
 
   return (
     <section
@@ -157,7 +155,6 @@ export function Summary() {
                             delay: 0.65 + globalIndex * 0.04,
                             ease: "easeOut",
                           }}
-                          onMouseEnter={() => playSound('hover')}
                           className="px-3.5 py-1.5 rounded-full border flex items-center gap-1.5 relative overflow-hidden"
                           style={{
                             borderColor: `rgba(${accentRgbVar}, 0.2)`,

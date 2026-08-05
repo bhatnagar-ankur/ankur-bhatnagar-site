@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform, LayoutGroup } from 'motion/react';
 import { Menu, X, ChevronUp, Share2, FileDown, Mail, Sun, Moon } from 'lucide-react';
 import { useSound } from '../providers/SoundProvider';
 import { SettingsMenu } from './SettingsMenu';
@@ -20,13 +20,16 @@ const navItems = [
 
 export function Navigation() {
   const { playSound } = useSound();
-  const { scrollYProgress } = useScroll();
+  const { theme, displayMode } = useTheme();
+  const { scrollYProgress, scrollY } = useScroll();
+  const darkNavBg = useTransform(scrollY, [0, 200], ['rgba(13,17,23,0.98)', 'rgba(13,17,23,0.75)']);
   const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const shareRef = useRef<HTMLDivElement>(null);
+  const scrollLockRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -74,30 +77,40 @@ export function Navigation() {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-      setShowScrollTop(window.scrollY > 500);
-
+    const detect = () => {
       const sections = navItems.map(item => document.getElementById(item.id));
-      const scrollPosition = window.scrollY + 200;
-
-      const atBottom =
-        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 20;
-      if (atBottom) {
-        setActiveSection(navItems[navItems.length - 1].id);
-        return;
-      }
-
+      const scrollY = window.scrollY;
+      const viewportH = window.innerHeight;
+      const atBottom = scrollY + viewportH >= document.documentElement.scrollHeight - 5;
+      const trigger = atBottom ? scrollY + viewportH : scrollY + 100;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
-        if (section && section.offsetTop <= scrollPosition) {
+        if (section && section.offsetTop <= trigger) {
           setActiveSection(navItems[i].id);
           break;
         }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const sy = window.scrollY;
+      setIsScrolled(sy > 100);
+      setShowScrollTop(sy > 500);
+
+      if (scrollLockRef.current) {
+        // Extend the lock on every scroll event — releases 150ms after scrolling stops
+        clearTimeout(scrollLockRef.current);
+        scrollLockRef.current = setTimeout(() => {
+          scrollLockRef.current = null;
+          detect();
+        }, 150);
+        return;
+      }
+
+      detect();
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -107,6 +120,8 @@ export function Navigation() {
     if (element) {
       playSound('transition');
       setActiveSection(id);
+      if (scrollLockRef.current) clearTimeout(scrollLockRef.current);
+      scrollLockRef.current = setTimeout(() => { scrollLockRef.current = null; }, 100);
       const rawY = element.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top: rawY, behavior: 'smooth' });
       setMobileMenuOpen(false);
@@ -124,13 +139,16 @@ export function Navigation() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
-        className="fixed top-0 left-0 right-0 z-50 transition-all"
+        className="fixed top-0 left-0 right-0 z-50"
         style={{
-          background: isScrolled ? 'var(--nav-bg-scrolled)' : 'transparent',
+          background: (theme !== 'light' && displayMode !== 'sunlight')
+            ? darkNavBg
+            : isScrolled ? 'var(--nav-bg-scrolled)' : 'transparent',
           backdropFilter: isScrolled ? 'var(--glass-filter)' : 'none',
           WebkitBackdropFilter: isScrolled ? 'var(--glass-filter)' : 'none',
           borderBottom: isScrolled ? '1px solid var(--glass-border)' : 'none',
           boxShadow: isScrolled ? `var(--nav-shadow), inset 0 -1px 0 rgba(255, 255, 255, 0.04)` : 'none',
+          transition: 'border-bottom 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease',
         }}
       >
         {/* Scroll progress bar */}
@@ -156,30 +174,42 @@ export function Navigation() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="relative px-4 py-2 rounded-lg transition-colors group"
-                style={{
-                  fontFamily: 'var(--font-ui)',
-                  fontSize: '0.875rem',
-                  color: activeSection === item.id ? 'var(--accent-cyan)' : 'var(--text-muted)',
-                  background: activeSection === item.id ? 'rgba(var(--accent-cyan-rgb), 0.1)' : 'transparent'
-                }}
-              >
-                {item.label}
-                {/* Underline draw-on */}
-                <motion.span
-                  className="absolute bottom-1 left-2 right-2 h-px"
-                  style={{ background: 'var(--accent-cyan)', originX: 0 }}
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  animate={{ scaleX: activeSection === item.id ? 1 : 0 }}
-                  transition={{ duration: 0.2, ease: 'easeOut' }}
-                />
-              </button>
-            ))}
+            <LayoutGroup id="desktop-nav">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="relative px-4 py-2 rounded-lg"
+                  style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '0.875rem',
+                    color: isActive ? 'var(--accent-cyan)' : 'var(--text-muted)',
+                    transition: 'color 0.2s ease',
+                  }}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-lg"
+                      style={{ background: 'rgba(var(--accent-cyan-rgb), 0.1)' }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 30, mass: 0.8 }}
+                    />
+                  )}
+                  <span className="relative" style={{ zIndex: 1 }}>{item.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-underline"
+                      className="absolute bottom-1 left-2 right-2 h-px"
+                      style={{ background: 'var(--accent-cyan)', zIndex: 1 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 30, mass: 0.8 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+            </LayoutGroup>
 
             <SettingsMenu />
 

@@ -2,7 +2,6 @@ import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { GraduationCap, BookOpen } from 'lucide-react';
 import { EducationBg } from './SectionBackgrounds';
-import { useSound } from '../providers/SoundProvider';
 
 interface Education {
   degree: string;
@@ -25,7 +24,6 @@ const education: Education[] = [
 
 export function Education() {
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
-  const { playSound } = useSound();
 
   return (
     <section
@@ -57,7 +55,6 @@ export function Education() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               whileHover={{ y: -4 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              onMouseEnter={() => playSound('hover')}
               className="p-6 rounded-2xl border cursor-default trace-border"
               style={{
                 borderColor: 'var(--accent-cyan)',

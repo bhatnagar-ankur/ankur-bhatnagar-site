@@ -40,7 +40,7 @@ export function Contact() {
     <section
       id="contact"
       ref={ref}
-      className="relative overflow-hidden pt-20 pb-16 px-6"
+      className="relative overflow-hidden pt-20 pb-64 px-6"
       style={{ background: 'var(--bg-surface)' }}
     >
       <ContactBg />
@@ -105,12 +105,10 @@ export function Contact() {
 
           <motion.button
             onClick={copyEmail}
+            onMouseEnter={() => playSound('hover')}
             whileTap={{ scale: 0.95 }}
-            className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border trace-border"
+            className="btn-fill-ltr group inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border"
             style={{
-              borderColor: 'var(--accent-cyan)',
-              background: 'rgba(var(--accent-cyan-rgb), 0.08)',
-              color: 'var(--accent-cyan)',
               fontFamily: 'var(--font-ui)',
               fontSize: '0.875rem',
               cursor: 'pointer',
@@ -197,19 +195,17 @@ function ContactLink({ icon, label, href }: { icon: React.ReactNode; label: stri
       rel="noopener noreferrer"
       onClick={() => playSound('click')}
       onMouseEnter={() => playSound('hover')}
-      className="group flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all hover:scale-105"
+      className="btn-fill-ltr group flex items-center gap-2 px-4 py-2.5 rounded-xl border hover:scale-105"
       style={{
-        borderColor: 'var(--glass-border)',
         background: 'var(--glass-bg)',
         backdropFilter: 'var(--glass-filter)',
         WebkitBackdropFilter: 'var(--glass-filter)',
         boxShadow: 'var(--glass-shadow)',
-        color: 'var(--text-primary)',
         fontFamily: 'var(--font-ui)',
         fontSize: '0.875rem'
       }}
     >
-      <span style={{ color: 'var(--accent-cyan)' }} className="group-hover:drop-shadow-[0_0_8px_rgba(var(--accent-cyan-rgb),0.8)] transition-all">
+      <span className="fill-btn-icon">
         {icon}
       </span>
       <span>{label}</span>

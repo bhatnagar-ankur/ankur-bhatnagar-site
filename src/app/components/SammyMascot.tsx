@@ -117,6 +117,7 @@ export function SammyMascot() {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const hasMoved = useRef(false);
   const lastSection = useRef('hero');
+  const pendingAnim = useRef<'fly-in' | 're-expand' | null>(null);
 
   // ── Scroll-based section detection ──
   useEffect(() => {
@@ -142,23 +143,30 @@ export function SammyMascot() {
   // ── Fly-in when leaving hero for the first time ──
   useEffect(() => {
     if (hasEntered || currentSection === 'hero') return;
+    pendingAnim.current = 'fly-in';
     setHasEntered(true);
-    controls.set({ x: -window.innerWidth * 0.6, y: 60, opacity: 0, scale: 0.5, rotate: -25 });
-    controls.start({
-      x: 0,
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      rotate: 0,
-      transition: {
-        type: 'spring',
-        stiffness: 55,
-        damping: 14,
-        mass: 1,
-        duration: 1.4,
-      },
-    });
-  }, [currentSection, hasEntered, controls]);
+    setIsMinimized(false);
+  }, [currentSection, hasEntered]);
+
+  // ── Run queued animation after motion.div mounts (isMinimized → false) ──
+  useEffect(() => {
+    if (isMinimized) return;
+    const anim = pendingAnim.current;
+    pendingAnim.current = null;
+    if (anim === 'fly-in') {
+      controls.set({ x: -window.innerWidth * 0.6, y: 60, opacity: 0, scale: 0.5, rotate: -25 });
+      controls.start({
+        x: 0, y: 0, opacity: 1, scale: 1, rotate: 0,
+        transition: { type: 'spring', stiffness: 55, damping: 14, mass: 1, duration: 1.4 },
+      });
+    } else {
+      controls.set({ opacity: 0, scale: 0.82, rotate: -8 });
+      controls.start({
+        opacity: 1, scale: 1, rotate: 0,
+        transition: { type: 'spring', stiffness: 220, damping: 22 },
+      });
+    }
+  }, [isMinimized]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Show greet on section change ──
   useEffect(() => {
@@ -230,15 +238,9 @@ export function SammyMascot() {
   const dialogue = SECTION_DIALOGUES[currentSection] ?? SECTION_DIALOGUES.hero;
 
   const handleExpand = () => {
+    pendingAnim.current = hasEntered ? 're-expand' : 'fly-in';
+    if (!hasEntered) setHasEntered(true);
     setIsMinimized(false);
-    if (!hasEntered) {
-      setHasEntered(true);
-      controls.set({ x: -window.innerWidth * 0.6, y: 60, opacity: 0, scale: 0.5, rotate: -25 });
-      controls.start({
-        x: 0, y: 0, opacity: 1, scale: 1, rotate: 0,
-        transition: { type: 'spring', stiffness: 55, damping: 14, mass: 1, duration: 1.4 },
-      });
-    }
   };
 
   if (isMinimized) {
@@ -271,7 +273,7 @@ export function SammyMascot() {
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      initial={{ opacity: 0, x: -300, y: 60, scale: 0.5, rotate: -25 }}
+      initial={false}
       animate={controls}
     >
       {/* Speech bubble */}

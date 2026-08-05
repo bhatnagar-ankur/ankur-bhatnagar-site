@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { ProjectsBg } from './SectionBackgrounds';
 import { motion, AnimatePresence } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import { useSound } from '../providers/SoundProvider';
-import { Calendar, CheckCircle2, ChevronDown, GitBranch, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
+import { Calendar, CheckCircle2, ChevronDown, GitBranch, Network, Sparkles, TrendingUp, Users, X, Zap } from 'lucide-react';
 
 interface TechLayer {
   label: string;
@@ -694,198 +695,281 @@ function DetailBlock({ icon, label, color, children }: {
   );
 }
 
+function ArchitectureModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return createPortal(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      className="inset-0 flex flex-col"
+      style={{ position: 'fixed', zIndex: 300, background: 'rgba(13,17,23,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
+      onClick={onClose}
+    >
+      {/* Header */}
+      <motion.div
+        initial={{ y: -16, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.28, delay: 0.06 }}
+        className="flex items-center justify-between px-5 sm:px-8 py-4 border-b shrink-0"
+        style={{ borderColor: 'rgba(var(--accent-cyan-rgb),0.2)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
+            style={{ background: 'rgba(var(--accent-cyan-rgb),0.1)', border: '1px solid rgba(var(--accent-cyan-rgb),0.3)' }}
+          >
+            <Network size={17} style={{ color: 'var(--accent-cyan)' }} />
+          </div>
+          <div>
+            <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.5625rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+              Architecture Diagram
+            </p>
+            <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)', fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', fontWeight: 700, lineHeight: 1.2 }}>
+              {project.name}
+            </h3>
+          </div>
+        </div>
+        <motion.button
+          onClick={onClose}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.9 }}
+          className="flex items-center justify-center w-9 h-9 rounded-xl"
+          style={{ color: 'var(--text-muted)', border: '1px solid var(--bg-border)', background: 'rgba(255,255,255,0.05)', cursor: 'pointer' }}
+          aria-label="Close architecture diagram"
+        >
+          <X size={18} />
+        </motion.button>
+      </motion.div>
+
+      {/* Diagram area — fills remaining viewport */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.32, delay: 0.1 }}
+        className="flex-1 flex items-center justify-center overflow-auto p-5 sm:p-8 lg:p-14"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="w-full" style={{ maxWidth: 'min(880px, 100%)' }}>
+          <div
+            className="rounded-2xl p-4 sm:p-6 lg:p-10"
+            style={{
+              background: 'rgba(var(--accent-cyan-rgb),0.03)',
+              border: '1px solid rgba(var(--accent-cyan-rgb),0.15)',
+              boxShadow: '0 0 80px rgba(var(--accent-cyan-rgb),0.06)',
+            }}
+          >
+            <BlueprintDiagram type={project.diagramType} />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ESC hint */}
+      <div className="shrink-0 pb-4 pt-1 flex justify-center" onClick={e => e.stopPropagation()}>
+        <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.5625rem', letterSpacing: '0.1em', opacity: 0.5 }}>
+          ESC OR CLICK OUTSIDE TO CLOSE
+        </p>
+      </div>
+    </motion.div>,
+    document.body
+  );
+}
+
 function ProjectCard({ project, index, inView, featured = false }: {
   project: Project; index: number; inView: boolean; featured?: boolean;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
   const [showDetails, setShowDetails] = useState(featured);
+  const [showArchitecture, setShowArchitecture] = useState(false);
   const { playSound } = useSound();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      whileTap={{ scale: 0.995 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group w-full rounded-2xl border overflow-hidden trace-border"
-      style={{
-        borderColor: isHovered ? 'var(--accent-cyan)' : featured ? 'rgba(var(--accent-cyan-rgb),0.3)' : 'var(--glass-border)',
-        background: 'var(--glass-bg)',
-        backdropFilter: 'var(--glass-filter)',
-        WebkitBackdropFilter: 'var(--glass-filter)',
-        boxShadow: isHovered
-          ? '0 0 32px rgba(var(--accent-cyan-rgb),0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-          : featured
-            ? '0 0 48px rgba(var(--accent-cyan-rgb),0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        whileTap={{ scale: 0.995 }}
+        transition={{ duration: 0.5, delay: index * 0.1 }}
+        className="group w-full rounded-2xl border overflow-hidden trace-border"
+        style={{
+          borderColor: featured ? 'rgba(var(--accent-cyan-rgb),0.3)' : 'var(--glass-border)',
+          background: 'var(--glass-bg)',
+          backdropFilter: 'var(--glass-filter)',
+          WebkitBackdropFilter: 'var(--glass-filter)',
+          boxShadow: featured
+            ? '0 0 48px rgba(var(--accent-cyan-rgb),0.12), inset 0 1px 0 rgba(255,255,255,0.05)'
             : 'var(--glass-shadow)',
-        transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
-      }}
-      onMouseEnter={() => { setIsHovered(true); playSound('hover'); }}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="flex flex-col lg:flex-row h-full">
-        {/* Left panel: header + diagram + tech layer */}
-        <div
-          className="lg:w-[42%] border-b lg:border-b-0 lg:border-r p-5 flex flex-col gap-3"
-          style={{ borderColor: 'var(--bg-border)', background: 'rgba(var(--accent-cyan-rgb),0.02)' }}
-        >
-          <div>
-            <div className="flex items-center gap-2 flex-wrap mb-2">
-              <h3
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
-                className={`${featured ? 'text-xl' : 'text-lg'} font-bold leading-tight`}
-              >
-                {project.name}
-              </h3>
-              {featured && (
-                <span
-                  className="px-2 py-0.5 rounded-full text-xs shrink-0"
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    background: 'rgba(var(--accent-cyan-rgb),0.15)',
-                    color: 'var(--accent-cyan)',
-                    border: '1px solid rgba(var(--accent-cyan-rgb),0.35)',
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  CURRENT ROLE
-                </span>
-              )}
-              {project.aiAssisted && (
-                <span
-                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs shrink-0"
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    background: 'rgba(var(--accent-amber-rgb),0.15)',
-                    color: 'var(--accent-amber)',
-                    border: '1px solid rgba(var(--accent-amber-rgb),0.3)'
-                  }}
-                >
-                  <Sparkles size={10} />
-                  AI-Assisted
-                </span>
-              )}
-            </div>
-            <div className="flex flex-wrap items-center gap-3 mb-2">
-              <span
-                className="px-2 py-0.5 rounded-full text-xs"
-                style={{ fontFamily: 'var(--font-mono)', background: 'var(--accent-cyan)', color: 'var(--bg-deep)' }}
-              >
-                {project.role}
-              </span>
-              <span
-                className="flex items-center gap-1 text-xs"
-                style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}
-              >
-                <Calendar size={12} />
-                {project.period}
-              </span>
-            </div>
-            <p
-              className="mb-4"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--text-muted)',
-                fontSize: '0.6875rem',
-                letterSpacing: '0.02em',
-              }}
-            >
-              {project.scope}
-            </p>
-            <BlueprintDiagram type={project.diagramType} featured={featured} />
-          </div>
-          <div className="pt-3 border-t mt-auto" style={{ borderColor: 'var(--bg-border)' }}>
-            <TechLayerStack layers={project.layers} />
-          </div>
-        </div>
+        }}
+      >
+        {/* ── Main content row ── */}
+        <div className="flex flex-col lg:flex-row">
 
-        {/* Right panel: metrics → description → achievements → collapsible details */}
-        <div className="lg:w-[58%] p-5 flex flex-col gap-4">
-          <MetricsBand metrics={project.metrics} />
-
-          <p
-            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)' }}
-            className="fluid-body"
+          {/* Left panel: identity + description + tech stack */}
+          <div
+            className="lg:w-[40%] border-b lg:border-b-0 lg:border-r p-5 flex flex-col gap-3"
+            style={{ borderColor: 'var(--bg-border)', background: 'rgba(var(--accent-cyan-rgb),0.02)' }}
           >
-            {project.description}
-          </p>
-
-          <div className="space-y-1.5">
-            {project.achievements.map((a, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <CheckCircle2 size={13} style={{ color: 'var(--success-green)', flexShrink: 0, marginTop: '3px' }} />
-                <span className="fluid-caption" style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}>
-                  {a}
-                </span>
+            {/* Title row + arch icon */}
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-2">
+                  <h3
+                    style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
+                    className={`${featured ? 'text-xl' : 'text-lg'} font-bold leading-tight`}
+                  >
+                    {project.name}
+                  </h3>
+                  {featured && (
+                    <span className="px-2 py-0.5 rounded-full text-xs shrink-0"
+                      style={{ fontFamily: 'var(--font-mono)', background: 'rgba(var(--accent-cyan-rgb),0.15)', color: 'var(--accent-cyan)', border: '1px solid rgba(var(--accent-cyan-rgb),0.35)', letterSpacing: '0.04em' }}>
+                      CURRENT ROLE
+                    </span>
+                  )}
+                  {project.aiAssisted && (
+                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs shrink-0"
+                      style={{ fontFamily: 'var(--font-mono)', background: 'rgba(var(--accent-amber-rgb),0.15)', color: 'var(--accent-amber)', border: '1px solid rgba(var(--accent-amber-rgb),0.3)' }}>
+                      <Sparkles size={10} />AI-Assisted
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <span className="px-2 py-0.5 rounded-full text-xs"
+                    style={{ fontFamily: 'var(--font-mono)', background: 'var(--accent-cyan)', color: 'var(--bg-deep)' }}>
+                    {project.role}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs"
+                    style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+                    <Calendar size={11} />{project.period}
+                  </span>
+                </div>
+                <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.6875rem', letterSpacing: '0.02em' }}>
+                  {project.scope}
+                </p>
               </div>
-            ))}
+
+              {/* Architecture icon button */}
+              <motion.button
+                onClick={(e) => { e.stopPropagation(); setShowArchitecture(true); playSound('click'); }}
+                whileHover={{ scale: 1.12, boxShadow: '0 0 14px rgba(var(--accent-cyan-rgb),0.4)' }}
+                whileTap={{ scale: 0.9 }}
+                className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg"
+                style={{ background: 'rgba(var(--accent-cyan-rgb),0.1)', border: '1px solid rgba(var(--accent-cyan-rgb),0.3)', color: 'var(--accent-cyan)', cursor: 'pointer' }}
+                title="View architecture diagram"
+                aria-label="View architecture diagram"
+              >
+                <Network size={15} />
+              </motion.button>
+            </div>
+
+            {/* Description */}
+            <p style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)' }} className="fluid-body">
+              {project.description}
+            </p>
+
+            {/* Tech stack — pinned to bottom */}
+            <div className="mt-auto pt-3 border-t" style={{ borderColor: 'var(--bg-border)' }}>
+              <TechLayerStack layers={project.layers} />
+            </div>
           </div>
 
-          {/* Details toggle */}
-          <div className="pt-3 border-t" style={{ borderColor: 'var(--bg-border)' }}>
-            <button
-              onClick={() => { setShowDetails(p => !p); playSound('click'); }}
-              className="flex items-center gap-2 transition-opacity hover:opacity-80"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--accent-cyan)',
-                fontSize: '0.75rem',
-                letterSpacing: '0.06em',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-              }}
-            >
-              <motion.span animate={{ rotate: showDetails ? 180 : 0 }} transition={{ duration: 0.22 }}>
-                <ChevronDown size={14} />
-              </motion.span>
-              {showDetails ? 'HIDE DETAILS' : 'SHOW DETAILS'}
-            </button>
+          {/* Right panel: metrics + achievements + details toggle */}
+          <div className="lg:w-[60%] p-5 flex flex-col gap-4">
+            <MetricsBand metrics={project.metrics} />
 
-            <AnimatePresence initial={false}>
-              {showDetails && (
-                <motion.div
-                  key="details"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="overflow-hidden"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
-                    <DetailBlock icon={<TrendingUp size={14} />} label="Impact" color="green">
-                      {project.details.impact.map((c, i) => (
-                        <div key={i} className="flex items-start gap-2">
-                          <span style={{ color: 'var(--success-green)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
-                          <span>{c}</span>
-                        </div>
-                      ))}
-                    </DetailBlock>
+            <div className="flex-1 space-y-1.5">
+              {project.achievements.map((a, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <CheckCircle2 size={13} style={{ color: 'var(--success-green)', flexShrink: 0, marginTop: '3px' }} />
+                  <span className="fluid-caption" style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}>
+                    {a}
+                  </span>
+                </div>
+              ))}
+            </div>
 
-                    <DetailBlock icon={<GitBranch size={14} />} label="Tech Decisions" color="amber">
-                      <span>{project.details.techDecisions}</span>
-                    </DetailBlock>
-
-                    <DetailBlock icon={<Zap size={14} />} label="Key Challenges" color="cyan">
-                      {project.details.challenges.map((c, i) => (
-                        <div key={i} className="flex items-start gap-2">
-                          <span style={{ color: 'var(--accent-cyan)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
-                          <span>{c}</span>
-                        </div>
-                      ))}
-                    </DetailBlock>
-
-                    <DetailBlock icon={<Users size={14} />} label="Team & Context" color="purple">
-                      <span>{project.details.team}</span>
-                    </DetailBlock>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Details toggle — right-aligned at bottom of panel */}
+            <div className="pt-3 border-t flex items-center justify-end" style={{ borderColor: 'var(--bg-border)' }}>
+              <button
+                onClick={() => { setShowDetails(p => !p); playSound('click'); }}
+                className="flex items-center gap-1.5 transition-opacity hover:opacity-80"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  color: showDetails ? 'var(--accent-cyan)' : 'var(--text-muted)',
+                  fontSize: '0.6875rem',
+                  letterSpacing: '0.08em',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                }}
+              >
+                <motion.span animate={{ rotate: showDetails ? 180 : 0 }} transition={{ duration: 0.22 }}>
+                  <ChevronDown size={13} />
+                </motion.span>
+                {showDetails ? 'HIDE DETAILS' : 'SHOW DETAILS'}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+
+        {/* ── Details section: full-width collapsible ── */}
+        <AnimatePresence initial={false}>
+          {showDetails && (
+            <motion.div
+              key="details"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="overflow-hidden"
+              style={{ borderTop: '1px solid var(--bg-border)' }}
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5">
+                <DetailBlock icon={<TrendingUp size={14} />} label="Impact" color="green">
+                  {project.details.impact.map((c, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <span style={{ color: 'var(--success-green)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
+                      <span>{c}</span>
+                    </div>
+                  ))}
+                </DetailBlock>
+                <DetailBlock icon={<GitBranch size={14} />} label="Tech Decisions" color="amber">
+                  <span>{project.details.techDecisions}</span>
+                </DetailBlock>
+                <DetailBlock icon={<Zap size={14} />} label="Key Challenges" color="cyan">
+                  {project.details.challenges.map((c, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <span style={{ color: 'var(--accent-cyan)', flexShrink: 0, fontSize: '0.75rem', marginTop: '2px' }}>▸</span>
+                      <span>{c}</span>
+                    </div>
+                  ))}
+                </DetailBlock>
+                <DetailBlock icon={<Users size={14} />} label="Team & Context" color="purple">
+                  <span>{project.details.team}</span>
+                </DetailBlock>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Architecture full-screen modal */}
+      <AnimatePresence>
+        {showArchitecture && (
+          <ArchitectureModal project={project} onClose={() => { setShowArchitecture(false); playSound('click'); }} />
+        )}
+      </AnimatePresence>
+    </>
   );
 }

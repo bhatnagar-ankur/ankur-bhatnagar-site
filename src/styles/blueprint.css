@@ -156,6 +156,63 @@ body > * {
   to { --border-angle: 360deg; }
 }
 
+/* Consistent hover glow for section cards — replaces JS-driven box-shadow changes */
+.trace-border:hover {
+  box-shadow: 0 0 24px rgba(var(--accent-cyan-rgb), 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.trace-border.trace-border-amber:hover {
+  box-shadow: 0 0 26px rgba(var(--accent-amber-rgb), 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Experience card: switch border to cyan on hover without JS */
+.exp-card-glass:hover {
+  border-color: var(--accent-cyan) !important;
+}
+
+/* Left-to-right fill micro-interaction for social/CTA link buttons */
+.btn-fill-ltr {
+  position: relative;
+  overflow: hidden;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border-color: var(--glass-border);
+  transition: color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-fill-ltr::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-cyan);
+  transform: translateX(-101%);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.btn-fill-ltr:hover::before {
+  transform: translateX(0);
+}
+
+.btn-fill-ltr:hover {
+  color: var(--bg-deep);
+  border-color: var(--accent-cyan);
+}
+
+.btn-fill-ltr > * {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-fill-ltr .fill-btn-icon {
+  color: var(--accent-cyan);
+  transition: color 0.3s ease;
+}
+
+.btn-fill-ltr:hover .fill-btn-icon {
+  color: var(--bg-deep);
+}
+
 /* Light mode: make sections & app wrapper semi-transparent so the blueprint grid bleeds through,
    giving glass cards something to frost over via backdrop-filter */
 .light section {
