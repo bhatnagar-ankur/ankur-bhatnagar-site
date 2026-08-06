@@ -52,29 +52,13 @@ npm run build
 
 This React application can be easily deployed to GitHub Pages:
 
-1. **Install gh-pages package:**
-   ```bash
-   npm install --save-dev gh-pages
-   ```
-
-2. **Update package.json:**
-   Add these scripts:
-   ```json
-   {
-     "scripts": {
-       "predeploy": "npm run build",
-       "deploy": "gh-pages -d dist"
-     },
-     "homepage": "https://bhatnagar-ankur.github.io/resume"
-   }
-   ```
-
-3. **Deploy:**
+1. **Deploy:**
    ```bash
    npm run deploy
    ```
+   This runs `predeploy` (build) then pushes `dist/` to the `gh-pages` branch, per the `homepage`/`predeploy`/`deploy` entries already in `package.json`.
 
-4. **Configure GitHub Pages:**
+2. **Configure GitHub Pages:**
    - Go to your repository settings
    - Navigate to "Pages" section
    - Select "gh-pages" branch as source

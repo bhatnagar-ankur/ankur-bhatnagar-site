@@ -119,7 +119,7 @@ npm run build
 
 ## Deployment target
 
-GitHub Pages via the `gh-pages` branch. Production URL: `https://bhatnagar-ankur.github.io/resume`
+GitHub Pages via the `gh-pages` branch. Production URL: `https://bhatnagar-ankur.github.io/ankur-bhatnagar-site/`
 
 Deploy steps (once `gh-pages` package is added):
 ```bash

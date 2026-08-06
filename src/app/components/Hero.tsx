@@ -1,9 +1,10 @@
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { ChevronDown, MapPin, Linkedin, Github, FileDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useSound } from '../providers/SoundProvider';
 import { ImageWithFallback } from './ImageWithFallback';
-import profileAnime from '../../imports/Profile_Anime.png';
+import profileAnime from '../../imports/Profile_Anime.webp';
 import profilePic from '../../imports/Profile_Pic.jpg';
 import { yearsOfExperience } from '../lib/constants';
 import { HeroBackground } from './HeroBackground';
@@ -12,10 +13,55 @@ const resumeUrl = new URL('../../imports/Ankur_Bhatnagar_Resume.pdf', import.met
 
 const roles = [
   'Technical Architect',
-  'UI/UX Practice Head',
   'Frontend Technologist',
-  'Team Leader & Mentor'
+  'Team Leader & Mentor',
+  'Engineering Practice Lead',
+  'Fractional CTO',
 ];
+
+function useCountUp(target: number, durationMs: number, active: boolean) {
+  const [count, setCount] = useState(0);
+  const frameRef = useRef<number>(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const isFirstRef = useRef(true);
+
+  useEffect(() => {
+    cancelAnimationFrame(frameRef.current);
+    clearTimeout(timerRef.current);
+
+    if (!active) {
+      setCount(0);
+      return;
+    }
+
+    // First activation on page load: delay to match the Framer Motion fade-in.
+    // Subsequent activations (scroll back into view): start immediately.
+    const delay = isFirstRef.current ? 700 : 0;
+    isFirstRef.current = false;
+
+    timerRef.current = setTimeout(() => {
+      const startTime = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min((now - startTime) / durationMs, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setCount(Math.floor(eased * target));
+        if (progress < 1) {
+          frameRef.current = requestAnimationFrame(tick);
+        } else {
+          setCount(target);
+        }
+      };
+      frameRef.current = requestAnimationFrame(tick);
+    }, delay);
+
+    return () => {
+      clearTimeout(timerRef.current);
+      cancelAnimationFrame(frameRef.current);
+    };
+  }, [active, target, durationMs]);
+
+  return count;
+}
 
 export function Hero() {
   const { playSound } = useSound();
@@ -23,6 +69,9 @@ export function Hero() {
   const [isImageFlipped, setIsImageFlipped] = useState(false);
   const { scrollY } = useScroll();
   const gridY = useTransform(scrollY, [0, 600], [0, -120]);
+  const { ref: statRef, inView: statInView } = useInView({ threshold: 0.3 });
+  const yearsCount = useCountUp(yearsOfExperience, 800, statInView);
+  const engineersCount = useCountUp(20, 800, statInView);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -108,6 +157,8 @@ export function Hero() {
                     src={profileAnime}
                     alt="Ankur Bhatnagar — illustrated"
                     className="w-full h-full object-cover object-top"
+                    loading="eager"
+                    fetchPriority="high"
                   />
                   <div
                     className="absolute inset-0 opacity-20 transition-opacity"
@@ -144,6 +195,7 @@ export function Hero() {
                     src={profilePic}
                     alt="Ankur Bhatnagar"
                     className="w-full h-full object-cover object-top"
+                    loading="lazy"
                   />
                   <div
                     className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-[0.55rem] tracking-widest select-none"
@@ -246,15 +298,16 @@ export function Hero() {
 
         {/* Stat band */}
         <motion.div
+          ref={statRef}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.65 }}
           className="flex items-center justify-center mb-5"
         >
           {[
-            { value: `${yearsOfExperience}+`, label: 'Years' },
-            { value: '20+', label: 'Engineers Led' },
-            { value: 'AI-First', label: 'Delivery' },
+            { display: `${yearsCount}+`, label: 'Years' },
+            { display: `${engineersCount}+`, label: 'Engineers Led' },
+            { display: 'AI-First', label: 'Delivery' },
           ].map((s, i) => (
             <div key={s.label} className="flex items-center">
               {i > 0 && (
@@ -262,7 +315,7 @@ export function Hero() {
               )}
               <div className="text-center">
                 <div style={{ fontFamily: 'var(--font-display)', color: 'var(--accent-cyan)', fontSize: 'clamp(1.125rem, 2.2vw, 1.5rem)', fontWeight: 700, lineHeight: 1.1 }}>
-                  {s.value}
+                  {s.display}
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.625rem', letterSpacing: '0.1em', marginTop: 3 }}>
                   {s.label.toUpperCase()}
@@ -284,20 +337,6 @@ export function Hero() {
           <span style={{ fontFamily: 'var(--font-body)' }} className="text-lg">
             Bengaluru, India
           </span>
-        </motion.div>
-
-        {/* Company / credential strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.78 }}
-          className="flex items-center justify-center gap-3 mb-10"
-        >
-          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', fontSize: '0.6875rem', letterSpacing: '0.04em' }}>▸ Saksoft Ltd</span>
-          <span style={{ color: 'var(--bg-border)' }}>·</span>
-          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.6875rem', letterSpacing: '0.04em' }}>DreamOrbit</span>
-          <span style={{ color: 'var(--bg-border)' }}>·</span>
-          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: '0.6875rem', letterSpacing: '0.04em' }}>ISRO Certified</span>
         </motion.div>
 
         {/* Primary CTA — Download Resume */}

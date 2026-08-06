@@ -16,7 +16,7 @@ interface ButtonConfig {
 function VintageButton({ icon, label, active, onClick, glowColor, ledHex }: ButtonConfig) {
   return (
     <motion.button
-      onClick={onClick}
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
       whileTap={{ scale: 0.97 }}
       aria-pressed={active}
       aria-label={label}

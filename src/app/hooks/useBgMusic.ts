@@ -12,9 +12,9 @@ export function useBgMusic() {
   const [isEnabled, setIsEnabled] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved === null ? true : saved === 'true';
+      return saved === null ? false : saved === 'true';
     } catch {
-      return true;
+      return false;
     }
   });
 
@@ -22,7 +22,7 @@ export function useBgMusic() {
     const audio = new Audio(bgMusicUrl);
     audio.loop = true;
     audio.volume = 0;
-    audio.preload = 'auto';
+    audio.preload = 'none';
     audioRef.current = audio;
     return () => {
       audio.pause();
@@ -49,26 +49,34 @@ export function useBgMusic() {
     }, 50);
   }, []);
 
-  // Auto-start on first user interaction
+  // Auto-start on first qualifying user gesture (click/keydown only — scroll is not a valid autoplay gesture)
   useEffect(() => {
     if (!isEnabled) return;
 
+    const events: ('click' | 'keydown')[] = ['click', 'keydown'];
+
+    const removeListeners = () => {
+      events.forEach(e => document.removeEventListener(e, tryStart));
+    };
+
     const tryStart = () => {
       if (interactedRef.current) return;
-      interactedRef.current = true;
       const audio = audioRef.current;
       if (!audio) return;
       audio.volume = 0;
       audio.play()
-        .then(() => fadeTo(TARGET_VOL, 4000))
-        .catch(() => { interactedRef.current = false; });
+        .then(() => {
+          interactedRef.current = true;
+          fadeTo(TARGET_VOL, 4000);
+          removeListeners();
+        })
+        .catch(() => {
+          // leave listeners; next gesture will retry
+        });
     };
 
-    const events = ['click', 'keydown', 'scroll'] as const;
-    events.forEach(e => document.addEventListener(e, tryStart, { once: true, passive: true }));
-    return () => {
-      events.forEach(e => document.removeEventListener(e, tryStart));
-    };
+    events.forEach(e => document.addEventListener(e, tryStart, { passive: true }));
+    return removeListeners;
   }, [isEnabled, fadeTo]);
 
   const toggle = useCallback(() => {
