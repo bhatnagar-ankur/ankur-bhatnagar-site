@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bhatnagar-ankur.github.io/ankur-bhatnagar-site/sitemap.xml
