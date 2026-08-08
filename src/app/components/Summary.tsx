@@ -149,7 +149,7 @@ export function Summary() {
                           key={tech.name}
                           initial={{ opacity: 0, y: 8 }}
                           animate={inView ? { opacity: 1, y: 0 } : {}}
-                          whileHover={{ scale: 1.07, y: -2 }}
+                          whileHover={{ scale: 1.07, y: -2, boxShadow: `0 0 14px rgba(${accentRgbVar}, 0.4)` }}
                           transition={{
                             duration: 0.45,
                             delay: 0.65 + globalIndex * 0.04,

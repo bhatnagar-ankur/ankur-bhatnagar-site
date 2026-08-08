@@ -53,7 +53,7 @@ export function Education() {
               key={edu.degree}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              whileHover={{ y: -4 }}
+              whileHover={{ y: -4, scale: 1.02, boxShadow: '0 12px 36px rgba(var(--accent-cyan-rgb), 0.25)' }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               className="p-6 rounded-2xl border cursor-default trace-border"
               style={{

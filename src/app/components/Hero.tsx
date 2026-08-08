@@ -158,7 +158,6 @@ export function Hero() {
                     alt="Ankur Bhatnagar — illustrated"
                     className="w-full h-full object-cover object-top"
                     loading="eager"
-                    fetchPriority="high"
                   />
                   <div
                     className="absolute inset-0 opacity-20 transition-opacity"
@@ -346,11 +345,13 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.82 }}
           className="mb-4"
         >
-          <a
+          <motion.a
             href={resumeUrl}
             download="Ankur_Bhatnagar_Resume.pdf"
             onClick={() => playSound('success')}
-            className="inline-flex items-center gap-2.5 px-7 py-3 rounded-xl font-semibold tracking-wide transition-all hover:scale-105 hover:brightness-110 active:scale-95"
+            whileHover={{ scale: 1.06, y: -2, boxShadow: '0 0 36px rgba(var(--accent-cyan-rgb), 0.55)' }}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex items-center gap-2.5 px-7 py-3 rounded-xl font-semibold tracking-wide"
             style={{
               background: 'var(--accent-cyan)',
               color: 'var(--bg-deep)',
@@ -361,7 +362,7 @@ export function Hero() {
           >
             <FileDown size={18} />
             Download Resume
-          </a>
+          </motion.a>
         </motion.div>
 
         {/* Social Links */}
@@ -381,7 +382,9 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
           onClick={scrollToSection}
-          className="group flex items-center gap-2 mx-auto px-6 py-3 rounded-full border backdrop-blur-sm transition-all hover:scale-105"
+          whileHover={{ scale: 1.06, y: -2, boxShadow: '0 0 18px rgba(var(--accent-cyan-rgb), 0.3)' }}
+          whileTap={{ scale: 0.97 }}
+          className="group flex items-center gap-2 mx-auto px-6 py-3 rounded-full border backdrop-blur-sm"
           style={{
             borderColor: 'var(--accent-cyan)',
             color: 'var(--accent-cyan)',
@@ -400,19 +403,21 @@ function ContactButton({ icon, label, href }: { icon: React.ReactNode; label: st
   const { playSound } = useSound();
 
   return (
-    <a
+    <motion.a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => playSound('click')}
       onMouseEnter={() => playSound('hover')}
-      className="btn-fill-ltr group flex items-center gap-3 px-5 py-3 rounded-lg border hover:scale-105"
+      whileHover={{ scale: 1.07, y: -2, boxShadow: '0 0 16px rgba(var(--accent-cyan-rgb), 0.25)' }}
+      whileTap={{ scale: 0.97 }}
+      className="btn-fill-ltr group flex items-center gap-3 px-5 py-3 rounded-lg border"
       style={{ fontFamily: 'var(--font-body)' }}
     >
       <span className="fill-btn-icon">
         {icon}
       </span>
       <span className="text-sm">{label}</span>
-    </a>
+    </motion.a>
   );
 }

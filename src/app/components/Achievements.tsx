@@ -88,42 +88,42 @@ function AchievementCard({ achievement, index, inView }: { achievement: Achievem
           {achievement.icon}
         </motion.div>
         <div className="flex-1">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <h3
-              style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
-              className="text-xl font-bold"
-            >
-              {achievement.title}
-            </h3>
-            <span
-              className="px-3 py-1 rounded-full text-xs whitespace-nowrap"
+            <div className="flex items-start justify-between gap-2 mb-1">
+              <h3
+                style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
+                className="text-xl font-bold"
+              >
+                {achievement.title}
+              </h3>
+              <span
+                className="px-3 py-1 rounded-full text-xs whitespace-nowrap"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  background: 'var(--accent-amber)',
+                  color: 'var(--bg-deep)'
+                }}
+              >
+                {achievement.year}
+              </span>
+            </div>
+            <p
+              className="mb-2"
               style={{
                 fontFamily: 'var(--font-mono)',
-                background: 'var(--accent-amber)',
-                color: 'var(--bg-deep)'
+                color: 'var(--accent-amber)',
+                fontSize: '0.75rem',
+                letterSpacing: '0.03em',
               }}
             >
-              {achievement.year}
-            </span>
+              {achievement.issuer}
+            </p>
+            <p
+              className="fluid-body"
+              style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
+            >
+              {achievement.description}
+            </p>
           </div>
-          <p
-            className="mb-2"
-            style={{
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--accent-amber)',
-              fontSize: '0.75rem',
-              letterSpacing: '0.03em',
-            }}
-          >
-            {achievement.issuer}
-          </p>
-          <p
-            className="fluid-body"
-            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
-          >
-            {achievement.description}
-          </p>
-        </div>
       </div>
     </motion.div>
   );
@@ -137,25 +137,25 @@ function CertCard({ cert, index, inView }: { cert: typeof certifications[0]; ind
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
       className="group p-4 rounded-2xl border trace-border"
-      style={{
-        borderColor: 'var(--glass-border)',
-        background: 'var(--glass-bg)',
-        backdropFilter: 'var(--glass-filter)',
-        WebkitBackdropFilter: 'var(--glass-filter)',
-        boxShadow: 'var(--glass-shadow)',
-        cursor: 'default',
-      }}
-    >
-      <div className="flex items-center justify-center mb-4">
-        <motion.div
-          whileHover={{ scale: 1.15, rotate: 6 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-          className="p-3 rounded-lg"
-          style={{
-            background: 'rgba(var(--accent-cyan-rgb), 0.1)',
-            color: 'var(--accent-cyan)'
-          }}
-        >
+        style={{
+          borderColor: 'var(--glass-border)',
+          background: 'var(--glass-bg)',
+          backdropFilter: 'var(--glass-filter)',
+          WebkitBackdropFilter: 'var(--glass-filter)',
+          boxShadow: 'var(--glass-shadow)',
+          cursor: 'default',
+        }}
+      >
+        <div className="flex items-center justify-center mb-4">
+          <motion.div
+            whileHover={{ scale: 1.15, rotate: 6 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+            className="p-3 rounded-lg"
+            style={{
+              background: 'rgba(var(--accent-cyan-rgb), 0.1)',
+              color: 'var(--accent-cyan)'
+            }}
+          >
           {cert.issuer === 'Google' ? (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

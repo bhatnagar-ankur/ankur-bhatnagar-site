@@ -2,104 +2,116 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import bgMusicUrl from '../../imports/chanakya music by rishab rikhiram sharma.mp3';
 
 const STORAGE_KEY = 'portfolio-bg-music';
-const TARGET_VOL = 0.12;
+const TARGET_VOL = 0.28;
+const FADE_STEP_MS = 80;
 
 export function useBgMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const interactedRef = useRef(false);
+  const isEnabledRef = useRef(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
-  const [isEnabled, setIsEnabled] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved === null ? false : saved === 'true';
-    } catch {
-      return false;
-    }
-  });
+  const fadeIn = (audio: HTMLAudioElement) => {
+    audio.volume = 0;
+    const id = setInterval(() => {
+      if (audio.volume >= TARGET_VOL - 0.01) {
+        audio.volume = TARGET_VOL;
+        clearInterval(id);
+      } else {
+        audio.volume = Math.min(TARGET_VOL, audio.volume + 0.01);
+      }
+    }, FADE_STEP_MS);
+  };
+
+  const fadeOut = (audio: HTMLAudioElement, onDone: () => void) => {
+    const id = setInterval(() => {
+      if (audio.volume <= 0.01) {
+        audio.volume = 0;
+        clearInterval(id);
+        onDone();
+      } else {
+        audio.volume = Math.max(0, audio.volume - 0.01);
+      }
+    }, FADE_STEP_MS);
+  };
 
   useEffect(() => {
     const audio = new Audio(bgMusicUrl);
     audio.loop = true;
     audio.volume = 0;
-    audio.preload = 'none';
+    audio.preload = 'auto';
     audioRef.current = audio;
+
+    let cancelled = false;
+    let timers: ReturnType<typeof setTimeout>[] = [];
+
+    const startPlaying = () => {
+      if (cancelled) return;
+      // Muted autoplay is universally allowed by Chrome/Firefox/Safari.
+      // We start muted, then unmute and fade in once play() resolves.
+      audio.muted = true;
+      audio.play()
+        .then(() => {
+          if (cancelled) { audio.pause(); return; }
+          audio.muted = false;
+          isEnabledRef.current = true;
+          setIsEnabled(true);
+          fadeIn(audio);
+        })
+        .catch(() => {
+          audio.muted = false;
+          // still blocked — button stays OFF
+        });
+    };
+
+    const schedulePlay = () => {
+      if (cancelled) return;
+      // Situation 2: audio not ready yet — wait for it, then 500ms buffer
+      if (audio.readyState < 3) {
+        const onReady = () => {
+          const t = setTimeout(startPlaying, 500);
+          timers.push(t);
+        };
+        audio.addEventListener('canplaythrough', onReady, { once: true });
+      } else {
+        // Audio already buffered — play immediately
+        startPlaying();
+      }
+    };
+
+    // Situation 1: wait 2s after render, then start
+    const t = setTimeout(schedulePlay, 2000);
+    timers.push(t);
+
     return () => {
+      cancelled = true;
+      timers.forEach(clearTimeout);
+      audio.removeEventListener('canplaythrough', schedulePlay);
       audio.pause();
       audio.src = '';
     };
   }, []);
 
-  const fadeTo = useCallback((target: number, durationMs: number, onDone?: () => void) => {
-    if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
-    const audio = audioRef.current;
-    if (!audio) return;
-    const startVol = audio.volume;
-    const steps = Math.max(1, Math.round(durationMs / 50));
-    let s = 0;
-    fadeTimerRef.current = setInterval(() => {
-      s++;
-      if (!audioRef.current) return;
-      audioRef.current.volume = Math.max(0, Math.min(1, startVol + (target - startVol) * (s / steps)));
-      if (s >= steps) {
-        clearInterval(fadeTimerRef.current!);
-        fadeTimerRef.current = null;
-        onDone?.();
-      }
-    }, 50);
-  }, []);
-
-  // Auto-start on first qualifying user gesture (click/keydown only — scroll is not a valid autoplay gesture)
-  useEffect(() => {
-    if (!isEnabled) return;
-
-    const events: ('click' | 'keydown')[] = ['click', 'keydown'];
-
-    const removeListeners = () => {
-      events.forEach(e => document.removeEventListener(e, tryStart));
-    };
-
-    const tryStart = () => {
-      if (interactedRef.current) return;
-      const audio = audioRef.current;
-      if (!audio) return;
-      audio.volume = 0;
-      audio.play()
-        .then(() => {
-          interactedRef.current = true;
-          fadeTo(TARGET_VOL, 4000);
-          removeListeners();
-        })
-        .catch(() => {
-          // leave listeners; next gesture will retry
-        });
-    };
-
-    events.forEach(e => document.addEventListener(e, tryStart, { passive: true }));
-    return removeListeners;
-  }, [isEnabled, fadeTo]);
-
   const toggle = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    setIsEnabled(prev => {
-      const next = !prev;
-      try { localStorage.setItem(STORAGE_KEY, String(next)); } catch { /* ignore */ }
+    const next = !isEnabledRef.current;
+    isEnabledRef.current = next;
+    setIsEnabled(next);
+    try { localStorage.setItem(STORAGE_KEY, String(next)); } catch { /* ignore */ }
 
-      if (next) {
-        interactedRef.current = true;
-        audio.volume = 0;
-        audio.play()
-          .then(() => fadeTo(TARGET_VOL, 2000))
-          .catch(() => { /* autoplay blocked */ });
-      } else {
-        fadeTo(0, 1200, () => audio.pause());
-      }
-
-      return next;
-    });
-  }, [fadeTo]);
+    if (next) {
+      audio.volume = 0;
+      audio.play()
+        .then(() => fadeIn(audio))
+        .catch(() => {
+          isEnabledRef.current = false;
+          setIsEnabled(false);
+        });
+    } else {
+      fadeOut(audio, () => audio.pause());
+    }
+  }, []);
 
   return { isEnabled, toggle };
 }

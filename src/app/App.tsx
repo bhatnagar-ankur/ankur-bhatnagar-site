@@ -14,7 +14,6 @@ import { BlueprintCursor } from './components/BlueprintCursor';
 import { SammyMascot } from './components/SammyMascot';
 import { FloatingControls } from './components/FloatingControls';
 import { SectionConnector } from './components/SectionConnector';
-import { useFavicon } from './hooks/useFavicon';
 import { ThemeProvider } from './providers/ThemeProvider';
 import { SoundProvider } from './providers/SoundProvider';
 import { BgMusicProvider } from './providers/BgMusicProvider';
@@ -165,8 +164,6 @@ function AppContent() {
 }
 
 export default function App() {
-  // useFavicon('⚡');
-
   return (
     <MotionConfig reducedMotion="user">
       <ThemeProvider>

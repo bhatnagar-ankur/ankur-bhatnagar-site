@@ -434,7 +434,7 @@ function TimelineItem({
               {experience.techStack.map((tech) => (
                 <motion.span
                   key={tech}
-                  whileHover={{ scale: 1.08, y: -1 }}
+                  whileHover={{ scale: 1.08, y: -2, boxShadow: '0 0 14px rgba(var(--accent-cyan-rgb), 0.4)' }}
                   className="px-3 py-1 rounded-full text-xs font-semibold cursor-pointer"
                   style={{
                     fontFamily: 'var(--font-mono)',
