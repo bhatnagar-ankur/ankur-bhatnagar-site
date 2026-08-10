@@ -10,15 +10,35 @@
   --text-primary: #E6EDF3;
   --text-muted: #8B949E;
   --success-green: #3FB950;
+  --success-green-rgb: 63, 185, 80;
   --grid-line: #00C8FF14;
   --nav-bg-scrolled: rgba(13, 17, 23, 0.75);
   --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 
-  /* Glassmorphism — dark frosted glass, lighter at top-left like overhead light */
-  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.04) 100%);
-  --glass-border: rgba(255, 255, 255, 0.14);
-  --glass-filter: blur(6px) saturate(200%);
-  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+  /* ─── Frosted glass — refined default (dark) ───
+     Used by all cards, timeline items, badges, chips. */
+  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-filter: blur(20px) saturate(180%);
+  --glass-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 1px 3px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+
+  /* ─── Liquid glass — premium hero-only variant (dark) ───
+     Specular highlight + chromatic tint + higher blur. Reserved for
+     Hero name plate, Download CTA, AI narrative callout, Contact CTA. */
+  --glass-liquid-bg:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.22) 0%, transparent 55%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, rgba(0, 200, 255, 0.05) 55%, rgba(240, 136, 62, 0.05) 100%);
+  --glass-liquid-border: rgba(255, 255, 255, 0.24);
+  --glass-liquid-filter: blur(30px) saturate(210%);
+  --glass-liquid-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.50),
+    0 2px 10px rgba(0, 200, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.20);
 
   --font-display: 'IBM Plex Sans', sans-serif;
   --font-body: 'Fira Sans', sans-serif;
@@ -38,6 +58,7 @@
   --text-primary: #1A2332;
   --text-muted: #5C6B7D;
   --success-green: #2D8A4F;
+  --success-green-rgb: 45, 138, 79;
   --grid-line: #0099CC30;
   --nav-bg-scrolled: rgba(245, 247, 250, 0.72);
   --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -46,11 +67,27 @@
   --bg-deep-section: rgba(245, 247, 250, 0.75);
   --bg-surface-section: rgba(255, 255, 255, 0.60);
 
-  /* Glassmorphism — translucent frost so grid bleeds through */
-  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.40) 0%, rgba(220, 238, 255, 0.22) 100%);
-  --glass-border: rgba(255, 255, 255, 0.55);
-  --glass-filter: blur(3px) saturate(180%);
-  --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 153, 204, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.70);
+  /* Frosted glass — refined (light) — bumped blur + opacity so cards actually read as glass */
+  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(220, 238, 255, 0.28) 100%);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-filter: blur(14px) saturate(200%);
+  --glass-shadow:
+    0 8px 24px rgba(0, 60, 100, 0.10),
+    0 1px 3px rgba(0, 153, 204, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90),
+    inset 0 -1px 0 rgba(0, 60, 100, 0.04);
+
+  /* Liquid glass — light theme premium variant */
+  --glass-liquid-bg:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.90) 0%, transparent 55%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(0, 153, 204, 0.10) 55%, rgba(216, 115, 51, 0.08) 100%);
+  --glass-liquid-border: rgba(255, 255, 255, 0.90);
+  --glass-liquid-filter: blur(22px) saturate(220%);
+  --glass-liquid-shadow:
+    0 16px 40px rgba(0, 60, 100, 0.14),
+    0 2px 8px rgba(0, 153, 204, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(0, 60, 100, 0.06);
 }
 
 /* Sunlight mode — warm cream, max contrast for outdoor use */
@@ -65,15 +102,26 @@
   --accent-amber: #B85C00 !important;
   --accent-amber-rgb: 184, 92, 0 !important;
   --success-green: #1A5C30 !important;
+  --success-green-rgb: 26, 92, 48 !important;
   --grid-line: #00000014 !important;
   --nav-bg-scrolled: rgba(255, 253, 247, 0.98) !important;
   --nav-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 
-  /* Glassmorphism — warm frosted glass for outdoor reading */
+  /* Frosted glass — warm cream for outdoor reading */
   --glass-bg: linear-gradient(135deg, rgba(255, 253, 247, 0.88) 0%, rgba(255, 248, 225, 0.68) 100%) !important;
   --glass-border: rgba(255, 255, 255, 0.65) !important;
   --glass-filter: blur(12px) saturate(140%) !important;
-  --glass-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+  --glass-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+
+  /* Liquid glass — kept flat in sunlight mode for readability */
+  --glass-liquid-bg: linear-gradient(135deg, rgba(255, 253, 247, 0.92) 0%, rgba(255, 248, 225, 0.75) 100%) !important;
+  --glass-liquid-border: rgba(255, 255, 255, 0.85) !important;
+  --glass-liquid-filter: blur(14px) saturate(150%) !important;
+  --glass-liquid-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 1) !important;
 }
 
 

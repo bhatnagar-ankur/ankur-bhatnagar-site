@@ -186,10 +186,10 @@ export function AISection() {
           className="mt-10 p-6 rounded-2xl border-l-4 flex items-start gap-4"
           style={{
             borderColor: 'var(--accent-cyan)',
-            background: 'var(--glass-bg)',
-            backdropFilter: 'var(--glass-filter)',
-            WebkitBackdropFilter: 'var(--glass-filter)',
-            boxShadow: 'var(--glass-shadow)',
+            background: 'var(--glass-liquid-bg)',
+            backdropFilter: 'var(--glass-liquid-filter)',
+            WebkitBackdropFilter: 'var(--glass-liquid-filter)',
+            boxShadow: 'var(--glass-liquid-shadow)',
           }}
         >
           <BrainCircuit size={24} style={{ color: 'var(--accent-cyan)', flexShrink: 0, marginTop: 2 }} />

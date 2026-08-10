@@ -237,11 +237,13 @@ export function Hero() {
             className="mt-6"
           >
             <div
-              className="inline-block px-6 py-3 rounded-full border-2 backdrop-blur-sm"
+              className="inline-block px-6 py-3 rounded-full border"
               style={{
-                borderColor: 'var(--accent-cyan)',
-                background: 'rgba(var(--accent-cyan-rgb), 0.1)',
-                boxShadow: '0 0 30px rgba(var(--accent-cyan-rgb), 0.3)'
+                borderColor: 'var(--glass-liquid-border)',
+                background: 'var(--glass-liquid-bg)',
+                backdropFilter: 'var(--glass-liquid-filter)',
+                WebkitBackdropFilter: 'var(--glass-liquid-filter)',
+                boxShadow: 'var(--glass-liquid-shadow), 0 0 30px rgba(var(--accent-cyan-rgb), 0.25)',
               }}
             >
               <span style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }} className="text-xl font-semibold tracking-wider">
@@ -382,13 +384,17 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
           onClick={scrollToSection}
-          whileHover={{ scale: 1.06, y: -2, boxShadow: '0 0 18px rgba(var(--accent-cyan-rgb), 0.3)' }}
+          whileHover={{ scale: 1.06, y: -2, boxShadow: '0 0 24px rgba(var(--accent-cyan-rgb), 0.35)' }}
           whileTap={{ scale: 0.97 }}
-          className="group flex items-center gap-2 mx-auto px-6 py-3 rounded-full border backdrop-blur-sm"
+          className="group flex items-center gap-2 mx-auto px-6 py-3 rounded-full border"
           style={{
-            borderColor: 'var(--accent-cyan)',
+            borderColor: 'var(--glass-liquid-border)',
+            background: 'var(--glass-liquid-bg)',
+            backdropFilter: 'var(--glass-liquid-filter)',
+            WebkitBackdropFilter: 'var(--glass-liquid-filter)',
+            boxShadow: 'var(--glass-liquid-shadow)',
             color: 'var(--accent-cyan)',
-            fontFamily: 'var(--font-ui)'
+            fontFamily: 'var(--font-ui)',
           }}
         >
           <span className="text-sm tracking-wider">SEE RECENT WORK</span>

@@ -34,7 +34,7 @@ body::before {
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 40px 40px;
-  opacity: 1;
+  opacity: 0.55;
 }
 
 /* Light theme — solid body base so semi-transparent sections reveal the grid */
@@ -74,11 +74,36 @@ body::after {
   pointer-events: none;
   z-index: 0;
   background: radial-gradient(
-    circle 320px at var(--cursor-x, -9999px) var(--cursor-y, -9999px),
-    rgba(var(--accent-cyan-rgb), 0.045) 0%,
-    rgba(var(--accent-cyan-rgb), 0.012) 50%,
+    circle 380px at var(--cursor-x, -9999px) var(--cursor-y, -9999px),
+    rgba(var(--accent-cyan-rgb), 0.055) 0%,
+    rgba(var(--accent-cyan-rgb), 0.015) 50%,
     transparent 70%
   );
+}
+
+/* Global grain overlay — tactility across all themes.
+   Uses html::before so it doesn't clash with body::before (grid) / body::after (cursor). */
+html::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 240px 240px;
+}
+
+.sunlight-mode html::before,
+html.sunlight-mode::before {
+  opacity: 0;
+}
+
+.light html::before,
+html.light::before {
+  opacity: 0.02;
+  mix-blend-mode: multiply;
 }
 
 /* Disable cursor glow in sunlight mode — too distracting outdoors */
