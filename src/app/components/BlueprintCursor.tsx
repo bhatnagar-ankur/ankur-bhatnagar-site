@@ -21,15 +21,30 @@ function detectState(el: Element | null): CursorState {
 }
 
 export function BlueprintCursor() {
-  // Cursor-glow CSS vars are still needed by blueprint.css body::after
+  // Cursor-glow CSS vars are still needed by blueprint.css body::after.
+  // Writing them on every raw mousemove repaints a full-viewport radial-gradient
+  // per event, so the update is batched to once per animation frame.
   useEffect(() => {
     document.documentElement.style.setProperty('--cursor-x', '-9999px');
     document.documentElement.style.setProperty('--cursor-y', '-9999px');
+    let frame = 0;
+    let pending: { x: number; y: number } | null = null;
+
+    const applyPending = () => {
+      frame = 0;
+      if (!pending) return;
+      document.documentElement.style.setProperty('--cursor-x', `${pending.x}px`);
+      document.documentElement.style.setProperty('--cursor-y', `${pending.y}px`);
+    };
+
     const onMove = (e: MouseEvent) => {
-      document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`);
-      document.documentElement.style.setProperty('--cursor-y', `${e.clientY}px`);
+      pending = { x: e.clientX, y: e.clientY };
+      if (!frame) frame = requestAnimationFrame(applyPending);
     };
     const onLeave = () => {
+      pending = null;
+      cancelAnimationFrame(frame);
+      frame = 0;
       document.documentElement.style.setProperty('--cursor-x', '-9999px');
       document.documentElement.style.setProperty('--cursor-y', '-9999px');
     };
@@ -38,6 +53,7 @@ export function BlueprintCursor() {
     return () => {
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseleave', onLeave);
+      cancelAnimationFrame(frame);
     };
   }, []);
 

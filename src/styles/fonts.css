@@ -1,1 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Fira+Sans:wght@300;400;500;600&family=Roboto:wght@400;500&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Google Fonts are loaded via a <link> in index.html (preconnect + parallel
+   fetch) instead of @import here, which would otherwise serialize the font
+   CSS fetch behind this stylesheet and delay text render. */
