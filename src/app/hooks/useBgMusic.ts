@@ -35,10 +35,13 @@ export function useBgMusic() {
   };
 
   useEffect(() => {
-    const audio = new Audio(bgMusicUrl);
+    const audio = new Audio();
     audio.loop = true;
     audio.volume = 0;
-    audio.preload = 'auto';
+    // preload stays 'none' until the 2s delay below fires — setting the src eagerly
+    // (or preload='auto') would start fetching this 3.6MB file immediately on mount,
+    // competing with fonts/CSS/JS for bandwidth during first paint.
+    audio.preload = 'none';
     audioRef.current = audio;
 
     let cancelled = false;
@@ -78,8 +81,13 @@ export function useBgMusic() {
       }
     };
 
-    // Situation 1: wait 2s after render, then start
-    const t = setTimeout(schedulePlay, 2000);
+    // Situation 1: wait 2s after render, then start — src is assigned here
+    // (not at mount) so the browser has no reason to fetch audio before this.
+    const t = setTimeout(() => {
+      if (cancelled) return;
+      audio.src = bgMusicUrl;
+      schedulePlay();
+    }, 2000);
     timers.push(t);
 
     return () => {
@@ -94,6 +102,7 @@ export function useBgMusic() {
   const toggle = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    if (!audio.src) audio.src = bgMusicUrl;
 
     const next = !isEnabledRef.current;
     isEnabledRef.current = next;
