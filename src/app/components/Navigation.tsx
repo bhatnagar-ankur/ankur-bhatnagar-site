@@ -125,8 +125,8 @@ export function Navigation() {
       if (scrollLockRef.current) clearTimeout(scrollLockRef.current);
       scrollLockRef.current = setTimeout(() => { scrollLockRef.current = null; }, 100);
       const rawY = element.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top: rawY, behavior: 'smooth' });
       setMobileMenuOpen(false);
+      setTimeout(() => window.scrollTo({ top: rawY, behavior: 'smooth' }), 10);
     }
   };
 
