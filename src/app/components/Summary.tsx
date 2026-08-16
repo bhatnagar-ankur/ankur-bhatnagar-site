@@ -107,6 +107,7 @@ export function Summary() {
                   { name: "Team Leadership", icon: Users },
                   { name: "UI/UX Design", icon: Layout },
                   { name: "Architecture", icon: Building },
+                  { name: "Open Source", icon: Code },
                 ],
               },
             ].map((group, gi) => {

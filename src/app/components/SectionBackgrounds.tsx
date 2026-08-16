@@ -136,21 +136,64 @@ export function SkillsBg() {
     [28, 28], [1412, 28], [28, 672], [1412, 672],
     [720, 28], [720, 672],
   ];
+
+  const SCAN_W = 120;
+
   return (
     <Bg opacity={0.70}>
       <defs>
+        {/* Base dot grid */}
         <pattern id="skbg-dots" x="0" y="0" width="28" height="28"
           patternUnits="userSpaceOnUse">
           <circle cx="14" cy="14" r="1.2"
             fill="var(--accent-cyan)" fillOpacity="0.38" />
         </pattern>
+
+        {/* Brighter, slightly larger dot grid — revealed by scan bands */}
+        <pattern id="skbg-dots-bright" x="0" y="0" width="28" height="28"
+          patternUnits="userSpaceOnUse">
+          <circle cx="14" cy="14" r="1.8"
+            fill="var(--accent-cyan)" fillOpacity="0.85" />
+        </pattern>
+
+        {/* Scan band gradient — fades in from left, peaks, fades out right */}
+        <linearGradient id="skbg-scan" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="white" stopOpacity="0" />
+          <stop offset="30%" stopColor="white" stopOpacity="0.7" />
+          <stop offset="50%" stopColor="white" stopOpacity="1" />
+          <stop offset="70%" stopColor="white" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="white" stopOpacity="0" />
+        </linearGradient>
+
+        {/* Masks — each scan band reveals the bright dots underneath */}
+        <mask id="skbg-scan-mask1">
+          <motion.rect
+            y="0" width={SCAN_W} height="700" fill="url(#skbg-scan)"
+            animate={{ x: [-SCAN_W, 1440 + SCAN_W] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+          />
+        </mask>
+        <mask id="skbg-scan-mask2">
+          <motion.rect
+            y="0" width={SCAN_W * 0.7} height="700" fill="url(#skbg-scan)"
+            animate={{ x: [-SCAN_W, 1440 + SCAN_W] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'linear', delay: 4 }}
+          />
+        </mask>
+
         <linearGradient id="skbg-radar" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="var(--accent-cyan)" stopOpacity="0" />
           <stop offset="80%" stopColor="var(--accent-cyan)" stopOpacity="0.35" />
           <stop offset="100%" stopColor="var(--accent-cyan)" stopOpacity="0.55" />
         </linearGradient>
       </defs>
+
+      {/* Base dot grid — always visible, dim */}
       <rect width="1440" height="700" fill="url(#skbg-dots)" />
+
+      {/* Bright dot overlays — only visible through moving scan masks */}
+      <rect width="1440" height="700" fill="url(#skbg-dots-bright)" mask="url(#skbg-scan-mask1)" />
+      <rect width="1440" height="700" fill="url(#skbg-dots-bright)" mask="url(#skbg-scan-mask2)" />
 
       {/* Radar sweep — slow rotation from center */}
       <motion.g
@@ -444,7 +487,58 @@ export function ProjectsBg() {
   );
 }
 
-// ── 06. ACHIEVEMENTS — "Award Radial" ─────────────────────────────────────────
+// ── 06. OPEN SOURCE — "Repository Grid" ──────────────────────────────────────
+
+const OS_NODES: Pt[] = [
+  [88, 80], [200, 140], [340, 60], [480, 130], [620, 72],
+  [760, 150], [900, 60], [1040, 130], [1180, 72], [1320, 140],
+  [1400, 80], [200, 580], [480, 560], [760, 600], [1040, 560],
+  [1320, 580],
+];
+const OS_EDGES: [number, number][] = [
+  [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],
+  [0,11],[3,12],[5,13],[7,14],[9,15],[10,15],
+];
+
+export function OpenSourceBg() {
+  return (
+    <Bg opacity={0.70}>
+      <defs>
+        <pattern id="osbg-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none"
+            stroke="var(--accent-cyan)" strokeWidth="0.4" strokeOpacity="0.18" />
+        </pattern>
+      </defs>
+
+      <rect width="1440" height="700" fill="url(#osbg-grid)" />
+
+      {OS_EDGES.map(([a, b], i) => (
+        <line key={i}
+          x1={OS_NODES[a][0]} y1={OS_NODES[a][1]}
+          x2={OS_NODES[b][0]} y2={OS_NODES[b][1]}
+          stroke="var(--accent-cyan)" strokeWidth={0.6} strokeOpacity={0.22} strokeDasharray="4 6" />
+      ))}
+
+      {OS_NODES.map(([x, y], i) => (
+        <motion.circle key={i} cx={x} cy={y}
+          r={i % 4 === 0 ? 3 : 1.8}
+          fill={i % 4 === 0 ? 'var(--accent-amber)' : 'var(--accent-cyan)'}
+          initial={{ opacity: 0.35 }}
+          animate={{ opacity: [0.35, 0.75, 0.35] }}
+          transition={{ duration: 4, delay: i * 0.22, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ))}
+
+      {/* Corner fork-icon hint — dashed bracket */}
+      <path d="M 60 620 L 60 660 L 120 660" fill="none"
+        stroke="var(--accent-amber)" strokeWidth={1} strokeOpacity={0.35} strokeDasharray="3 4" />
+      <path d="M 1380 620 L 1380 660 L 1320 660" fill="none"
+        stroke="var(--accent-amber)" strokeWidth={1} strokeOpacity={0.25} strokeDasharray="3 4" />
+    </Bg>
+  );
+}
+
+// ── 07. ACHIEVEMENTS — "Award Radial" ─────────────────────────────────────────
 
 const ACH_CX = 1372;
 const ACH_CY = 58;

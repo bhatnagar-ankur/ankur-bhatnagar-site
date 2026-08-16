@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, LayoutGroup } from 'motion/react';
-import { Menu, X, ChevronUp, Share2, FileDown, Mail, Sun, Moon } from 'lucide-react';
+import { Menu, X, Share2, FileDown, Mail, Sun, Moon } from 'lucide-react';
 import { useSound } from '../providers/SoundProvider';
 import { SettingsMenu } from './SettingsMenu';
+import { OrbitMascot } from './OrbitMascot';
 import { useTheme } from '../providers/ThemeProvider';
 
 const resumeUrl = new URL('../../imports/Ankur_Bhatnagar_Resume.pdf', import.meta.url).href;
@@ -13,6 +14,7 @@ const navItems = [
   { id: 'ai-practice', label: 'AI Practice' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
+  { id: 'open-source', label: 'Open Source' },
   { id: 'achievements', label: 'Awards' },
   { id: 'education', label: 'Education' },
   { id: 'contact', label: 'Contact' }
@@ -162,15 +164,18 @@ export function Navigation() {
         />
 
         <div className="resume-container py-4 flex items-center justify-between">
-          {/* Logo — A.BHATNAGAR */}
-          <button
-            onClick={scrollToTop}
-            style={{ fontFamily: 'var(--font-ui)' }}
-            className="text-xl font-bold tracking-wider hover:opacity-80 transition-opacity"
-          >
-            <span style={{ color: 'var(--accent-cyan)' }}>A.</span>
-            <span style={{ color: 'var(--text-primary)' }}>BHATNAGAR</span>
-          </button>
+          {/* Logo — Orbit mascot + A.BHATNAGAR wordmark */}
+          <div className="flex items-center gap-3">
+            <OrbitMascot size={46} onClick={scrollToTop} growOnScroll />
+            <button
+              onClick={scrollToTop}
+              style={{ fontFamily: 'var(--font-ui)' }}
+              className="text-xl font-bold tracking-wider hover:opacity-80 transition-opacity"
+            >
+              <span style={{ color: 'var(--accent-cyan)' }}>A.</span>
+              <span style={{ color: 'var(--text-primary)' }}>BHATNAGAR</span>
+            </button>
+          </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1">
@@ -351,27 +356,18 @@ export function Navigation() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* Scroll to Top Button */}
+      {/* Scroll to Top — Orbit mascot with scroll-progress ring */}
       <AnimatePresence>
         {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.2 }}
-            onClick={scrollToTop}
-            className="fixed bottom-8 left-8 p-4 rounded-full border z-50 hover:scale-110 transition-transform"
-            style={{
-              borderColor: 'var(--accent-cyan)',
-              background: 'var(--glass-bg)',
-              backdropFilter: 'var(--glass-filter)',
-              WebkitBackdropFilter: 'var(--glass-filter)',
-              color: 'var(--accent-cyan)',
-              boxShadow: '0 4px 20px rgba(var(--accent-cyan-rgb), 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-            }}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.3, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.3, y: 20 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 18, mass: 0.7 }}
+            className="fixed bottom-8 left-8 z-50"
           >
-            <ChevronUp size={24} />
-          </motion.button>
+            <OrbitMascot size={68} onClick={scrollToTop} hint hintText="Back to top" />
+          </motion.div>
         )}
       </AnimatePresence>
     </>

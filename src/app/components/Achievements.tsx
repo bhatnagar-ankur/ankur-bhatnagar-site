@@ -213,7 +213,7 @@ export function Achievements() {
           style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
           className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
-          <span style={{ color: 'var(--accent-amber)' }}>06.</span> ACHIEVEMENTS & RECOGNITION
+          <span style={{ color: 'var(--accent-amber)' }}>07.</span> ACHIEVEMENTS & RECOGNITION
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">

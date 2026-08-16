@@ -7,6 +7,7 @@ import { Skills } from './components/Skills';
 import { AISection } from './components/AISection';
 import { Experience } from './components/Experience';
 import { Projects } from './components/Projects';
+import { OpenSource } from './components/OpenSource';
 import { Achievements } from './components/Achievements';
 import { Education } from './components/Education';
 import { Contact } from './components/Contact';
@@ -105,6 +106,9 @@ function AppContent() {
 
         <SectionConnector label="DELIVERED WORK" variant="surface-to-deep" />
         <Projects />
+
+        <SectionConnector label="OPEN SOURCE &amp; LABS" variant="surface-to-deep" />
+        <OpenSource />
 
         <SectionConnector label="RECOGNITION" variant="deep-to-surface" />
         <Achievements />

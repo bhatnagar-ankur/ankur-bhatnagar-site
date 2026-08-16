@@ -55,7 +55,7 @@ export function Contact() {
             style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}
             className="fluid-section-h2 font-bold tracking-wide mb-3"
           >
-            <span style={{ color: 'var(--accent-amber)' }}>08.</span> LET'S CONNECT
+            <span style={{ color: 'var(--accent-amber)' }}>09.</span> LET'S CONNECT
           </h2>
 
           <div className="flex items-center gap-2 mb-4">

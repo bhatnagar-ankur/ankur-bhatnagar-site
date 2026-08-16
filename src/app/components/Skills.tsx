@@ -9,7 +9,7 @@ import {
   CloudCog, GitBranch, Package,
   BrainCircuit, Bot, Sparkles, Zap,
   Code2, Grid3x3, Component, BarChart3,
-  Users, Building2, Layout
+  Users, Building2, Layout, BookOpen, FlaskConical, TestTube2
 } from 'lucide-react';
 
 interface SkillTag {
@@ -38,12 +38,13 @@ const skillTiers: SkillTier[] = [
       {
         category: 'Frontend',
         skills: [
-          { name: 'Angular', icon: <Hexagon size={14} /> },
+          { name: 'Angular 21/22', icon: <Hexagon size={14} /> },
           { name: 'React', icon: <AtomIcon size={14} /> },
           { name: 'TypeScript', icon: <FileCode size={14} /> },
           { name: 'JavaScript', icon: <Braces size={14} /> },
           { name: 'HTML5/CSS3', icon: <Code size={14} /> },
-          { name: 'SCSS', icon: <Palette size={14} /> }
+          { name: 'SCSS', icon: <Palette size={14} /> },
+          { name: 'Signals / Zoneless', icon: <Zap size={14} /> }
         ]
       },
       {
@@ -115,6 +116,14 @@ const skillTiers: SkillTier[] = [
         category: 'AI',
         skills: [
           { name: 'OpenAI Codex', icon: <BrainCircuit size={14} /> }
+        ]
+      },
+      {
+        category: 'Testing',
+        skills: [
+          { name: 'Vitest', icon: <TestTube2 size={14} /> },
+          { name: 'Playwright', icon: <FlaskConical size={14} /> },
+          { name: 'Storybook 10', icon: <BookOpen size={14} /> }
         ]
       }
     ]

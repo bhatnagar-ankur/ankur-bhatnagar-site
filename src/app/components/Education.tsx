@@ -44,7 +44,7 @@ export function Education() {
           }}
           className="fluid-section-h2 font-bold mb-12 tracking-wide"
         >
-          <span style={{ color: 'var(--accent-amber)' }}>07.</span> EDUCATION
+          <span style={{ color: 'var(--accent-amber)' }}>08.</span> EDUCATION
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
